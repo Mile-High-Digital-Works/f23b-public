@@ -5,7 +5,6 @@
   "flight_source": "931b267fb7d3",
   "unchanged_files": {
     "COPYING": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
-    "LICENSE": "83ecf0e27062074fface00de7fce3bfc492a15a679c4a0574a534a13f87e259c",
     "LICENSES/MIT.txt": "b2ffc91f892b8977a39d4c5e592cea65a29c43c119eb9ec88bda34ce618f7c75",
     "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "8d196bf834f0c340c0265abe512cc923be00fca2da1130a0dfddc794059335b0",
     "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f1e29e1af13b700c0de8d2f80435cfc14d3daa28a526ccd10044e0b069b25840",
@@ -84,6 +83,10 @@
     "native_patch.py": {
       "upstream_sha256": "9035ea9f5774f7f938b64c62781de31a42784070f7b0d9015f1af96f4293169b",
       "reason": "Add verified legacy restoration for the independent-weapon installer; preserve existing recovery support."
+    },
+    "LICENSE": {
+      "inherited_sha256": "83ecf0e27062074fface00de7fce3bfc492a15a679c4a0574a534a13f87e259c",
+      "reason": "Canonical v1.5 licence/credits consolidation; full inherited legal texts retained."
     }
   },
   "prior_runtime_source": "4c254be08a8d23ba5ad29e4a8cbf7962dc5d340b",

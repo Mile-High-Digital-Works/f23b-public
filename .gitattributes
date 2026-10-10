@@ -1,2 +1,5 @@
 # Preserve the byte-identical inherited source snapshot across platforms.
 * -text
+
+# Full inherited legal notices retain their original trailing whitespace.
+LICENCE.md whitespace=-blank-at-eol,-blank-at-eof

@@ -1,12 +1,14 @@
 # F-23B Black Widow II
 
-The full Hornet radar, datalink and SA page in a stealth airframe, with custom F-23 flight dynamics.
-Internal bays open before weapon release. MALICE has a recorded **336-mile A-50 kill** with continuing target support.
+v1.5 release draft. The current download remains v1.4; no v1.5 package has been issued.
+
+The full Hornet radar, datalink and SA page in a stealth airframe, with adapted F-23 flight dynamics.
+Player internal bays open before weapon release. MALICE has a recorded **336-mile A-50 kill** with continuing target support.
 AI F-23Bs fly and fight with MALICE and Block II. Current installs change **no DCS game files**.
 
 ![F-23B in DCS World](docs/images/f23b-exterior.jpg)
 
-## Get v1.4
+## Current download: v1.4
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
 The weapon and radar connection supports **DCS 2.9.30.28738**.
@@ -48,7 +50,7 @@ Start an **F-23B Quick Start** mission. Your first flight uses the Langley liver
 ## In the aircraft
 
 - Native Hornet radar, MSI, datalink, SA, EW and RWR, with a 640 NM SA scale.
-- Sequenced internal bays, AIM-424 MALICE with loft control and a second motor pulse, and project AIM-9X Block II.
+- Sequenced player internal bays, AIM-424 MALICE with loft control and a second motor pulse, and project AIM-9X Block II.
 - Friendly-track selection protection and AI weapon use.
 - Ground and water collision, speed-limited nosewheel steering, and a stiffer nose strut.
 - One canopy frame in the pilot view, exterior lights, and new afterburner visuals.
@@ -79,8 +81,10 @@ Use [a compatible release](https://github.com/Coaokalo/f23b-public/releases/late
 ## Limits and licences
 
 The 336-mile kill is one supported flight, not a guaranteed launch range. Exact 350-mile shots remain unverified.
-MALICE's coasting-apex estimate is not a hard altitude cap. Block II helmet cueing and post-launch datalink are not implemented.
+MALICE's coasting-apex estimate is not a hard altitude cap. With Block II selected, the helmet display shows `9X`, its count and the aiming cross. A helmet-cued shot has not been flown. Block II post-launch datalink is not implemented.
 AI uses the extended MALICE energy profile when the player also flies an F-23B.
+AI main bay doors remain closed during the observed MALICE launch.
+MALICE is this project's DCS game version of the [publicly reported Navy AIM-424 name](https://aviationweek.com/defense/missile-defense-weapons/us-navy-testing-new-long-range-air-air-missile); its numerical definitions are game values.
 See [known limitations](KNOWN_ISSUES.md).
 
 The combined software uses **GPL-3.0-or-later**, with retained file-level MIT grants.
@@ -88,7 +92,7 @@ Original documentation and eligible original creative content use **CC BY-SA 4.0
 Purchased models and derived textures retain separate asset terms.
 Credits: **Grinnelli Designs and Branden Hooper** for flight-model source; **SytaPastel** for the licensed YF-23 visual source.
 
-[Software licence](LICENSE) · [Asset terms](LICENSE-ASSETS.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) ·
+[Licence and asset terms](LICENCE.md) · [Credits and component notices](CREDITS.md) ·
 [Report a bug](https://github.com/Coaokalo/f23b-public/issues/new?template=bug_report.yml)
 
 [Build and test](BUILDING.md) · [Source layout](docs/SOURCE_LAYOUT.md) · [Contributing](CONTRIBUTING.md)

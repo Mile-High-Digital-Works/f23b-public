@@ -7,7 +7,8 @@
 - MALICE has a supported 336.4-mile A-50 intercept. Exact 350-mile shots and the full engagement envelope remain unverified.
 - The 98,400-foot coasting-apex threshold is not a hard cap. The recorded long shot reached about 158,000 feet.
 - Hornet SMS labels remain: AMRAAM selects MALICE, and Sidewinder selects Block II.
-- Block II helmet cueing and post-launch datalink/lock-on after launch are not implemented.
+- With Block II selected, the helmet display shows 9X, its count and the aiming cross. A helmet-cued shot has not been flown. Post-launch datalink/lock-on after launch is not implemented.
+- The observed AI MALICE launch occurred with the main bay doors closed. The AI Block II bay sequence remains unverified.
 - Flight performance is a simulator design approximation, not measured YF-23 data.
 - Steering authority reduces with speed. Use rudder and differential braking at higher speeds.
 - The installer is unsigned. Use the ZIP if Windows warns about it.

@@ -1,18 +1,5 @@
-# F-23B license map
+# F-23B software licence
 
-The combined F-23B community software distribution is licensed under the
-GNU General Public License, version 3 or (at your option) any later version
-(`GPL-3.0-or-later`). The complete GPLv3 text is in `COPYING`.
-
-Project-original source files that carry `SPDX-License-Identifier: MIT` retain
-their MIT grant. The complete MIT text is in `LICENSES/MIT.txt`. When those
-files are conveyed as part of a combined work containing GPL-covered F-22A
-derived code, the combined work is conveyed under GPL-3.0-or-later.
-
-Files with another explicit SPDX identifier or provenance record remain under
-their stated terms. Models, textures, audio, documentation, missions, and
-other non-code content are not relicensed by this file. See
-`LICENSE-ASSETS.md` and `THIRD_PARTY_NOTICES.md` before redistribution.
-
-No Eagle Dynamics or DCS proprietary code, binary, or asset is licensed or
-redistributed by this project.
+The canonical terms are in [LICENCE.md](LICENCE.md).
+Contributions and component notices are in [CREDITS.md](CREDITS.md).
+Existing file-specific notices and earlier-release records remain in force.

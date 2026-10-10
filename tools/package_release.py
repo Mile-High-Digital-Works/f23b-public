@@ -15,11 +15,10 @@ ROOT = Path(__file__).resolve().parents[1]
 PIN = 'config/releases/release-v1.4.json'
 DOCS = 'F-23B-docs/'
 TEXT = ('.lua', '.lods', '.txt')
-NOTICES = ['COPYING', 'LICENSE', 'LICENSE-ASSETS.md', 'THIRD_PARTY_NOTICES.md', 'INSTALL.md',
-           'LICENSES/MIT.txt', 'config/licensing/third-party-code-reuse.json',
+NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md',
+           'config/licensing/third-party-code-reuse.json',
            'native/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md',
-           'config/licensing/liveries-v1.4.json', 'LICENSES/Python-3.12.txt',
-           'LICENSES/Tcl.txt', 'LICENSES/Tk.txt', 'LICENSES/PyInstaller.txt', 'docs/PILOT_GUIDE.html']
+           'config/licensing/liveries-v1.4.json', 'docs/PILOT_GUIDE.html']
 
 
 def sha(data):
@@ -97,12 +96,12 @@ def main():
     files[DOCS + 'known-installations.json'] = source_files['config/releases/known-installations.json']
     files[DOCS + 'dcs-requirements.json'] = source_files['config/releases/dcs-requirements.json']
     files[DOCS + 'NOTICES.md'] = (
-        '# F-23B v1.4\n\n'
+        f'# {name}\n\n'
         'THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.\n\n'
         'Requires an installed, activated DCS: F/A-18C Hornet. Read INSTALL.md.\n'
         'Software: GPL-3.0-or-later with retained file-level MIT grants.\n'
         'Visual derivatives: SytaPastel YF-23, CGTrader product 2046482.\n'
-        'See THIRD_PARTY_NOTICES.md and LICENSE-ASSETS.md for attribution and terms.\n'
+        'See LICENCE.md and CREDITS.md for full terms and component notices.\n'
     ).encode()
     files[DOCS + 'SOURCE.md'] = (
         '# Corresponding software source\n\n'
