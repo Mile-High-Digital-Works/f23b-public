@@ -9,7 +9,7 @@ Hornet. Use the headers in your own DCS installation; they are not bundled here.
 From the repository root, replacing the DCS path with your installation:
 
 ```powershell
-cmake -S experiments/native-force-bridge -B build/native -A x64 -DDCS_ROOT="D:/Eagle Dynamics/DCS World"
+cmake -S native/force-bridge -B build/native -A x64 -DDCS_ROOT="D:/Eagle Dynamics/DCS World"
 cmake --build build/native --config Release
 ctest --test-dir build/native -C Release --output-on-failure
 ```
@@ -25,7 +25,7 @@ unavailable. The stub tests calculations and integration code, not the real SDK
 ABI or flight inside DCS.
 
 ```powershell
-cmake -S experiments/flight-feel -B build/flight
+cmake -S native/flight-feel -B build/flight
 cmake --build build/flight --config Release
 ctest --test-dir build/flight -C Release --output-on-failure
 python -B -m unittest discover -s tests/tools -v
@@ -49,7 +49,7 @@ memory while an F-23B is flown. It checks the exact DCS binaries in
 restores the original bytes when the session closes. It needs MinGW-w64 `g++`:
 
 ```powershell
-./experiments/native-radar/build.ps1
+./native/radar-helper/build.ps1
 ```
 
 The script runs the native test groups and writes the DLL to `build/native-radar`.

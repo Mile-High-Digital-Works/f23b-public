@@ -17,7 +17,7 @@ in [COPYING](COPYING) and [LICENSES/MIT.txt](LICENSES/MIT.txt).
 
 Exact upstream hashes, included derived files, and modification records are in
 [the reuse manifest](config/licensing/third-party-code-reuse.json). The
-[performance provenance record](experiments/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md)
+[performance provenance record](native/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md)
 describes the adaptation and its limitations. No upstream aircraft models,
 textures, audio, or compiled binaries are bundled in this source tree.
 

@@ -24,49 +24,49 @@
     "Mods/aircraft/F-23B/Weapons/F23B_AIM424_MALICE.lua": "4f9d07af7153efa867fd20d6118b2907d0d80842eedd4bdb0a01d4789c320de7",
     "Mods/aircraft/F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "744e402aeb2f798a1e47f4e121b011f188a20ff0f47cef93c2912bab9633d6a2",
     "Mods/aircraft/F-23B/entry.lua": "8bcdf76922f6484216679b7af5b3d1d737cf4a5116b79a97d5e3fea69c02ec2a",
-    "experiments/flight-feel/CMakeLists.txt": "363acf9bc20fce1479500de89b04ae3ac123b876873452a7cf08fa4f576b0c3d",
-    "experiments/flight-feel/src/efm/performance/dcs_adapter/performance_adapter.cpp": "a9688dc04da52eb879348cd90b3155e4750796a9f563a3698c3708ee58a20a7d",
-    "experiments/flight-feel/src/efm/performance/engine_mapping.cpp": "7a301129f461df71eb6fe2ccdbe4c2880a6349bdbbe12efaf92fffa4bce6e816",
-    "experiments/flight-feel/src/efm/performance/include/f23b/performance/engine_mapping.hpp": "8a4ec520763e6e4e40c1b0edf43b286dbae15d543c0b9b6ef470bc9908e9f3b3",
-    "experiments/flight-feel/src/efm/performance/include/f23b/performance/grinnelli_v21_reference.hpp": "c285d05a53caf662c465752378165af6bc4c47c970c06b5c7c3654a9beecdffc",
-    "experiments/flight-feel/src/efm/performance/include/f23b/performance/performance_model.hpp": "515949830fab5cae94b92ec577f07e70cee0978dd4f25a5956333c213b5c69d5",
-    "experiments/flight-feel/src/efm/performance/performance_model.cpp": "8c5a463f8ab80edc4061b68fd4cb7a8880bce6df12dcc165ea24cfa68d86120e",
-    "experiments/flight-feel/tests/native/f23b_performance_adapter_tests.cpp": "479efdb730e88ce464204d2f54501283d4975dfc3d3564e05c613bb76ca3128c",
-    "experiments/flight-feel/tests/native/f23b_performance_engine_mapping_tests.cpp": "46d60fb82a1cc67ce3a75d549587dabda409d69bccb12cd5e9580efc0b8e2455",
-    "experiments/flight-feel/tests/native/f23b_performance_model_tests.cpp": "1664344f84a12d90ea51c2bf10aecb271fadbc03984c928ba0ac4af618bbf6e7",
-    "experiments/flight-feel/tests/native/f23b_roll_stability_tests.cpp": "6670ee212cd5b2c4567d8c2431a76bc57f15698cd114c1d5b4a0b3bfbc269cfb",
-    "experiments/flight-feel/tests/stubs/FM/wHumanCustomPhysicsAPI.h": "6a92d3d0f04f382280f71e31d1c4bbfd565529d28f42b02cc1d309173ebf89ac",
-    "experiments/flight-feel/tools/performance/performance_report.cpp": "e48f8b5016e3b59f85a0a2ecf956019cbf95c02c5962699cd28b10e4dacebcec",
-    "experiments/native-force-bridge/CMakeLists.txt": "22427fba5b1e5e7ab35e98e6fd6499424f5d0073d83608be0f027d1f1ea9761a",
-    "experiments/native-force-bridge/bridge.cpp": "fb8976c104559dd42dcd5c6ffae14237a10e3f00087bfea9d03ec87d027cc0f7",
-    "experiments/native-force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
-    "experiments/native-force-bridge/generate.py": "c524ceb43b9be9fe6472a8bb3201702250d2bda441c537105c06b448eb47320f",
-    "experiments/native-force-bridge/generate_forwarding.py": "828893127125615d646506e115d51e7db66fd2e2369fa00fa7e11f6be06638e2",
-    "experiments/native-force-bridge/ground_config.lua": "1536a0a942724278d3d63f53e428d56911f3e79d626a62371fa7bbd823fcfbf6",
-    "experiments/native-force-bridge/ground_yaw_tests.cpp": "81a18f63756ad39a75a63b97e22d723746c09743d2ae26a6e870e621170db9bb",
-    "experiments/native-force-bridge/native_exports.txt": "3ac19e001f5c10919650360efdab4f3c4c594a719a6dcfa689e2faa41691f167",
-    "experiments/native-force-bridge/native_loader.cpp": "b0f0ad3faf3b7628dcacc42b4de2c283e713ef0ac2fea1bec03c2b51009e9225",
-    "experiments/native-force-bridge/propulsion.hpp": "7d37fb693ec03b22c18f6d9271116cb782cb0128f749f1eb9e97c137aed7f46b",
-    "experiments/native-force-bridge/propulsion_tests.cpp": "f79110c676f112b4e9756dd0b4525576cf99c6049e70144001f3d22a3d955a70",
-    "experiments/native-force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
-    "experiments/native-force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
-    "experiments/native-radar/LaunchZone_test.cpp": "9f0d2d35e49d8f2871a4f0e66e7bee1ddc49b36dc6efffbbac4af5f44ec2b96e",
-    "experiments/native-radar/MaliceEnergy.h": "32477d081bf3bf82be706d28dd5a0e58299796a0a3c950e342163953a1242646",
-    "experiments/native-radar/MaliceEnergy_test.cpp": "61b7460d7744cb253dda132f43adf073f953d87bfcbcc9f3120b8867fd97eb76",
-    "experiments/native-radar/MaliceLoftHook.h": "966f9ab173efb602b861375140a906f53e21e9c80ac0a9a1296c6ffa74d2f919",
-    "experiments/native-radar/MaliceRuntime.h": "ea492a3a12fbf5b95771e9901e9673985c3b2eb9c8ee99c87becd1ea23b244cb",
-    "experiments/native-radar/MissileProfile_test.cpp": "b0cc4a04be09c50ef54b4a2cd1afa0f47d3e0872eb3cfb4c97d43aa78f3dc91e",
-    "experiments/native-radar/NativeTarget.h": "2695f3dc9de1fa13f45c8b425cb3d9024da052e98554c6779994d00db27c6982",
-    "experiments/native-radar/PayloadAccessHook.h": "a92f4cf9757b198e1670f04084f1042a8095e9d7db254a766462983440ae15d4",
-    "experiments/native-radar/PayloadAccessHook_test.cpp": "d6b32e86998b04bad9a9cd87edc7917779fb356720e481ed6ea3e6e2b0d5807d",
-    "experiments/native-radar/PayloadAlias_test.cpp": "93cc025e94ecac8acf7ddd50fa774136ac0919a702a966f57747d7f9b3dddc0d",
-    "experiments/native-radar/RadarTune.h": "62cdc42d912fc296e8b61209266ae2fc98027893f447085d7007c8eab1de8cfa",
-    "experiments/native-radar/RadarTune_test.cpp": "5a125f3eef0c771bec969c4005d1335fd3e52b61174f4fbe99e30f293769d3f6",
-    "experiments/native-radar/RankingHook.h": "86ea7474004580543a4bf33e36c165ec7bc98d0a7beb4fd6510ddf49ef94a219",
-    "experiments/native-radar/SaRangeHook.h": "ee31eef97df3fcb8c160f4b9c054fab8c7d8047bda981bcf692cd4ed27a717b4",
-    "experiments/native-radar/SaRangeHook_test.cpp": "759596c5d6678310e57881bb65c4c55b87fe7834bdfde3aed9602d4cacfcea1f",
-    "experiments/native-radar/SupportDiag_test.cpp": "a118f67ccd267ecdcf7c7ca3000c911eb968a33c533bd3ebd47e15f73a553ba1",
-    "experiments/native-radar/SupportHook_test.cpp": "11b84e2612404744fae73e7aafe7e14ab70aa9bd66a80fb01d6c9de06d4fd643"
+    "native/flight-feel/CMakeLists.txt": "363acf9bc20fce1479500de89b04ae3ac123b876873452a7cf08fa4f576b0c3d",
+    "native/flight-feel/src/efm/performance/dcs_adapter/performance_adapter.cpp": "a9688dc04da52eb879348cd90b3155e4750796a9f563a3698c3708ee58a20a7d",
+    "native/flight-feel/src/efm/performance/engine_mapping.cpp": "7a301129f461df71eb6fe2ccdbe4c2880a6349bdbbe12efaf92fffa4bce6e816",
+    "native/flight-feel/src/efm/performance/include/f23b/performance/engine_mapping.hpp": "8a4ec520763e6e4e40c1b0edf43b286dbae15d543c0b9b6ef470bc9908e9f3b3",
+    "native/flight-feel/src/efm/performance/include/f23b/performance/grinnelli_v21_reference.hpp": "c285d05a53caf662c465752378165af6bc4c47c970c06b5c7c3654a9beecdffc",
+    "native/flight-feel/src/efm/performance/include/f23b/performance/performance_model.hpp": "515949830fab5cae94b92ec577f07e70cee0978dd4f25a5956333c213b5c69d5",
+    "native/flight-feel/src/efm/performance/performance_model.cpp": "8c5a463f8ab80edc4061b68fd4cb7a8880bce6df12dcc165ea24cfa68d86120e",
+    "native/flight-feel/tests/native/f23b_performance_adapter_tests.cpp": "479efdb730e88ce464204d2f54501283d4975dfc3d3564e05c613bb76ca3128c",
+    "native/flight-feel/tests/native/f23b_performance_engine_mapping_tests.cpp": "46d60fb82a1cc67ce3a75d549587dabda409d69bccb12cd5e9580efc0b8e2455",
+    "native/flight-feel/tests/native/f23b_performance_model_tests.cpp": "1664344f84a12d90ea51c2bf10aecb271fadbc03984c928ba0ac4af618bbf6e7",
+    "native/flight-feel/tests/native/f23b_roll_stability_tests.cpp": "6670ee212cd5b2c4567d8c2431a76bc57f15698cd114c1d5b4a0b3bfbc269cfb",
+    "native/flight-feel/tests/stubs/FM/wHumanCustomPhysicsAPI.h": "6a92d3d0f04f382280f71e31d1c4bbfd565529d28f42b02cc1d309173ebf89ac",
+    "native/flight-feel/tools/performance/performance_report.cpp": "e48f8b5016e3b59f85a0a2ecf956019cbf95c02c5962699cd28b10e4dacebcec",
+    "native/force-bridge/CMakeLists.txt": "22427fba5b1e5e7ab35e98e6fd6499424f5d0073d83608be0f027d1f1ea9761a",
+    "native/force-bridge/bridge.cpp": "fb8976c104559dd42dcd5c6ffae14237a10e3f00087bfea9d03ec87d027cc0f7",
+    "native/force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
+    "native/force-bridge/generate.py": "c524ceb43b9be9fe6472a8bb3201702250d2bda441c537105c06b448eb47320f",
+    "native/force-bridge/generate_forwarding.py": "828893127125615d646506e115d51e7db66fd2e2369fa00fa7e11f6be06638e2",
+    "native/force-bridge/ground_config.lua": "1536a0a942724278d3d63f53e428d56911f3e79d626a62371fa7bbd823fcfbf6",
+    "native/force-bridge/ground_yaw_tests.cpp": "81a18f63756ad39a75a63b97e22d723746c09743d2ae26a6e870e621170db9bb",
+    "native/force-bridge/native_exports.txt": "3ac19e001f5c10919650360efdab4f3c4c594a719a6dcfa689e2faa41691f167",
+    "native/force-bridge/native_loader.cpp": "b0f0ad3faf3b7628dcacc42b4de2c283e713ef0ac2fea1bec03c2b51009e9225",
+    "native/force-bridge/propulsion.hpp": "7d37fb693ec03b22c18f6d9271116cb782cb0128f749f1eb9e97c137aed7f46b",
+    "native/force-bridge/propulsion_tests.cpp": "f79110c676f112b4e9756dd0b4525576cf99c6049e70144001f3d22a3d955a70",
+    "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
+    "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
+    "native/radar-helper/LaunchZone_test.cpp": "9f0d2d35e49d8f2871a4f0e66e7bee1ddc49b36dc6efffbbac4af5f44ec2b96e",
+    "native/radar-helper/MaliceEnergy.h": "32477d081bf3bf82be706d28dd5a0e58299796a0a3c950e342163953a1242646",
+    "native/radar-helper/MaliceEnergy_test.cpp": "61b7460d7744cb253dda132f43adf073f953d87bfcbcc9f3120b8867fd97eb76",
+    "native/radar-helper/MaliceLoftHook.h": "966f9ab173efb602b861375140a906f53e21e9c80ac0a9a1296c6ffa74d2f919",
+    "native/radar-helper/MaliceRuntime.h": "ea492a3a12fbf5b95771e9901e9673985c3b2eb9c8ee99c87becd1ea23b244cb",
+    "native/radar-helper/MissileProfile_test.cpp": "b0cc4a04be09c50ef54b4a2cd1afa0f47d3e0872eb3cfb4c97d43aa78f3dc91e",
+    "native/radar-helper/NativeTarget.h": "2695f3dc9de1fa13f45c8b425cb3d9024da052e98554c6779994d00db27c6982",
+    "native/radar-helper/PayloadAccessHook.h": "a92f4cf9757b198e1670f04084f1042a8095e9d7db254a766462983440ae15d4",
+    "native/radar-helper/PayloadAccessHook_test.cpp": "d6b32e86998b04bad9a9cd87edc7917779fb356720e481ed6ea3e6e2b0d5807d",
+    "native/radar-helper/PayloadAlias_test.cpp": "93cc025e94ecac8acf7ddd50fa774136ac0919a702a966f57747d7f9b3dddc0d",
+    "native/radar-helper/RadarTune.h": "62cdc42d912fc296e8b61209266ae2fc98027893f447085d7007c8eab1de8cfa",
+    "native/radar-helper/RadarTune_test.cpp": "5a125f3eef0c771bec969c4005d1335fd3e52b61174f4fbe99e30f293769d3f6",
+    "native/radar-helper/RankingHook.h": "86ea7474004580543a4bf33e36c165ec7bc98d0a7beb4fd6510ddf49ef94a219",
+    "native/radar-helper/SaRangeHook.h": "ee31eef97df3fcb8c160f4b9c054fab8c7d8047bda981bcf692cd4ed27a717b4",
+    "native/radar-helper/SaRangeHook_test.cpp": "759596c5d6678310e57881bb65c4c55b87fe7834bdfde3aed9602d4cacfcea1f",
+    "native/radar-helper/SupportDiag_test.cpp": "a118f67ccd267ecdcf7c7ca3000c911eb968a33c533bd3ebd47e15f73a553ba1",
+    "native/radar-helper/SupportHook_test.cpp": "11b84e2612404744fae73e7aafe7e14ab70aa9bd66a80fb01d6c9de06d4fd643"
   },
   "modified_files": {
     "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": {
@@ -77,7 +77,7 @@
       "upstream_sha256": "df4a6aad4bf526d83f2446d48371f63c198618bf7ae1261cad87cf9853aabd80",
       "reason": "Player encyclopedia text for this release."
     },
-    "experiments/native-radar/build.ps1": {
+    "native/radar-helper/build.ps1": {
       "upstream_sha256": "5237ef77e77cffc04d8d616c5c36b7eada1d84e0bb53d4a1cda72db529fd585e",
       "reason": "Build into build/native-radar. The check that needs a private module capture is not included."
     },
@@ -103,31 +103,31 @@
       "inherited_sha256": "f82e70b75b1f0320e3561192746cf5fa863c5a7ee4fb655a94fd7b3e8bbd4f18",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/native-radar/MissileProfile.h": {
+    "native/radar-helper/MissileProfile.h": {
       "inherited_sha256": "139b91d748c20118e8d99d2304473a0640ea60d7c03f410fbe932a060a349c8e",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/native-radar/NativeRanking.h": {
+    "native/radar-helper/NativeRanking.h": {
       "inherited_sha256": "0cc935f5b38d6aeb7896bac06b6fccdc19a2d7445ae84e6a1e69fb273b821413",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/native-radar/PayloadAlias.h": {
+    "native/radar-helper/PayloadAlias.h": {
       "inherited_sha256": "7d8ad6dba269397a3f04339b6ec992ac9e6574c05854b3fd04460cfdbba633af",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/native-radar/Radar.cpp": {
+    "native/radar-helper/Radar.cpp": {
       "inherited_sha256": "2ebba32955ad723113ddc82bd3a91d2c0af2a16461a6785bc121a61a4c3b552c",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/native-radar/SupportDiag.h": {
+    "native/radar-helper/SupportDiag.h": {
       "inherited_sha256": "f4e7fc32b4d0d6b3b23b5089cf12196667402800ee5708a56bc40080d9aedb55",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/native-radar/SupportHook.h": {
+    "native/radar-helper/SupportHook.h": {
       "inherited_sha256": "5f41d8a73504d54e69e015c03643f1043342d4bbf8f81fe96d57299f5f9b4ecf",
       "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
     },
-    "experiments/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md": {
+    "native/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md": {
       "inherited_sha256": "6da5da14a5658735ea7e80fca8788345667ce0f44711ffd8a839ab1b6b5ded96",
       "reason": "Remove obsolete product status wording while retaining source attribution."
     }

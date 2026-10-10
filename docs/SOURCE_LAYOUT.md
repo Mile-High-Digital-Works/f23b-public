@@ -4,9 +4,9 @@
 | --- | --- |
 | `Mods/aircraft/` | Lua and configuration files for the aircraft release |
 | `Liveries/F-23B/` | Livery bindings; runtime paint maps remain in the aircraft ZIP |
-| `experiments/native-radar/` | Version-guarded weapon, radar and SA connection loaded in memory by the aircraft |
-| `experiments/native-force-bridge/` | Windows native bridge, callback generators, steering, propulsion and control tests |
-| `experiments/flight-feel/` | Flight-model library, adapter, tests, and performance report |
+| `native/radar-helper/` | Version-guarded weapon, radar and SA connection loaded in memory by the aircraft |
+| `native/force-bridge/` | Windows native bridge, callback generators, steering, propulsion and control tests |
+| `native/flight-feel/` | Flight-model library, adapter, tests, and performance report |
 | `native_patch.py` | Restoration of game files changed by earlier releases, with atomic writes |
 | `setup_f23b.py` | Single-window aircraft setup, repair and removal |
 | `tools/build_setup.py` | Bundle the Windows setup executable |
@@ -16,8 +16,7 @@
 | `config/releases/` | Flown aircraft file inventory, removed files, and supported DCS binaries |
 | `docs/images/` | Project screenshots |
 
-The `experiments` paths are retained so the corresponding source can be built
-using the existing build scripts.
+Releases to v1.4 had these three folders under `experiments/`. The build scripts are the same.
 
 The Git tree contains software, documentation, and the documentation captures
 listed in `config/releases/documentation-images.json`. Runtime images, textures,

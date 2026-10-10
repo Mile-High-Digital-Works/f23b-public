@@ -23,7 +23,7 @@
   ],
   "derived_files": [
     {
-      "project_path": "experiments/flight-feel/src/efm/performance/include/f23b/performance/grinnelli_v21_reference.hpp",
+      "project_path": "native/flight-feel/src/efm/performance/include/f23b/performance/grinnelli_v21_reference.hpp",
       "project_sha256": "c285d05a53caf662c465752378165af6bc4c47c970c06b5c7c3654a9beecdffc",
       "source_id": "GRINNELLI_F22A_V2_1_PERFORMANCE",
       "upstream_revision": "24dc1f51a8d0d9427c7bd3c368ccabd3e0ade53c",
@@ -35,7 +35,7 @@
       "purpose": "Independent-throttle, fixed-force, time-based-trim flight model; no thrust vectoring."
     },
     {
-      "project_path": "experiments/flight-feel/src/efm/performance/performance_model.cpp",
+      "project_path": "native/flight-feel/src/efm/performance/performance_model.cpp",
       "project_sha256": "8c5a463f8ab80edc4061b68fd4cb7a8880bce6df12dcc165ea24cfa68d86120e",
       "source_id": "GRINNELLI_F22A_V2_1_PERFORMANCE",
       "upstream_revision": "24dc1f51a8d0d9427c7bd3c368ccabd3e0ade53c",

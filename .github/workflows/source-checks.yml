@@ -30,7 +30,7 @@ jobs:
       - name: Check generated graphics
         run: python -B tests/check_branding.py
       - name: Configure flight tests without DCS
-        run: cmake -S experiments/flight-feel -B build/flight
+        run: cmake -S native/flight-feel -B build/flight
       - name: Build
         run: cmake --build build/flight --config Release
       - name: Test
