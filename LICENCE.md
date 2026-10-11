@@ -15,11 +15,13 @@ The combined software is GNU GPL version 3 or, at your option, any later version
 MIT retain their file-level grants, including the original copyright name in
 Annex B. The native bridge, propulsion and steering retain their GPL notices.
 
-The current flight implementation retains the Grinnelli Designs F-22A v2.1.0
-adaptation, upstream commit `24dc1f51a8d0d9427c7bd3c368ccabd3e0ade53c`.
-The Branden Hooper notice and file-specific grants remain active. No replacement
-core has been accepted. [Credits](CREDITS.md) and the
-[reuse manifest](config/licensing/third-party-code-reuse.json) identify this source.
+**Scenario A — OPEN until acceptance: the replacement flight core has passed.** The replacement core and its typed adapter must be identified by the accepted source commit, build recipe, full DLL SHA-256 and executable `.text` SHA-256 before publication. Do not describe a merely prepared or unit-tested candidate as the accepted core. Remove the old derived core from the v1.5 build and corresponding-source tree after verifying that the 16 previously identified derived functions/values are absent from the active replacement; preserve historical source and notices for previously conveyed releases. The remaining bridge/propulsion/steering GPL notices continue to govern their shipped scope.
+
+This candidate uses the F-23B replacement core with project-authored MIT file notices.
+Owner acceptance is pending. Historical Grinnelli Designs / Branden Hooper
+source and notices remain in this source tree pending that decision.
+The active build recipe selects the replacement. The older model is retained
+for historical tests and is not linked into the candidate flight DLL.
 
 Each binary release must include its matching corresponding software source,
 changes, build and installation scripts, notices and source/output hashes.
@@ -79,8 +81,9 @@ Match these notices to the final installer's actual component versions before re
 Blender, Matplotlib and Pillow are build tools; their programs are not bundled
 with the rendered pictures. The source archive retains existing file notices.
 
-The final v1.5 manifest, compatible DCS build, source commit and ZIP/EXE hashes
-are pending. The current checked-in v1.4 pin is a historical baseline, not a v1.5 pin.
+The v1.5 candidate manifest and checksums identify this local package.
+DCS 2.9.30.28738 is pinned. Final core acceptance, licence scenario review
+and publication remain pending. The v1.4 pin is retained as historical evidence.
 
 ## Annex A: GNU GPL version 3
 

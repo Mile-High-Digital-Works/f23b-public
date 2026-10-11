@@ -1,12 +1,13 @@
 # F-23B credits
 
-Draft for v1.5. Current flight-core credits remain active until a replacement is accepted.
+Draft for v1.5, licence scenario A. The replacement core awaits owner acceptance.
+Historical source and notices remain pending that decision.
 Public creator name: **OPEN**. Public contact email: **OPEN**.
 
 | Contributor | Contribution |
 | --- | --- |
-| F-23B project contributors | Original integration, bridge/helper work, propulsion/steering integration, build/install tools, missions, documentation and eligible original artwork. |
-| Grinnelli Designs; Branden Hooper | F-22A v2.1.0 flight implementation retained in the current adaptation. Copyright (C) 2025 Branden Hooper for upstream portions; Copyright (C) 2026 F-23B project contributors for adaptation. |
+| F-23B project contributors | Original candidate flight core and typed adapter; flight measurements credited to the project owner; original integration, bridge/helper work, propulsion/steering integration, build/install tools, missions, documentation and eligible original artwork. |
+| Grinnelli Designs; Branden Hooper | Historical F-22A v2.1.0 adaptation retained in the source and older releases; the candidate DLL selects the replacement core. Copyright (C) 2025 Branden Hooper for upstream portions; Copyright (C) 2026 F-23B project contributors for adaptation. |
 | SytaPastel | Purchased Northrop YF-23 Black Widow II exterior and paint foundation, CGTrader product 2046482; project-derived visual/contact mesh, liveries and selected menu aircraft renders. |
 | Eagle Dynamics SA and its licensors | The user's separately installed DCS World and activated F/A-18C Hornet, supplying cockpit, sensors, native engines, gear and installed resources. No proprietary game files are bundled. |
 | Python Software Foundation and holders named in its full notice | Bundled interpreter and components; LICENCE Annex D retains every recorded component notice. |

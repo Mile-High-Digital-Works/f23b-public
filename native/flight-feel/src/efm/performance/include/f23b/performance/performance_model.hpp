@@ -153,6 +153,7 @@ private:
     double leading_edge_flap_position_{};
     double simulation_time_s_{};
     double airborne_yaw_time_s_{0.5};
+    bool low_speed_recovery_{}; // explicit state for the optional independent-core protection
 };
 
 // Portable helpers used by offline scoring and native tests.

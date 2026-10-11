@@ -12,7 +12,7 @@ from verify_source import verify
 from release_assets import branding, fix_mission
 
 ROOT = Path(__file__).resolve().parents[1]
-PIN = 'config/releases/release-v1.4.json'
+PIN = 'config/releases/release-v1.5.json'
 DOCS = 'F-23B-docs/'
 TEXT = ('.lua', '.lods', '.txt')
 NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md',
@@ -123,7 +123,7 @@ def main():
         'BUILDING.md. SDK headers and licensed visual sources are external inputs.\n'
         f'Source archive SHA-256: `{sha(source)}`.\n'
     ).encode()
-    manifest = dict(name=name, kind='RELEASE', dcs_version=pin['dcs_version'],
+    manifest = dict(name=name, kind=pin.get('kind', 'RELEASE'), dcs_version=pin['dcs_version'],
                     description=pin['description'], validation_limits=pin['validation_limits'],
                     source_repository='https://github.com/Coaokalo/f23b-public',
                     corresponding_source_commit=commit, release_tooling_source=commit,

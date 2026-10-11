@@ -16,6 +16,10 @@ def verify():
         path = ROOT / name
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             failures.append(f'Source snapshot mismatch: {name}')
+    for name, expected in origin.get('candidate_2', {}).get('files', {}).items():
+        path = ROOT / name
+        if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            failures.append(f'Candidate source mismatch: {name}')
     reuse = json.loads((ROOT / 'config/licensing/third-party-code-reuse.json').read_text())
     for item in reuse['derived_files']:
         path = ROOT / item['project_path']

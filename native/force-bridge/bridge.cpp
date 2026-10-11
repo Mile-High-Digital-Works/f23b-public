@@ -10,6 +10,26 @@
 #include "own_adapter.hpp"
 #include "propulsion.hpp"
 #include "steering.hpp"
+#include "telemetry.hpp"
+#ifdef F23B_DAMAGE_LOGGER
+#include "damage_logger.hpp"
+#endif
+#ifdef F23B_INDEPENDENT_CORE
+#include <tuple>
+#include <type_traits>
+#include "bridge_context.hpp"
+#include "tuning_runtime.hpp"
+void load_core_tuning_at_start() {
+    wchar_t path[32768]{};
+    const auto override_length=GetEnvironmentVariableW(L"F23B_SAVED_GAMES",path,32768);
+    if(override_length>0&&override_length<32768) {
+        f23b::flight_core::load_development_tuning(std::filesystem::path(path));return;
+    }
+    const auto length=GetEnvironmentVariableW(L"USERPROFILE",path,32768);
+    if(length>0&&length<32768)
+        f23b::flight_core::load_development_tuning(std::filesystem::path(path)/L"Saved Games"/L"DCS");
+}
+#endif
 
 // Only documented, typed SDK inputs are dispatched to both implementations.
 // All other native callbacks remain unchanged in the compatibility experiment.
@@ -17,7 +37,21 @@ template<auto Own> struct Both;
 template<class... Args, void(*Own)(Args...)>
 struct Both<Own> {
     static inline void(*native)(Args...){};
-    static void invoke(Args... args) { native(args...); Own(args...); }
+    static void invoke(Args... args) {
+#ifdef F23B_INDEPENDENT_CORE
+        if constexpr(sizeof...(Args)==0) {
+            if constexpr(Own==&own_ed_fm_cold_start||Own==&own_ed_fm_hot_start||Own==&own_ed_fm_hot_start_in_air)
+                load_core_tuning_at_start();
+        }
+#endif
+        native(args...); Own(args...);
+#ifdef F23B_INDEPENDENT_CORE
+        if constexpr(std::is_same_v<decltype(Own),decltype(&own_ed_fm_set_current_state_body_axis)>) {
+            if constexpr(Own==&own_ed_fm_set_current_state_body_axis)
+                f23b::flight_core::sdk_pitch_rad=std::get<16>(std::tuple{args...});
+        }
+#endif
+    }
 };
 
 namespace {
@@ -28,6 +62,13 @@ decltype(&own_ed_fm_get_internal_fuel) native_fuel{};
 decltype(&own_ed_fm_set_draw_args_v2) native_draw{};
 decltype(&own_ed_fm_get_shake_amplitude) native_shake{};
 std::array<float, 3> last_native_gear_draw{};
+#ifdef F23B_DAMAGE_LOGGER
+f23b::bridge::damage::Native native_damage{};
+double damage_bridge_time{};
+void damage_callback(int element,double integrity) {
+    f23b::bridge::damage::emit_and_forward(damage_bridge_time,element,integrity,native_damage);
+}
+#endif
 std::array<double, 3> contact_vertical_force{};
 
 double ground_speed() {
@@ -87,18 +128,32 @@ void simulate_native_engines(double dt) {
     runtime.input.engine_left_running = false;
     runtime.input.engine_right_running = false;
     own_ed_fm_simulate(dt);
+    const auto aerodynamic_output = runtime.output;
     std::array<double, 2> thrust{}, flow{};
     for (std::size_t i = 0; i < 2; ++i) {
         const auto base = i == 0 ? ED_FM_ENGINE_1_RPM : ED_FM_ENGINE_2_RPM;
         thrust[i] = std::max(0.0, native_parameter(base + (ED_FM_ENGINE_1_THRUST - ED_FM_ENGINE_1_RPM)));
         flow[i] = native_parameter(base + (ED_FM_ENGINE_1_FUEL_FLOW - ED_FM_ENGINE_1_RPM));
         const double related_rpm = native_parameter(base + (ED_FM_ENGINE_1_RELATED_RPM - ED_FM_ENGINE_1_RPM));
-        f23b::bridge::add_native_engine(runtime.output, runtime.mass, i, thrust[i], flow[i], related_rpm);
+#ifdef F23B_INDEPENDENT_CORE
+        // The recorded MIL command is axis -0.55, normalized to 0.775 by
+        // the retained SDK adapter. Selecting the augmented range restores
+        // the accepted gain immediately; native combustion/spool remain native.
+        const double throttle=i==0?runtime.input.throttle_left:runtime.input.throttle_right;
+        f23b::bridge::add_native_engine(runtime.output,runtime.mass,i,thrust[i],flow[i],related_rpm,
+            runtime.output.mach,throttle>.775001,f23b::flight_core::runtime_dry_thrust);
+#else
+        f23b::bridge::add_native_engine(runtime.output,runtime.mass,i,thrust[i],flow[i],related_rpm);
+#endif
     }
     static double time = 0.0, last = -1.0;
     time += dt;
+#ifdef F23B_DAMAGE_LOGGER
+    damage_bridge_time=time;
+#endif
     if (time - last >= 0.05) {
         last = time;
+        record_fit_sample(time, dt, aerodynamic_output);
         wchar_t path[2048]{};
         const auto length = GetEnvironmentVariableW(L"F23B_FORCE_BRIDGE_STATE", path, 2048);
         if (length > 0 && length < 2048) {
@@ -140,6 +195,12 @@ void simulate_native_engines(double dt) {
 }
 
 FARPROC f23b_select_callback(const char* name, FARPROC original) {
+#ifdef F23B_DAMAGE_LOGGER
+    if(std::strcmp(name,"ed_fm_on_damage")==0&&original) {
+        native_damage=reinterpret_cast<f23b::bridge::damage::Native>(original);
+        return reinterpret_cast<FARPROC>(&damage_callback);
+    }
+#endif
     if (std::strcmp(name, "ed_fm_get_shake_amplitude") == 0) {
         native_shake = reinterpret_cast<decltype(native_shake)>(original);
         return reinterpret_cast<FARPROC>(&shake_for_active_forces);

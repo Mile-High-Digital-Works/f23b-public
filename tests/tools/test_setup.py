@@ -306,6 +306,15 @@ class SetupTests(unittest.TestCase):
         self.setup_action('install')
         self.assertEqual(json.loads(path.read_text())['source_commit'], 'fixture')
 
+    def test_upgrade_from_v14_release(self):
+        self.setup_action('install')
+        path = self.state / 'receipt.json'
+        record = json.loads(path.read_text())
+        record['source_commit'] = setup.V14_RELEASE
+        path.write_text(json.dumps(record))
+        self.setup_action('install')
+        self.assertEqual(json.loads(path.read_text())['source_commit'], 'fixture')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -22,6 +22,7 @@ STATE = '.f23b-install'  # Earlier releases kept their receipt in the DCS profil
 DOCS = 'F-23B-docs'
 MANIFEST = DOCS + '/release.json'
 OCTOBER_3_RELEASE = '40c67d86716bb002726db2da89c9ddfbffc26358'
+V14_RELEASE = 'f2cd004b6ec587cca88dda921eb3e23641232246'
 UNMANAGED = 'Move the existing F-23B aircraft, supplied livery and F-23B-docs folders to a backup location, then run setup again.'
 CONNECTION_OFF = ('The F-23B weapon and radar connection is OFF for this DCS build. '
                   'MALICE, Block II, radar upgrades and the 640 NM SA scale are unavailable. '
@@ -211,7 +212,7 @@ def perform(action, dcs, profile, archive, request_elevation=False, receipt_dir=
         catalog = json.loads(catalog_path.read_text())['releases'] if catalog_path.exists() else []
         candidates = [dict(source_commit=release['corresponding_source_commit'], files=files)] + catalog
         known = {r['source_commit'] for r in candidates} | {
-            LEGACY_RELEASE, HOOK_RELEASE, SEPTEMBER_29_RELEASE, OCTOBER_1_RELEASE, OCTOBER_3_RELEASE}
+            LEGACY_RELEASE, HOOK_RELEASE, SEPTEMBER_29_RELEASE, OCTOBER_1_RELEASE, OCTOBER_3_RELEASE, V14_RELEASE}
         if receipt and receipt['source_commit'] not in known:
             raise ValueError('Remove the previous release with its original installer before changing releases')
         if receipt is None and any((profile / n).exists() for n in new_roots):
@@ -288,7 +289,7 @@ def perform(action, dcs, profile, archive, request_elevation=False, receipt_dir=
     if action == 'remove':
         return 'F-23B removed. Your controls, missions and unrelated liveries were kept.' + (game if changes else '')
     status = (' ' + CONNECTION_OFF) if mismatches else ' Weapon and radar connection: compatible.'
-    return 'F-23B v1.4 installed.' + game + status + ' Start DCS and select an F-23B Quick Start mission.'
+    return 'F-23B v1.5 installed.' + game + status + ' Start DCS and select an F-23B Quick Start mission.'
 
 
 def elevated_action(action, dcs, profile):

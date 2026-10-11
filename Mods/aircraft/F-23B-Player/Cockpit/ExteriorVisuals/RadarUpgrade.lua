@@ -7,7 +7,7 @@ local last_target, last_side
 local ranking_failed = false
 local support_reported, support_target, profile_reported, alias_reported
 local alias_ticks = 0
-local energy_reported, sa_range_reported
+local energy_reported, sa_range_reported, decoy_reported, flight_decoy_reported
 local connection_off = "F-23B weapon and radar connection OFF. MALICE, Block II, radar upgrades and SA 640 are unavailable. "
     .. "Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available. "
     .. "Get a compatible F-23B release: github.com/Coaokalo/f23b-public/releases/latest"
@@ -56,7 +56,7 @@ return function(ranking_scope, cue_ir)
     if not native_update then return end
     local ok, status, target, side, ranking, az, el, cue_valid, support, grants, granted, profile, diag,
         alias, malice_type, blockii_type, alias_diag, launch_zone_diag, energy_status, energy_message, energy_diag,
-        sa_range_status = pcall(
+        sa_range_status, decoy_status, decoy_rejects, flight_decoy_status, flight_decoy_rejects = pcall(
         native_update, ranking_scope == true, cue_ir == true)
     if not ok then
         connection_failed("Update failed: " .. tostring(status))
@@ -114,6 +114,23 @@ return function(ranking_scope, cue_ir)
         report(sa_range_status == 1 and "SA scale extended to 640 NM (SCL cycles 40, 20, 10, 5, 640, 320)"
             or ("SA scale extension unavailable (code " .. tostring(sa_range_status) .. "); stock 320 NM limit"), sa_range_status < 0)
         sa_range_reported = sa_range_status
+    end
+    -- Block II flare rejection: the Hornet cockpit seeker does not take a flare as its target before launch.
+    if decoy_status and decoy_status ~= 0 and decoy_status ~= decoy_reported then
+        report(decoy_status == 1 and "Block II flare rejection active: the cockpit seeker ignores flares before launch"
+            or ("Block II flare rejection unavailable (code " .. tostring(decoy_status) .. "); native seeker behaviour"),
+            decoy_status < 0)
+        decoy_reported = decoy_status
+    end
+    if flight_decoy_status and flight_decoy_status ~= 0 and flight_decoy_status ~= flight_decoy_reported then
+        report(flight_decoy_status == 1 and "Block II flare rejection active in flight: a launched Block II ignores flares"
+            or ("Block II in-flight flare rejection unavailable (code " .. tostring(flight_decoy_status)
+                .. "); native missile behaviour"), flight_decoy_status < 0)
+        flight_decoy_reported = flight_decoy_status
+    end
+    if ((decoy_rejects or 0) > 0 or (flight_decoy_rejects or 0) > 0) and alias_ticks % 1000 == 1 then
+        report(string.format("Block II flare rejection diag: seeker=%d flight=%d", decoy_rejects or 0,
+            flight_decoy_rejects or 0), false)
     end
     if type(energy_message) == "string" then report(energy_message, energy_message:sub(1, 5) == "ERROR") end
     if type(energy_diag) == "string" and alias_ticks % 1000 == 1 then report("MALICE energy diag: " .. energy_diag, false) end

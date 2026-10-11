@@ -1,11 +1,12 @@
 # F-23B v1.5 — release draft
 
-No v1.5 package has been issued. The final files, source commit, checksums and
-download links are pending. The current public download is v1.4.
+A local v1.5 candidate is prepared. Owner acceptance and publication are pending.
+The current public download is v1.4. Candidate checksums accompany the local files.
 
 The aircraft retains the native Hornet cockpit, radar, datalink, engines, fuel,
-gear and steering. The present adapted flight core and its credits remain until
-the owner accepts a replacement. Current installation changes no DCS game files.
+gear and steering. This candidate contains the replacement core, candidate 2.
+Owner acceptance is pending; optional development presets are off.
+The previous contact model remains installed. Current installation changes no DCS game files.
 
 The revised slate is selected for both builds, and MALICE motor option C is
 selected. One copied medium-range fixture shot hit with one motor pulse;

@@ -36,14 +36,17 @@ void connect_weapons() {
             reinterpret_cast<LPCWSTR>(&connect_weapons), &self)
         || !GetModuleFileNameW(self, module_path, 32768)) return;
     const auto path = std::filesystem::path(module_path).parent_path() / L"F23B_Radar.dll";
+    note("F23B_WEAPONS loading sibling helper");
     const auto library = LoadLibraryExW(path.c_str(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!library) { note("F23B_WEAPONS library unavailable: " + std::to_string(GetLastError())); return; }
     const auto connect = reinterpret_cast<int(*)()>(GetProcAddress(library, "f23b_connect_weapons"));
     if (!connect) { note("F23B_WEAPONS native initializer unavailable"); return; }
+    note("F23B_WEAPONS invoking native initializer");
     note("F23B_WEAPONS native early connection status=" + std::to_string(connect()));
 }
 
 void initialize() {
+    note("native callback resolution started");
     wchar_t executable[2048]{};
     if (!GetModuleFileNameW(nullptr, executable, 2048)) throw std::runtime_error("DCS path unavailable");
     auto root = std::filesystem::path(executable).parent_path().parent_path();
@@ -55,11 +58,15 @@ void initialize() {
         if (_wcsicmp(std::filesystem::weakly_canonical(path).c_str(),
                      std::filesystem::weakly_canonical(loaded).c_str()) != 0)
             throw std::runtime_error("Native Hornet module is not the installed reference");
-    } else native = LoadLibraryExW(path.c_str(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+    } else {
+        note("loading installed Hornet callback library");
+        native = LoadLibraryExW(path.c_str(), nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
+    }
     if (!native) {
         note("native load failed: " + std::to_string(GetLastError()));
         throw std::runtime_error("Installed Hornet callback library unavailable");
     }
+    note("installed Hornet callback library available");
     connect_weapons();
     for (std::size_t i = 0; i < count; ++i) {
         callbacks[i] = GetProcAddress(native, names[i]);
