@@ -55,9 +55,7 @@
       "native/flight-core/calibration_replay.py": "f252e1d3d7d608400c94ce76cd56c595f2ff37f56d08857f7acf5c2f9ea13c42",
       "native/flight-core/calibration_replay_test.py": "5520d4b617434bd1efb8187b71865228659e580ad3c74c10a60b1ac7f5948000",
       "native/force-bridge/bridge.cpp": "10695e052a2cecb3df9642f8f1ea7b400eec2ae7e6c8ff2469726a0cf8bbecac",
-      "native/force-bridge/build_collision.py": "48a5e99921c3d1213670a821f4b7fbfe612657e8b083bae5422af373a3675d8a",
       "native/force-bridge/CMakeLists.txt": "5449f87885761799a7b680bc954b9997a1a9cbebfb5c61ae34254b7d9ada9794",
-      "native/force-bridge/contact_geometry.py": "c0cc9a06949e844b642be37ff4a4d6089ebbfe1d1f6185addf632002aae4dae8",
       "native/force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
       "native/force-bridge/damage_logger.hpp": "89853046847adfab93e02ad47674700c3a75638054f6f8be71d41229c9ca1ed2",
       "native/force-bridge/damage_logger_test.cpp": "5e3d731539ba657c6410710de7b97d2eb0cf4341ada84492f4997ea573aad611",
@@ -69,8 +67,6 @@
       "native/force-bridge/propulsion.hpp": "10c206b950fc14bdf791ebaa2816554b777aa9781217c4de63132a3c3ce4c7a9",
       "native/force-bridge/propulsion_tests.cpp": "e932680027d6bdd8c8105b8f2a7ba412cb20f983eb5b9206fe521d91c5f262bc",
       "native/force-bridge/sdk_adapter.hpp": "cde389775f55fcc7d89c2630ed27e53a3f50da1b229b0d8c18de99c9813ba13f",
-      "native/force-bridge/stage_aim260_preview.py": "f266c23124c9f96cfaf832075d71d14b995ea96e69e789b2294c10065ca95795",
-      "native/force-bridge/stage_malice_preview.py": "e4a775ccb7e1be0b0c6ee2cc7dc8e27b368745e3e2c3b8f999a9727a575014b9",
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
       "native/force-bridge/telemetry.hpp": "4d38374f601ae302bf9ba7b99c941ac0b999fe400f6cbeb85f4b258142ca7d8c"
