@@ -11,6 +11,10 @@ void native_body(double,double,double,double,double,double,double,double,double,
                  double,double,double,double,double,double,double,double,double,double,double) {}
 void native_start() {}
 int main() {
+    static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_state),PFN_CURRENT_STATE>);
+    static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_state_body_axis),PFN_CURRENT_STATE_BODY_AXIS>);
+    static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_mass_state),PFN_CURRENT_MASS_STATE>);
+    static_assert(std::is_same_v<decltype(&own_ed_fm_suspension_feedback),PFN_FM_SUSPENSION_FEEDBACK>);
     using Callback=decltype(&own_ed_fm_set_current_state_body_axis);
     auto body=reinterpret_cast<Callback>(f23b_select_callback("ed_fm_set_current_state_body_axis",reinterpret_cast<FARPROC>(&native_body)));
     own_ed_fm_hot_start_in_air();
@@ -23,6 +27,9 @@ int main() {
     check(std::abs(runtime.input.throttle_left-.775)<1e-6&&runtime.input.throttle_right==1.,"recorded MIL and AB command mapping");
     std::cout<<"SDK command signs: pitch="<<runtime.input.pitch<<" roll="<<runtime.input.roll<<" yaw="<<runtime.input.yaw<<'\n';
     check(std::abs(runtime.input.pitch-.3)<1e-6&&std::abs(runtime.input.roll+.2)<1e-6&&std::abs(runtime.input.yaw+.4)<1e-6,"SDK command polarity");
+    own_ed_fm_set_command(203,1);check(runtime.input.yaw==-1,"keyboard right pedal agrees with the SDK axis sign");
+    own_ed_fm_set_command(204,1);check(runtime.input.yaw==0,"keyboard pedal release");
+    own_ed_fm_set_command(2003,.4f);
     runtime.input.engine_left_running=runtime.input.engine_right_running=false;
     const auto& b=runtime.body;const auto& a=runtime.atmosphere;const auto& m=runtime.mass;const auto& u=runtime.input;
     core::State state{{b.velocity_body_m_s.x,b.velocity_body_m_s.y,b.velocity_body_m_s.z},

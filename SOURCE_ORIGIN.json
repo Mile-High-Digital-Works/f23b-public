@@ -1,8 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Curated v1.5 candidate source. Candidate 2 and optional startup-only presets match the pinned private installation. Core acceptance and public release remain pending. Historical source and notices are retained.",
-  "runtime_source": "9ada987c176f562bfd28cbe74a1346c73f4bf9a2",
-  "flight_source": "931b267fb7d3",
+  "description": "Corresponding source for the final private v1.5 acceptance build. Historical implementations are available in their release commits.",
   "unchanged_files": {
     "COPYING": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
     "LICENSES/MIT.txt": "b2ffc91f892b8977a39d4c5e592cea65a29c43c119eb9ec88bda34ce618f7c75",
@@ -14,30 +12,15 @@
     "Mods/aircraft/F-23B-Player/Input/F-23B/joystick/default.lua": "933deb376b1ef217720aedac20f2f84a783b9f2c617828f1b9d41e456c93b454",
     "Mods/aircraft/F-23B-Player/Input/F-23B/keyboard/default.lua": "454dec3b61774be95b805ac4c383bbf081b54df50d4f5f097de7c9edacadd11c",
     "Mods/aircraft/F-23B-Player/Input/F-23B/name.lua": "405c6cc3cf823c968aa675464c05326f96e5fb5ad0057ad54cf96c3429accfa3",
-    "Mods/aircraft/F-23B/F-23B.lua": "06e008ea4552ec0ba3fb484b357f6773dc0ee2ede14787385df6d38c27254c94",
     "Mods/aircraft/F-23B/Liveries/F-23B/Standard/description.lua": "90d6497157129423de6d1df5ad0d5e7929a4e7c8100524db30d2562d2930841b",
     "Mods/aircraft/F-23B/Liveries/F-23B/USA/description.lua": "e9c7e74af5be498c8cee916e8efbddb28e21e526e6405a4fac8d0a746ee0c244",
     "Mods/aircraft/F-23B/Missions/QuickStart/quickstart.lua": "971b42e42925c29c4b7278fb85e643305880e2fe750ba6cbfe87d415a987f342",
     "Mods/aircraft/F-23B/Shapes/F-23B.lods": "08f98c287a79b19ce2eec9b2189320970d64e795af53b1cfab35f5a0c1e9173b",
     "Mods/aircraft/F-23B/UnitPayloads/F-23B.lua": "46b0fd00706469ad17d700d765aad1a728e7fcf0bafadf3a4a172d5106ae47e2",
     "Mods/aircraft/F-23B/entry.lua": "8bcdf76922f6484216679b7af5b3d1d737cf4a5116b79a97d5e3fea69c02ec2a",
-    "native/flight-feel/CMakeLists.txt": "363acf9bc20fce1479500de89b04ae3ac123b876873452a7cf08fa4f576b0c3d",
-    "native/flight-feel/src/efm/performance/dcs_adapter/performance_adapter.cpp": "a9688dc04da52eb879348cd90b3155e4750796a9f563a3698c3708ee58a20a7d",
-    "native/flight-feel/src/efm/performance/engine_mapping.cpp": "7a301129f461df71eb6fe2ccdbe4c2880a6349bdbbe12efaf92fffa4bce6e816",
-    "native/flight-feel/src/efm/performance/include/f23b/performance/engine_mapping.hpp": "8a4ec520763e6e4e40c1b0edf43b286dbae15d543c0b9b6ef470bc9908e9f3b3",
-    "native/flight-feel/src/efm/performance/include/f23b/performance/grinnelli_v21_reference.hpp": "c285d05a53caf662c465752378165af6bc4c47c970c06b5c7c3654a9beecdffc",
-    "native/flight-feel/src/efm/performance/performance_model.cpp": "8c5a463f8ab80edc4061b68fd4cb7a8880bce6df12dcc165ea24cfa68d86120e",
-    "native/flight-feel/tests/native/f23b_performance_adapter_tests.cpp": "479efdb730e88ce464204d2f54501283d4975dfc3d3564e05c613bb76ca3128c",
-    "native/flight-feel/tests/native/f23b_performance_engine_mapping_tests.cpp": "46d60fb82a1cc67ce3a75d549587dabda409d69bccb12cd5e9580efc0b8e2455",
-    "native/flight-feel/tests/native/f23b_performance_model_tests.cpp": "1664344f84a12d90ea51c2bf10aecb271fadbc03984c928ba0ac4af618bbf6e7",
-    "native/flight-feel/tests/native/f23b_roll_stability_tests.cpp": "6670ee212cd5b2c4567d8c2431a76bc57f15698cd114c1d5b4a0b3bfbc269cfb",
-    "native/flight-feel/tests/stubs/FM/wHumanCustomPhysicsAPI.h": "6a92d3d0f04f382280f71e31d1c4bbfd565529d28f42b02cc1d309173ebf89ac",
-    "native/flight-feel/tools/performance/performance_report.cpp": "e48f8b5016e3b59f85a0a2ecf956019cbf95c02c5962699cd28b10e4dacebcec",
     "native/force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
-    "native/force-bridge/generate.py": "c524ceb43b9be9fe6472a8bb3201702250d2bda441c537105c06b448eb47320f",
     "native/force-bridge/generate_forwarding.py": "828893127125615d646506e115d51e7db66fd2e2369fa00fa7e11f6be06638e2",
     "native/force-bridge/ground_config.lua": "1536a0a942724278d3d63f53e428d56911f3e79d626a62371fa7bbd823fcfbf6",
-    "native/force-bridge/ground_yaw_tests.cpp": "81a18f63756ad39a75a63b97e22d723746c09743d2ae26a6e870e621170db9bb",
     "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
     "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
     "native/radar-helper/LaunchZone_test.cpp": "9f0d2d35e49d8f2871a4f0e66e7bee1ddc49b36dc6efffbbac4af5f44ec2b96e",
@@ -51,214 +34,46 @@
     "native/radar-helper/SupportDiag_test.cpp": "a118f67ccd267ecdcf7c7ca3000c911eb968a33c533bd3ebd47e15f73a553ba1",
     "native/radar-helper/SupportHook_test.cpp": "11b84e2612404744fae73e7aafe7e14ab70aa9bd66a80fb01d6c9de06d4fd643"
   },
-  "modified_files": {
-    "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": {
-      "upstream_sha256": "c4759547585b4e5bbac2c11504cdfb16495663aad08c019b0b6e3679af43e159",
-      "reason": "Public release identity replaces the private build identity."
-    },
-    "Mods/aircraft/F-23B/Encyclopedia/Plane/F-23B.txt": {
-      "upstream_sha256": "df4a6aad4bf526d83f2446d48371f63c198618bf7ae1261cad87cf9853aabd80",
-      "reason": "Player encyclopedia text for this release."
-    },
-    "native/radar-helper/build.ps1": {
-      "upstream_sha256": "5237ef77e77cffc04d8d616c5c36b7eada1d84e0bb53d4a1cda72db529fd585e",
-      "reason": "Build into build/native-radar. The check that needs a private module capture is not included."
-    },
-    "native_patch.py": {
-      "upstream_sha256": "9035ea9f5774f7f938b64c62781de31a42784070f7b0d9015f1af96f4293169b",
-      "reason": "Add verified legacy restoration for the independent-weapon installer; preserve existing recovery support."
-    },
-    "LICENSE": {
-      "inherited_sha256": "83ecf0e27062074fface00de7fce3bfc492a15a679c4a0574a534a13f87e259c",
-      "reason": "Canonical v1.5 licence/credits consolidation; full inherited legal texts retained."
-    }
-  },
-  "prior_runtime_source": "4c254be08a8d23ba5ad29e4a8cbf7962dc5d340b",
-  "accepted_runtime_archive_sha256": "9e46867abcd899cf4577956e017f953bb6363dfd00a1839fc5b3c0a679f80a7c",
-  "prior_curated_release": "804920ad2fc51de498fed81daab072c1351aa6a7",
-  "native_radar_source": "9ada987c176f562bfd28cbe74a1346c73f4bf9a2",
-  "public_v1_4_changes": {
-    "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": {
-      "inherited_sha256": "25c232745972317e80c005e25595a3025d9f3f11700ca3ce483767c8d8211c54",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "Mods/aircraft/F-23B-Player/entry.lua": {
-      "inherited_sha256": "a7034366ca018f4cf9300605f4267cad898bf42ac5c87b3a7d934b2c6d542194",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "Mods/aircraft/F-23B/Entry/VisualConfig.lua": {
-      "inherited_sha256": "f82e70b75b1f0320e3561192746cf5fa863c5a7ee4fb655a94fd7b3e8bbd4f18",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/radar-helper/MissileProfile.h": {
-      "inherited_sha256": "139b91d748c20118e8d99d2304473a0640ea60d7c03f410fbe932a060a349c8e",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/radar-helper/NativeRanking.h": {
-      "inherited_sha256": "0cc935f5b38d6aeb7896bac06b6fccdc19a2d7445ae84e6a1e69fb273b821413",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/radar-helper/PayloadAlias.h": {
-      "inherited_sha256": "7d8ad6dba269397a3f04339b6ec992ac9e6574c05854b3fd04460cfdbba633af",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/radar-helper/Radar.cpp": {
-      "inherited_sha256": "2ebba32955ad723113ddc82bd3a91d2c0af2a16461a6785bc121a61a4c3b552c",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/radar-helper/SupportDiag.h": {
-      "inherited_sha256": "f4e7fc32b4d0d6b3b23b5089cf12196667402800ee5708a56bc40080d9aedb55",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/radar-helper/SupportHook.h": {
-      "inherited_sha256": "5f41d8a73504d54e69e015c03643f1043342d4bbf8f81fe96d57299f5f9b4ecf",
-      "reason": "Current DCS pins, release identity, accepted afterburner configuration, or connection diagnostics; see Git history."
-    },
-    "native/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md": {
-      "inherited_sha256": "6da5da14a5658735ea7e80fca8788345667ce0f44711ffd8a839ab1b6b5ded96",
-      "reason": "Remove obsolete product status wording while retaining source attribution."
-    }
-  },
-  "v15_selected_motor": {
-    "choice": "C",
-    "published": false,
+  "v1_5": {
+    "bridge_sha256": "5e1dfe6a48553d25a36502d33ec91ba946e5148c0c43c228b5a18572108703f3",
     "files": {
-      "Mods/aircraft/F-23B/Weapons/F23B_AIM424_MALICE.lua": {
-        "previous_public_sha256": "4f9d07af7153efa867fd20d6118b2907d0d80842eedd4bdb0a01d4789c320de7",
-        "selected_sha256": "28016ff03e35f5f78fb9ed5ec6e054bf69f9192bb7d4710694091185fd3c5dc9"
-      },
-      "native/radar-helper/MaliceEnergy.h": {
-        "previous_public_sha256": "32477d081bf3bf82be706d28dd5a0e58299796a0a3c950e342163953a1242646",
-        "selected_sha256": "bae9171c7f08a58f303f6c5e0b0795196d8d1010a50b15fcf054624d29a06c3c"
-      },
-      "native/radar-helper/MaliceRuntime.h": {
-        "previous_public_sha256": "ea492a3a12fbf5b95771e9901e9673985c3b2eb9c8ee99c87becd1ea23b244cb",
-        "selected_sha256": "94c8bc55fc77a037e853070f0bd40bc3b5dcab451676752bf1afaeccb5d0b171"
-      },
-      "native/radar-helper/MaliceEnergy_test.cpp": {
-        "previous_public_sha256": "61b7460d7744cb253dda132f43adf073f953d87bfcbcc9f3120b8867fd97eb76",
-        "selected_sha256": "8013bd4e222d49b9d31c336d9f50fa19334dd3321444036306e6c2ea1e345cc6"
-      },
-      "tests/lua/malice_blockii_hornet_spec.lua": {
-        "previous_public_sha256": "c69ff14e871ddf6ed794415083c6d3d0a0e994928d4b9f520270aa465c392bd9",
-        "selected_sha256": "05a06a38879634ced6902a600dc9fc0b8fe03c1bb993ac6956768f44713d7275"
-      }
-    }
-  },
-  "v15_original_radar_inputs": {
-    "native/radar-helper/MissileProfile_test.cpp": {
-      "previous_public_sha256": "b0cc4a04be09c50ef54b4a2cd1afa0f47d3e0872eb3cfb4c97d43aa78f3dc91e",
-      "selected_sha256": "6bb5b0cf3678dff06675fd2f46f63370c8e791486aaf7ca5bfba729a38f54b2d"
-    },
-    "native/radar-helper/NativeRanking_test.cpp": {
-      "previous_public_sha256": null,
-      "selected_sha256": "b011a5f201fcf570959a4b44804b617d54c2623da2ef4e300ead8a890cfa71e1"
-    },
-    "native/radar-helper/PayloadAlias_test.cpp": {
-      "previous_public_sha256": "93cc025e94ecac8acf7ddd50fa774136ac0919a702a966f57747d7f9b3dddc0d",
-      "selected_sha256": "ecc32e778d3fc392aa08c359649f9d9ab3e66a3115f1fc35af07d655dde4f5f4"
-    },
-    "native/radar-helper/Radar.cpp": {
-      "previous_public_sha256": "c5f58caa4cb619eb26e50986660a557edf96ec446d2cb9009ebe4c84ffa23ea2",
-      "selected_sha256": "aadf2d76a48d48ce3a734fef6590da2263dcbf63cb271a437851fc8eb0c54791"
-    },
-    "native/radar-helper/RadarTune.h": {
-      "previous_public_sha256": "62cdc42d912fc296e8b61209266ae2fc98027893f447085d7007c8eab1de8cfa",
-      "selected_sha256": "63ee964d3fd57db923b494a7f7628d3541b7c9eb337d1b867526b4f97882a9f8"
-    },
-    "native/radar-helper/RadarTune_test.cpp": {
-      "previous_public_sha256": "5a125f3eef0c771bec969c4005d1335fd3e52b61174f4fbe99e30f293769d3f6",
-      "selected_sha256": "dd85a58e60e6e883665849a1b3995cddafa46364807ec76699c3951058fb09d8"
-    },
-    "native/radar-helper/SeekerDecoyHook.h": {
-      "previous_public_sha256": null,
-      "selected_sha256": "c8dd897f3cf9700c126e936e6a5303d38d4d2dcf8592f543fea14d49b4b09f35"
-    },
-    "native/radar-helper/SeekerDecoyHook_test.cpp": {
-      "previous_public_sha256": null,
-      "selected_sha256": "fbb564bcc1200d1f47e3a26ca98cb6796063d930561af16998b7feb30aab2d00"
-    }
-  },
-  "modified_in_v1_5": {
-    "native/force-bridge/bridge.cpp": {
-      "previous_sha256": "fb8976c104559dd42dcd5c6ffae14237a10e3f00087bfea9d03ec87d027cc0f7",
-      "current_sha256": "6aa93cdc67db93ae7ae750893c8ff7163cd0cb2e8313b0f8ff34505514ae7f02",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "native/force-bridge/CMakeLists.txt": {
-      "previous_sha256": "22427fba5b1e5e7ab35e98e6fd6499424f5d0073d83608be0f027d1f1ea9761a",
-      "current_sha256": "9c162671a7f50d49c1c52e01a047c6f8d1f500adeb67280c635d8f0533619834",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "native/force-bridge/native_exports.txt": {
-      "previous_sha256": "3ac19e001f5c10919650360efdab4f3c4c594a719a6dcfa689e2faa41691f167",
-      "current_sha256": "005800e3510b11a764e9bf62a1b5ed7091da7165fd9b144816ea04b4aae4d181",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "native/force-bridge/native_loader.cpp": {
-      "previous_sha256": "b0f0ad3faf3b7628dcacc42b4de2c283e713ef0ac2fea1bec03c2b51009e9225",
-      "current_sha256": "b280c21433d10a4fa6361804120b11819daa100ad6d46451b72eca6fbdc26e80",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "native/force-bridge/propulsion.hpp": {
-      "previous_sha256": "7d37fb693ec03b22c18f6d9271116cb782cb0128f749f1eb9e97c137aed7f46b",
-      "current_sha256": "a56559cf21144071d36d7245599ec870bae87381a7fa8a14bbe46d42e6aeabc1",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "native/force-bridge/propulsion_tests.cpp": {
-      "previous_sha256": "f79110c676f112b4e9756dd0b4525576cf99c6049e70144001f3d22a3d955a70",
-      "current_sha256": "378660fe63503587e1af01ca08f7f312f57f10e6d9a82274b6373962404b6262",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "native/flight-feel/src/efm/performance/include/f23b/performance/performance_model.hpp": {
-      "previous_sha256": "515949830fab5cae94b92ec577f07e70cee0978dd4f25a5956333c213b5c69d5",
-      "current_sha256": "fb0fb4fe46753393ebbda68c5459962807f72ab23a5dd168bb371b6d02c16da2",
-      "reason": "Candidate 2 integration and optional startup-only development presets."
-    },
-    "Mods/aircraft/F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": {
-      "previous_sha256": "744e402aeb2f798a1e47f4e121b011f188a20ff0f47cef93c2912bab9633d6a2",
-      "current_sha256": "76e310c9f91ae8263d80ea9a341e183a2a161ff31a50eed9e23f038e33f891da",
-      "reason": "Installed v1.5 script parity."
-    }
-  },
-  "candidate_2": {
-    "status": "owner acceptance pending",
-    "bridge_sha256": "65ee0b0eeae8624cb73a365bffad1cd6b92d6232728a8d2c2b0135df500dd9da",
-    "files": {
-      "native/flight-core/bridge_context.hpp": "41e5106460f6e22909376f3266e002183882230d994a2c66f603edc0d80a106b",
-      "native/flight-core/bridge_model.cpp": "1cbd411b507851da1e2d7ad13e51ddad79f5013a82d99ed1fd6d98ba0371833c",
-      "native/flight-core/bridge_model_test.cpp": "1acd1d9bae380662cac9e056b9467d0a5b162d8e90e1962f2926ccf4eb3d4459",
-      "native/flight-core/core.hpp": "ac1c1eca9a1813daa4d15cd1be3b8f41fc0dcc341e0fe2c9bb62a6da8fd86c31",
-      "native/flight-core/core_test.cpp": "24ba72455713a5ea4662dcd6852233ace36118603d1f72ab5ecbc61b00c012d0",
-      "native/flight-core/development_options.hpp": "06e3495312026f1d8656b6e525fe91c1864e3dd708f58730f7b608f7016816fd",
-      "native/flight-core/installed_control.hpp": "1d93b35f1a7467fbd6ab827a4117b1862c5d5e6de6a8453ded0dd81c0d274b83",
-      "native/flight-core/offline_api.cpp": "4387323d97af4e72b3ca027ee1159ef48724a9d267ad9b8cfa87bdbf468a12d2",
+      "native/flight-core/CMakeLists.txt": "a9ac372c1fcb8cccba0025a17c53806ce73493edb451e21735683a3d899e7a5a",
+      "native/flight-core/core.hpp": "7d837eb10d7841d5bd04158eabf724ac4b3d566d7e30e0c4122e5f542ddc4c6d",
+      "native/flight-core/fitted_parameters.hpp": "193eb5dc6acc32aba4c2cb0fee176f04c2c7bd292297954626cc5bf1de662f52",
       "native/flight-core/recorded_trim.hpp": "5b63a73037d64ac305e1937198b973ffb380a42b64ab3621dbdb1509c357eb69",
-      "native/flight-core/replay.cpp": "0eb3bfeff6de940433c89c43f6e8b2d7497a8bb182f3741648ef50e3e0762743",
-      "native/flight-core/tuning.hpp": "6c93cb3b71f2028d89616c0c9b08d582409bc651dd18d7f2c839781b80d6b544",
+      "native/flight-core/core_test.cpp": "24ba72455713a5ea4662dcd6852233ace36118603d1f72ab5ecbc61b00c012d0",
+      "native/flight-core/tuning.hpp": "42d21b1bd8277f3276118b8c0e850a1f719e9678eec426eabdc2be3fc4c4f7b9",
+      "native/flight-core/tuning_test.cpp": "80edcfb5c1c4a3bc3c9a51f536f1548116d079d8cea66094f4607ea40f277d18",
       "native/flight-core/tuning_runtime.hpp": "1b11accfb9297d65157cbde9fea709227aaf0dacb9fc09602cd2c1259848e2fa",
-      "native/flight-core/tuning_test.cpp": "8a11b923d6526c3d7a8f9df9d4365207a1b1a54dfd4f6b49f7e5a2a6aa355247",
-      "native/flight-core/CMakeLists.txt": "070add7e5bd5f770e0e9b9490bbace34f6d1d535dd4318554e55f01620bcd6e1",
+      "native/flight-core/development_options.hpp": "0518e49e55a46900ef16a73d2dbd0a6885a81c854a41881b2f6cfa7e09506de6",
+      "native/flight-core/bridge_context.hpp": "41e5106460f6e22909376f3266e002183882230d994a2c66f603edc0d80a106b",
+      "native/flight-core/bridge_model.hpp": "6d080e6fee1855087b9e0e857777246bbd97770e9829118db923b11f99c77e0f",
+      "native/flight-core/bridge_model.cpp": "1d0de7611691e2ed830466bede3bde297da08d5c926ada8166972f3b30286adb",
+      "native/flight-core/bridge_model_test.cpp": "a20a3c1f85206dc529da75d755cb9b02b6d622f1536c6a4712bbc908e3710514",
+      "native/flight-core/offline_api.cpp": "ef9ecd6d07b2c6811479864303f501f4683562d88016e3773d4005b2df72d46f",
+      "native/flight-core/replay.cpp": "0eb3bfeff6de940433c89c43f6e8b2d7497a8bb182f3741648ef50e3e0762743",
       "native/flight-core/calibration_replay.py": "f252e1d3d7d608400c94ce76cd56c595f2ff37f56d08857f7acf5c2f9ea13c42",
       "native/flight-core/calibration_replay_test.py": "5520d4b617434bd1efb8187b71865228659e580ad3c74c10a60b1ac7f5948000",
-      "native/force-bridge/bridge.cpp": "6aa93cdc67db93ae7ae750893c8ff7163cd0cb2e8313b0f8ff34505514ae7f02",
-      "native/force-bridge/CMakeLists.txt": "9c162671a7f50d49c1c52e01a047c6f8d1f500adeb67280c635d8f0533619834",
+      "native/force-bridge/bridge.cpp": "10695e052a2cecb3df9642f8f1ea7b400eec2ae7e6c8ff2469726a0cf8bbecac",
+      "native/force-bridge/build_collision.py": "48a5e99921c3d1213670a821f4b7fbfe612657e8b083bae5422af373a3675d8a",
+      "native/force-bridge/CMakeLists.txt": "5449f87885761799a7b680bc954b9997a1a9cbebfb5c61ae34254b7d9ada9794",
+      "native/force-bridge/contact_geometry.py": "c0cc9a06949e844b642be37ff4a4d6089ebbfe1d1f6185addf632002aae4dae8",
       "native/force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
       "native/force-bridge/damage_logger.hpp": "89853046847adfab93e02ad47674700c3a75638054f6f8be71d41229c9ca1ed2",
       "native/force-bridge/damage_logger_test.cpp": "5e3d731539ba657c6410710de7b97d2eb0cf4341ada84492f4997ea573aad611",
-      "native/force-bridge/generate.py": "c524ceb43b9be9fe6472a8bb3201702250d2bda441c537105c06b448eb47320f",
+      "native/force-bridge/generate.py": "e27ef0d920d64c92a6558f2ea382f46ae219c2b3541589fea9b809ea44434b9c",
       "native/force-bridge/generate_forwarding.py": "828893127125615d646506e115d51e7db66fd2e2369fa00fa7e11f6be06638e2",
-      "native/force-bridge/ground_yaw_tests.cpp": "81a18f63756ad39a75a63b97e22d723746c09743d2ae26a6e870e621170db9bb",
+      "native/force-bridge/ground_yaw_tests.cpp": "af61d695cd2f844fb8c9af29b2064aafa3305a95e08279b8e5146e74a271c952",
       "native/force-bridge/native_exports.txt": "005800e3510b11a764e9bf62a1b5ed7091da7165fd9b144816ea04b4aae4d181",
       "native/force-bridge/native_loader.cpp": "b280c21433d10a4fa6361804120b11819daa100ad6d46451b72eca6fbdc26e80",
-      "native/force-bridge/propulsion.hpp": "a56559cf21144071d36d7245599ec870bae87381a7fa8a14bbe46d42e6aeabc1",
-      "native/force-bridge/propulsion_tests.cpp": "378660fe63503587e1af01ca08f7f312f57f10e6d9a82274b6373962404b6262",
+      "native/force-bridge/propulsion.hpp": "10c206b950fc14bdf791ebaa2816554b777aa9781217c4de63132a3c3ce4c7a9",
+      "native/force-bridge/propulsion_tests.cpp": "e932680027d6bdd8c8105b8f2a7ba412cb20f983eb5b9206fe521d91c5f262bc",
+      "native/force-bridge/sdk_adapter.hpp": "cde389775f55fcc7d89c2630ed27e53a3f50da1b229b0d8c18de99c9813ba13f",
+      "native/force-bridge/stage_aim260_preview.py": "f266c23124c9f96cfaf832075d71d14b995ea96e69e789b2294c10065ca95795",
+      "native/force-bridge/stage_malice_preview.py": "e4a775ccb7e1be0b0c6ee2cc7dc8e27b368745e3e2c3b8f999a9727a575014b9",
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
-      "native/force-bridge/telemetry.hpp": "4d38374f601ae302bf9ba7b99c941ac0b999fe400f6cbeb85f4b258142ca7d8c",
-      "native/flight-feel/src/efm/performance/include/f23b/performance/performance_model.hpp": "fb0fb4fe46753393ebbda68c5459962807f72ab23a5dd168bb371b6d02c16da2",
-      "native/flight-core/fitted_parameters.hpp": "d6e8d8a68985b7a1d67bd710d6829edaa62e6e8fbfea56e68ff3385f4c39838a",
-      "Mods/aircraft/F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "76e310c9f91ae8263d80ea9a341e183a2a161ff31a50eed9e23f038e33f891da"
+      "native/force-bridge/telemetry.hpp": "4d38374f601ae302bf9ba7b99c941ac0b999fe400f6cbeb85f4b258142ca7d8c"
     }
   }
 }

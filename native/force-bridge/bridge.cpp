@@ -7,7 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
-#include "own_adapter.hpp"
+#include "sdk_adapter.hpp"
 #include "propulsion.hpp"
 #include "steering.hpp"
 #include "telemetry.hpp"
@@ -84,7 +84,7 @@ double parameter(unsigned index) {
 void configure_bridge(const char* path) {
     native_configure(path);
     own_ed_fm_configure(path);
-    runtime.model = perf::Model{f23b::bridge::flight_options};
+    runtime.model = perf::Model{};
 }
 
 decltype(&own_ed_fm_suspension_feedback) native_suspension{};

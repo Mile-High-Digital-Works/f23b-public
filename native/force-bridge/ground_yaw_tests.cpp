@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-#include <f23b/performance/performance_model.hpp>
+#include "../flight-core/bridge_model.hpp"
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>

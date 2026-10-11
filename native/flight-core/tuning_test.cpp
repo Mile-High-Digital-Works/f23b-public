@@ -40,6 +40,16 @@ int main() {
     zoom.pitch=.3;check(recovery_switch(true,p,zoom)&&!recovery_switch(false,p,zoom),"recovery hysteresis");
     zoom.pitch=-.2;check(!recovery_switch(true,p,zoom),"nose-low path releases recovery");
     zoom.pitch=1.2;zoom.weight_on_wheels=true;check(!recovery_switch(true,p,zoom),"ground inhibits recovery");
-    zoom.weight_on_wheels=false;check(!recovery_switch(true,defaults,zoom),"no preset means no recovery controller");
+    zoom.weight_on_wheels=false;
+    zoom.pitch=1.2;check(recovery_switch(false,defaults,zoom),"default core starts recovery with no preset");
+    p=defaults;log.clear();check(tuning::apply(R"({"preset":"candidate-2"})",p,log),"candidate-2 comparison preset");
+    check(!recovery_switch(true,p,zoom)&&!recovery_switch(false,p,zoom),"candidate-2 preset has no recovery controller");
+    const double limit=50*3.141592653589793/180;
+    check(pilot_lateral_scale(defaults,limit,limit,false)==.25,"default reduces roll and pedal at the limit");
+    auto reduced=defaults;log.clear();check(tuning::apply(R"({"high_alpha_roll_floor":0.25})",reduced,log),"roll floor key");
+    check(pilot_lateral_scale(reduced,limit,0,false)==1&&pilot_lateral_scale(reduced,limit,.3,false)==1,"full roll and pedal below 20 degrees");
+    check(std::abs(pilot_lateral_scale(reduced,limit,.5*(limit+reduced.roll_alpha_start_rad),false)-(.5))<1e-12,"scale falls linearly from 20 degrees to the limit");
+    check(pilot_lateral_scale(reduced,limit,limit,false)==.25&&pilot_lateral_scale(reduced,limit,1.5,false)==.25,"scale holds the floor at and above the limit");
+    check(pilot_lateral_scale(reduced,limit,limit,true)==1,"no reduction on the ground");
     std::cout<<"TUNING PASS: absent byte identity, clamps, unknown keys, JSON validation, finite guards\n";
 }

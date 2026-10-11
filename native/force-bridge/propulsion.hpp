@@ -2,11 +2,11 @@
 #pragma once
 #include <algorithm>
 #include <cmath>
-#include <f23b/performance/performance_model.hpp>
+#include "../flight-core/bridge_model.hpp"
 #include "../flight-core/development_options.hpp"
 
 namespace f23b::bridge {
-// Owner-requested moderate speed tune; simulation settings, not F-22 calibration.
+// Owner-requested moderate speed tune; project simulation settings.
 inline constexpr double native_thrust_scale = 2.0; // previously 1.75 (+14.29%)
 // Native SDK fan-speed fraction, not cockpit core RPM or a sampled HOTAS axis.
 // Measured hot-start idle is 0.212 steady / below 0.269 during settling.
@@ -27,10 +27,6 @@ inline double development_engine_gain(double related_rpm,double mach,bool augmen
     // Keep the idle correction and native spool response; only powered gain changes.
     return 1.+(original-1.)*(powered_gain-1.);
 }
-inline constexpr performance::Options flight_options{
-    .high_speed_zero_lift_drag_reduction = 0.08,
-};
-
 inline double add_native_engine(performance::Output& output,
     const performance::MassState& mass, std::size_t engine,
     double native_thrust_n, double native_flow_kg_s, double related_rpm,

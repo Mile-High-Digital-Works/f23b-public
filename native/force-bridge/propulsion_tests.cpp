@@ -7,7 +7,7 @@ void near(double actual, double expected) { if(!std::isfinite(actual) || std::ab
 int main() {
     const DryThrustSettings dry{true};
     for(double mach:{0.,1.,1.3,1.6,2.,2.5})for(double rpm:{0.,.212,.5,.9,1.1}) {
-        near(bridge::development_engine_gain(rpm,mach,false,{}),bridge::native_engine_gain(rpm));
+        near(bridge::development_engine_gain(rpm,mach,false,DryThrustSettings{false}),bridge::native_engine_gain(rpm));
         near(bridge::development_engine_gain(rpm,mach,true,dry),bridge::native_engine_gain(rpm));
         if(mach<=1.3)near(bridge::development_engine_gain(rpm,mach,false,dry),bridge::native_engine_gain(rpm));
     }
@@ -79,41 +79,9 @@ int main() {
     bridge::add_native_engine(o,mass,0,-10000,.1,.9);
     near(o.force_n.x,0);
 
-    // Compare the actual force model with the previous aerodynamic settings.
-    // Increased power must still have zero pitching moment on the tested CG.
-    mass.center_of_mass_m.y = -.320670754;
-    o = {};
-    bridge::add_native_engine(o,mass,0,10000,.1,.9);
-    bridge::add_native_engine(o,mass,1,10000,.1,.9);
-    near(o.moment_n_m.z,0);
-    performance::Atmosphere air;
-    air.altitude_m = 5000;
-    performance::PilotInput input;
-    input.engine_left_running = input.engine_right_running = false;
-    auto sample = [&](double mach, bool tuned, double alpha, bool gear, bool brake, bool flaps) {
-        performance::Model model(tuned ? bridge::flight_options : performance::Options{});
-        model.reset(); // the tune must survive the normal start/reset lifecycle
-        performance::BodyState body;
-        body.velocity_body_m_s.x = mach * air.speed_of_sound_m_s;
-        body.angle_of_attack_rad = alpha;
-        input.gear_down = gear;
-        input.speedbrake = brake;
-        input.landing_flaps = flaps;
-        return model.step(.01, air, mass, body, input);
-    };
-    for (double mach : {.2, .8, .9, 1.15, 1.4, 2.0, 2.4}) {
-        const auto before = sample(mach,false,0,false,false,false);
-        const auto after = sample(mach,true,0,false,false,false);
-        const double ratio = mach <= .9 ? 1.0 : mach == 1.15 ? .96 : .92;
-        near(after.drag_coefficient, before.drag_coefficient * ratio);
-        near(after.force_n.x, before.force_n.x * ratio);
-        near(after.lift_coefficient, before.lift_coefficient);
-        near(after.controls.pitch_command, before.controls.pitch_command);
-        near(after.controls.roll_rate_limit_rad_s, before.controls.roll_rate_limit_rad_s);
-        // Gear, speedbrake, flap and AOA drag retain their full increments.
-        const auto configured_before = sample(mach,false,.2,true,true,true);
-        const auto configured_after = sample(mach,true,.2,true,true,true);
-        near(configured_after.drag_coefficient - after.drag_coefficient,
-             configured_before.drag_coefficient - before.drag_coefficient);
-    }
+    // The default dry curve changes only supersonic dry power.
+    const DryThrustSettings defaults;
+    near(bridge::development_engine_gain(.9,2.,false,defaults),defaults.end_gain);
+    near(bridge::development_engine_gain(.9,2.,true,defaults),2.);
+    near(bridge::development_engine_gain(.9,1.2221,false,defaults),2.);
 }

@@ -1,9 +1,9 @@
 # F-23B Black Widow II
 
-v1.5 release draft. The current download remains v1.4; no v1.5 package has been issued.
+v1.5 is prepared for its final owner flight. The published download remains v1.4.
 
-The full Hornet radar, datalink and SA page in a stealth airframe, with adapted F-23 flight dynamics.
-Player internal bays open before weapon release. MALICE has a recorded **336-mile A-50 kill** with continuing target support.
+The full Hornet radar, datalink and SA page in a stealth airframe, with the project flight core and carefree, fast and stable defaults.
+Player internal bays open before weapon release. The earlier MALICE motor recorded a **336-mile A-50 kill** with continuing target support; motor C awaits its long shot.
 AI F-23Bs can use MALICE; their main bay doors can remain closed during launch. Current installs change **no DCS game files**.
 
 ![F-23B in DCS World](docs/images/f23b-exterior.jpg)
@@ -52,7 +52,9 @@ Start an **F-23B Quick Start** mission. Your first flight uses the Langley liver
 - Native Hornet radar, MSI, datalink, SA, EW and RWR, with a 640 NM SA scale.
 - Sequenced player internal bays, AIM-424 MALICE with loft control and a second motor pulse, and project AIM-9X Block II.
 - Friendly-track selection protection and AI weapon use.
-- Ground and water collision, speed-limited nosewheel steering, and a stiffer nose strut.
+- Fourteen offline handling corners pass with protection on by default; smoother 140-degree-per-second roll and progressive hard pulls.
+- Dry Mach 2.0 at 35,000 ft; the afterburner target remains Mach 2.47.
+- Eighteen regional contact shells, retained wheels and ground lines, speed-limited steering and the accepted nose strut.
 - One canopy frame in the pilot view, exterior lights, and new afterburner visuals.
 - Ten liveries: four USAF schemes, two heritage schemes, Crimson Widow, Arctic Splinter, Desert Aggressor and NASA Research.
 
@@ -90,7 +92,7 @@ See [known limitations](KNOWN_ISSUES.md).
 The combined software uses **GPL-3.0-or-later**, with retained file-level MIT grants.
 Original documentation and eligible original creative content use **CC BY-SA 4.0**.
 Purchased models and derived textures retain separate asset terms.
-Credits: **Grinnelli Designs and Branden Hooper** for flight-model source; **SytaPastel** for the licensed YF-23 visual source.
+Credits: **F-23B project contributors** for the flight core and integration; **SytaPastel** for the licensed YF-23 visual source.
 
 [Licence and asset terms](LICENCE.md) · [Credits and component notices](CREDITS.md) ·
 [Report a bug](https://github.com/Coaokalo/f23b-public/issues/new?template=bug_report.yml)

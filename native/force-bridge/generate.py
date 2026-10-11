@@ -4,12 +4,6 @@ import re
 import sys
 
 source, output = map(Path, sys.argv[1:])
-adapter = source.parent / 'flight-feel/src/efm/performance/dcs_adapter/performance_adapter.cpp'
-names = re.findall(r'F23B_PERF_EXPORT \w+ (ed_fm_\w+)\(', adapter.read_text())
-(output / 'own_adapter.hpp').write_text(
-    '\n'.join(f'#define {n} own_{n}' for n in names) + '\n' +
-    f'#include "{adapter.resolve().as_posix()}"\n' +
-    '\n'.join(f'#undef {n}' for n in names) + '\n')
 loader = (source / 'native_loader.cpp').read_text()
 loader = loader.replace('#include "names.hpp"', '#include "names.hpp"\nFARPROC f23b_select_callback(const char*, FARPROC);')
 anchor = '    note("resolved all "'

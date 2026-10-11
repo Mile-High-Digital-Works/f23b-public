@@ -3,8 +3,16 @@
 #include "core.hpp"
 #include "fitted_parameters.hpp"
 #include "tuning.hpp"
+#include "../force-bridge/propulsion.hpp"
 using namespace f23b::flight_core;
+#ifdef _WIN32
 #define API extern "C" __declspec(dllexport)
+#else
+#define API extern "C" __attribute__((visibility("default")))
+#endif
+API double default_engine_gain(double rpm,double mach,bool augmented) {
+    return f23b::bridge::development_engine_gain(rpm,mach,augmented,{});
+}
 struct Quaternion {
     double w,x,y,z;
     Quaternion operator*(Quaternion b) const {

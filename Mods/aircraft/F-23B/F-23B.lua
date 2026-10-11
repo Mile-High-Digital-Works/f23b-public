@@ -108,8 +108,8 @@ local aircraft = {
     Vy_max = 254.0,
     Mach_max = 1.8,
     Ny_min = -3.0,
-    Ny_max = 7.0,
-    Ny_max_e = 7.5,
+    Ny_max = 8.0, -- Project FBW cap; the transient check permits 0.3 g overshoot.
+    Ny_max_e = 8.5, -- Project structural margin above the protected command.
     range = 1520.0,
 
     -- Measured F-23 landing-gear geometry on the standard Hornet animation

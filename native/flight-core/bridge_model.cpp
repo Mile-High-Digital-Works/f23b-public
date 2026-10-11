@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Original adapter for the project's retained force-bridge interface.
 // Aerodynamics come only from core.hpp and the recorded fitted parameters.
-#include <f23b/performance/performance_model.hpp>
+#include "bridge_model.hpp"
 #include "core.hpp"
 #include "fitted_parameters.hpp"
 #include "bridge_context.hpp"
@@ -12,16 +12,12 @@ namespace {
 core::Vec3 vector(Vec3 v) { return {v.x,v.y,v.z}; }
 Vec3 vector(core::Vec3 v) { return {v.x,v.y,v.z}; }
 }
-Model::Model(Options options) noexcept : options_(options) { reset(); }
 void Model::reset() noexcept {
-    output_={};engines_={};left_elevon_rad_=right_elevon_rad_=0;
+    output_={};
     last_pitch_command_=last_roll_command_=last_yaw_command_=0;
-    flap_position_=leading_edge_flap_position_=0;simulation_time_s_=0;
+    flap_position_=0;
     airborne_yaw_time_s_=.5;
     low_speed_recovery_=false;
-}
-void Model::prime_engines_for_offline_analysis(double,bool,bool) noexcept {
-    // No second engine: the retained bridge owns native thrust and fuel.
 }
 Output Model::step(double dt,const Atmosphere& air,const MassState& mass,
                    const BodyState& body,const PilotInput& input) noexcept {
@@ -75,16 +71,5 @@ Output Model::step(double dt,const Atmosphere& air,const MassState& mass,
     c.alpha_limiter_active=s.alpha>=core::sample(parameters.alpha_limit,output_.mach);
     c.g_limiter_active=s.normal_g>parameters.n_max||s.normal_g<parameters.n_min;
     return output_;
-}
-double clamp(double value,double low,double high) noexcept { return std::clamp(value,low,high); }
-double interpolate(const double* xs,const double* ys,std::size_t count,double x) noexcept {
-    if(!count)return 0;
-    if(x<=xs[0])return ys[0];
-    for(std::size_t i=1;i<count;++i)if(x<=xs[i])return ys[i-1]+(ys[i]-ys[i-1])*(x-xs[i-1])/(xs[i]-xs[i-1]);
-    return ys[count-1];
-}
-double shaped_axis(double input) noexcept { return std::clamp(input,-1.,1.); }
-double approach(double current,double target,double maximum_delta) noexcept {
-    return current+std::clamp(target-current,-maximum_delta,maximum_delta);
 }
 }

@@ -16,7 +16,7 @@ def verify():
         path = ROOT / name
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             failures.append(f'Source snapshot mismatch: {name}')
-    for name, expected in origin.get('candidate_2', {}).get('files', {}).items():
+    for name, expected in origin.get('v1_5', {}).get('files', {}).items():
         path = ROOT / name
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             failures.append(f'Candidate source mismatch: {name}')

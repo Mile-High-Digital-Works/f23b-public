@@ -38,7 +38,16 @@ struct Parameters {
     Vec3 control_power_per_pa{};
     double lift_break_fraction{},post_stall_decrease_per_rad{},alpha_feedback_s_inv{};
     double force_bound_n{},moment_bound_nm{};
-    double recovery_kias{},recovery_pitch_rad{},recovery_path_rad{};
+    // Carefree handling (project choices, owner goal of October 11). Low-speed
+    // recovery: below recovery_kias with the nose above recovery_pitch the law
+    // commands a pushover toward recovery_path. Zero speed disables it.
+    double recovery_kias{260},recovery_pitch_rad{.7853981633974483},recovery_path_rad{-.08726646259971647};
+    // Pilot roll and pedal commands fall linearly from full at roll_alpha_start
+    // to high_alpha_roll_floor at the alpha limit. A floor of one disables this.
+    // Off by default: the offline corner sweep shows sideslip below 0.4 degrees
+    // without it, so full roll authority stays until a DCS corner shows a need.
+    double roll_alpha_start_rad{.3490658503988659},high_alpha_roll_floor{1.};
+    double positive_load_limit{},negative_load_limit{-1};
 };
 struct State {
     Vec3 velocity_body{},wind_body{},angular_rate{},inertia{};
@@ -63,7 +72,9 @@ inline bool valid_parameters(const Parameters& p) {
                       p.wp,p.kn,p.pitch_damping,p.tau_roll,p.k_beta,p.k_r,p.cy_beta,p.tau_yaw,p.pedal_rate,p.high_alpha_drag,
                       p.yaw_alpha_power_gain,p.alpha_guard_gain,p.alpha_guard_power_gain,p.neutral_stick_width,
                       p.lift_break_fraction,p.post_stall_decrease_per_rad,p.alpha_feedback_s_inv,
-                      p.force_bound_n,p.moment_bound_nm,p.recovery_kias,p.recovery_pitch_rad,p.recovery_path_rad}) if(!std::isfinite(value)) return false;
+                      p.force_bound_n,p.moment_bound_nm,p.recovery_kias,p.recovery_pitch_rad,p.recovery_path_rad,
+                      p.roll_alpha_start_rad,p.high_alpha_roll_floor,p.positive_load_limit,p.negative_load_limit}) if(!std::isfinite(value)) return false;
+    if(p.high_alpha_roll_floor<0||p.high_alpha_roll_floor>1) return false;
     return p.area_m2>0&&p.force_bound_n>0&&p.moment_bound_nm>0&&p.tau_roll>0&&p.tau_yaw>0
         &&p.lift_break_fraction>0&&p.lift_break_fraction<1&&p.control_power_per_pa.x>=0
         &&p.control_power_per_pa.y>=0&&p.control_power_per_pa.z>=0&&p.high_alpha_drag>=0
@@ -85,6 +96,12 @@ inline bool recovery_switch(bool previous,const Parameters& p,const State& s) {
     const double kias=std::sqrt(dot(v,v))*knots_per_m_s*std::sqrt(std::max(0.,s.density)/sea_level_density);
     if(previous)return kias<p.recovery_kias+40&&flight_path_angle(s)>p.recovery_path_rad;
     return kias<p.recovery_kias&&s.pitch>p.recovery_pitch_rad;
+}
+// A full roll or pedal input at high alpha builds sideslip faster than the
+// weaker yaw control can remove it. Scale the pilot command toward the limit.
+inline double pilot_lateral_scale(const Parameters& p,double alpha_limit,double alpha,bool weight_on_wheels) {
+    if(weight_on_wheels)return 1.;
+    return std::clamp((alpha_limit-alpha)/std::max(1e-3,alpha_limit-p.roll_alpha_start_rad),p.high_alpha_roll_floor,1.);
 }
 inline double high_alpha_drag_coefficient(const Parameters& p,double mach,double alpha) {
     // Separated normal-pressure drag: normal dynamic pressure scales as
@@ -152,7 +169,8 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     double pitch_rate=gravity/speed*(command-std::cos(s.pitch)*std::cos(s.bank));
     pitch_rate=std::min(pitch_rate,path_rate+p.alpha_feedback_s_inv*(limit-s.alpha));
     const double kias=speed*knots_per_m_s*std::sqrt(s.density/sea_level_density);
-    const double roll_rate=std::clamp(u.roll,-1.,1.)*sample(p.roll_limit,kias);
+    const double high_alpha_scale=pilot_lateral_scale(p,limit,s.alpha,s.weight_on_wheels);
+    const double roll_rate=std::clamp(u.roll,-1.,1.)*high_alpha_scale*sample(p.roll_limit,kias);
     const double roll_acceleration=bounded((roll_rate-s.angular_rate.x)/p.tau_roll,p.control_power_per_pa.x*pressure);
     // Body axes are X forward, Y up, Z right. Rotation alone gives
     // beta_dot = r*cos(alpha) + p*sin(alpha). Include that roll coupling,
@@ -168,13 +186,20 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
         +(air.y*acceleration.x-air.x*acceleration.y)/std::max(1e-6,air.x*air.x+air.y*air.y);
     const double yaw_acceleration=(-p.k_beta*s.beta-p.k_r*beta_rate
         -roll_acceleration*sa-alpha_rate*(s.angular_rate.x*ca-s.angular_rate.y*sa))/safe_ca
-        +std::clamp(u.pedal,-1.,1.)*p.pedal_rate/p.tau_yaw;
+        +std::clamp(u.pedal,-1.,1.)*high_alpha_scale*p.pedal_rate/p.tau_yaw;
     // Released stick should damp alpha change, not oppose the pitch rate of
     // the flight path itself. Preserve the measured full-stick pull response.
     const double neutral=p.neutral_stick_width>0&&!s.weight_on_wheels
         ?std::clamp(1-std::abs(stick)/p.neutral_stick_width,0.,1.):0;
-    double pitch_acceleration=p.wp*(pitch_rate-s.angular_rate.z)+p.kn*(command-s.normal_g)
-        -p.pitch_damping*(s.angular_rate.z-neutral*path_rate);
+    // Released-stick trim needs stronger load-error feedback than the smooth
+    // full-stick onset. Keep the selected onset values at commanded input.
+    const double trim_gain=p.positive_load_limit>0?1.2*neutral:0.;
+    // Keep candidate 2's measured ground pitch response through liftoff.
+    const double wp=s.weight_on_wheels?3.0538127212911865:p.wp;
+    const double kn=s.weight_on_wheels?1.6359128355278652:p.kn;
+    const double damping=s.weight_on_wheels?15.21395727316683:p.pitch_damping;
+    double pitch_acceleration=wp*(pitch_rate-s.angular_rate.z)+(kn+trim_gain)*(command-s.normal_g)
+        -damping*(s.angular_rate.z-neutral*path_rate);
     double pitch_power=p.control_power_per_pa.z*pressure;
     if(p.alpha_guard_gain>0&&!s.weight_on_wheels) {
         // Active protection: anticipate the boundary using alpha rate, then
@@ -185,6 +210,17 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
             pitch_acceleration=guard;
             pitch_power*=1+p.alpha_guard_power_gain*sa*sa;
         }
+    }
+    if(p.positive_load_limit>0&&!s.weight_on_wheels) {
+        // Bound the measured load, not just the pilot's command. Predict the
+        // load from the local lift slope over the short control response.
+        // Leave the calibrated 350-knot pull below the 8 g boundary intact.
+        const double load_slope=std::max(1.,pressure*p.area_m2*sample(p.cla,mach)/(s.mass*gravity));
+        const double predicted_load=s.normal_g+.05*load_slope*alpha_rate;
+        if(predicted_load>p.positive_load_limit)
+            pitch_acceleration=std::min(pitch_acceleration,20*((p.positive_load_limit-s.normal_g)/(.05*load_slope)-alpha_rate));
+        if(predicted_load<p.negative_load_limit)
+            pitch_acceleration=std::max(pitch_acceleration,20*((p.negative_load_limit-s.normal_g)/(.05*load_slope)-alpha_rate));
     }
     o.wanted_acceleration={
        roll_acceleration,

@@ -25,7 +25,7 @@ unavailable. The stub tests calculations and integration code, not the real SDK
 ABI or flight inside DCS.
 
 ```powershell
-cmake -S native/flight-feel -B build/flight
+cmake -S native/flight-core -B build/flight -DFIT_PARAMETERS_DIR="$PWD/native/flight-core"
 cmake --build build/flight --config Release
 ctest --test-dir build/flight -C Release --output-on-failure
 python -B -m unittest discover -s tests/tools -v
@@ -79,8 +79,7 @@ They contain the licensed visual derivatives. The Blender source for these
 derivatives remains private; it is not corresponding software source.
 Before release, compare both rebuilt DLLs with the accepted runtime by code
 section hash. Other sections contain build paths and timestamps, so whole-file
-hashes can differ. The v1.5 candidate helper matches; final bridge parity awaits
-the accepted core and its corresponding source.
+hashes can differ. The v1.5 candidate helper matches; the final bridge code matches its corresponding source rebuild.
 Packaging produces a draft candidate; it does not change GitHub visibility or
 publish a release.
 
@@ -121,25 +120,18 @@ Repeat against the actual compiled EXE for fresh install, repair, removal, histo
 upgrades, matching manual adoption, modified manual refusal, and a mismatched DCS fixture.
 Load the extracted ZIP aircraft in DCS and verify the slot, weapons, SA 640 and all liveries.
 
-## Candidate core and remaining decisions
+## Final private v1.5 build
 
-The current pin has `kind: CANDIDATE`. Do not publish it as an accepted release.
-The shipped bridge uses `native/flight-core/fitted_parameters.hpp` and candidate 2.
-No development tuning file is shipped. All three optional presets remain off.
-The damage logger stays off. No temporary test hook is packaged.
+The pin is marked CANDIDATE until the final owner flight and multiplayer check.
+The installed defaults include stable handling, low-speed recovery and the dry-power curve.
+No tuning file, damage logger or temporary test hook is shipped.
+The retired flight model and its tests are absent from the build and source archive.
+The source archive, DLL code sections and module manifest identify the same implementation.
 
-The final core decision controls the bridge DLL, flight-core source, fitted header,
-build recipe, licence/credits scenario, source archive and release hashes.
-All candidate module bytes must already match the private installation.
-A later accepted core must replace the pin and package together.
-Historical flight-model source remains until acceptance and provenance review.
-
-The pure core also has offline tests:
+The offline library and tests use NumPy for recorded-data checks:
 
 ```powershell
 cmake -S native/flight-core -B build/core -DFIT_PARAMETERS_DIR="$PWD/native/flight-core"
 cmake --build build/core --config Release
 ctest --test-dir build/core -C Release --output-on-failure
 ```
-
-The segment-boundary test uses NumPy. Native unit tests do not need it.

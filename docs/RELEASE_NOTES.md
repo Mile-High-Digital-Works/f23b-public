@@ -1,25 +1,24 @@
-# F-23B v1.5 — release draft
+# F-23B v1.5
 
-A local v1.5 candidate is prepared. Owner acceptance and publication are pending.
-The current public download is v1.4. Candidate checksums accompany the local files.
+This build is prepared for the final owner flight. It has not been published.
 
-The aircraft retains the native Hornet cockpit, radar, datalink, engines, fuel,
-gear and steering. This candidate contains the replacement core, candidate 2.
-Owner acceptance is pending; optional development presets are off.
-The previous contact model remains installed. Current installation changes no DCS game files.
+The default core provides carefree protection, a calmer roll response, smoother
+hard pulls and low-speed recovery. All fourteen offline corners pass.
+Dry power targets Mach 2.0 at 35,000 ft; afterburner targets remain unchanged.
+The Hornet retains its cockpit, radar, datalink, engines, fuel and gear.
+Eighteen regional contact shells replace the single airframe shell. Wheels and
+ground lines retain their verified geometry. Native damage behavior still needs observation.
 
-The revised slate is selected for both builds, and MALICE motor option C is
-selected. One copied medium-range fixture shot hit with one motor pulse;
-its direct velocity sample was not captured. The owner's long shot remains
-to be flown. The licence and credits retain complete third-party texts.
-With Block II selected, the helmet display shows 9X, count and the aiming cross;
-a helmet-cued shot has not been flown. Post-launch datalink is not implemented.
+MALICE retains motor C and its 58.7-mile fixture result. Its long shot remains open.
+Block II stays as installed. The selected revised slate appears in both builds.
+AI MALICE may launch with closed main bay doors. No AI bay controller is added.
+Block II post-launch datalink is not implemented. Multiplayer and VR remain unverified.
 
-AI F-23Bs can launch MALICE with their main bay doors closed. This visual
-limitation is retained for v1.5. The AI Block II bay sequence remains unverified.
-Multiplayer and VR remain untested. No damage-model change has been qualified.
+The original project flight core and SDK adapter replace the retired model in
+both the DLL and source archive. Existing GPL and MIT file grants remain.
+The ZIP and setup install identical files. No DCS game file is changed.
 
-Read [installation instructions](../INSTALL.md), [known limits](../KNOWN_ISSUES.md),
-[licence and asset terms](../LICENCE.md) and [credits](../CREDITS.md).
+Read [installation](../INSTALL.md), [known limits](../KNOWN_ISSUES.md),
+[licence](../LICENCE.md) and [credits](../CREDITS.md).
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.

@@ -57,7 +57,7 @@ check(#registered == 1, "expected exactly one registered aircraft, got " .. #reg
 local aircraft = registered[1]
 check(aircraft.Name == "F-23B", "wrong aircraft registered: " .. tostring(aircraft.Name))
 
-check(aircraft.RCS == 0.00001, "registered RCS differs from owner-selected F-22 reference")
+check(aircraft.RCS == 0.00001, "registered RCS differs from owner-selected project value")
 local light_contract = {
     [WOLALIGHT_STROBES] = {193}, [WOLALIGHT_LANDING_LIGHTS] = {210},
     [WOLALIGHT_TAXI_LIGHTS] = {210}, [WOLALIGHT_NAVLIGHTS] = {190, 191, 192},
@@ -77,7 +77,7 @@ for group, arguments in pairs(light_contract) do
         if group == WOLALIGHT_STROBES then check(light.period == 1.2, "incorrect native strobe period") end
     end
 end
-print("OFFLINE PASS: registered F-22 reference RCS and complete Hornet model-light contract")
+print("OFFLINE PASS: registered project RCS and complete Hornet model-light contract")
 
 local nozzles = aircraft.engines_nozzles
 check(type(nozzles) == "table", "engines_nozzles missing from the registered record")

@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "name": "F-23B-v1.5",
-  "description": "Unpublished v1.5 candidate: candidate 2 flight core, revised slate, MALICE motor C and ten liveries. Owner acceptance is pending.",
+  "description": "Final private v1.5 acceptance build: carefree stable defaults, dry Mach 2.0, independent flight core and 18-region contact model.",
   "dcs_version": "2.9.30.28738",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "8d196bf834f0c340c0265abe512cc923be00fca2da1130a0dfddc794059335b0",
-    "F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": "f8cf0f92c7c7fd19c3721bc68591bada18063f1cbfe3639584473050927ff153",
+    "F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": "ef2195296924f9762d962a2b50ecb18eada7f6eefdf1af3d08533865c414847f",
     "F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f1e29e1af13b700c0de8d2f80435cfc14d3daa28a526ccd10044e0b069b25840",
     "F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "f37d87a72161c1437552da83a72527ec6bc6d510da976adc91e7abfb7160830a",
     "F-23B-Player/Cockpit/ExteriorVisuals/device_init.lua": "ea83bca0fd4c71f30d31299df4fd5fdee005f6f01821225ec6c50d566046d28a",
@@ -18,14 +18,14 @@
     "F-23B-Player/Input/F-23B/joystick/default.lua": "933deb376b1ef217720aedac20f2f84a783b9f2c617828f1b9d41e456c93b454",
     "F-23B-Player/Input/F-23B/keyboard/default.lua": "454dec3b61774be95b805ac4c383bbf081b54df50d4f5f097de7c9edacadd11c",
     "F-23B-Player/Input/F-23B/name.lua": "405c6cc3cf823c968aa675464c05326f96e5fb5ad0057ad54cf96c3429accfa3",
-    "F-23B-Player/bin/F23B_ForceBridge.dll": "65ee0b0eeae8624cb73a365bffad1cd6b92d6232728a8d2c2b0135df500dd9da",
+    "F-23B-Player/bin/F23B_ForceBridge.dll": "5e1dfe6a48553d25a36502d33ec91ba946e5148c0c43c228b5a18572108703f3",
     "F-23B-Player/bin/F23B_Radar.dll": "6dd98838a38ec8798ee30ab5a20833b692be9446c3f0c0519ae303d242f7f259",
-    "F-23B-Player/entry.lua": "904d52ac1e85e761675f781c8e860cb64eab3e098ac430377d453bb2478e3a74",
+    "F-23B-Player/entry.lua": "1854deb22d8df7476f7bef6867054943d5fd45fff0ff45248952ded2309c1851",
     "F-23B-Player/ground_config.lua": "79b1230ec988e1ad02424d22791b50c6a2b8a5d6d21c104d5894cc64cc48589e",
     "F-23B/Encyclopedia/Plane/F-23B.txt": "293d3f0fd8675209c1b0a296906c73cc0d5086237f30e809e21d1ed149b75237",
     "F-23B/Encyclopedia/Plane/F-23B/F-23B.png": "a0d6ffce57470c502f7f2749f612b9f2095ce940e02095561ac5b4b4032d64fe",
-    "F-23B/Entry/VisualConfig.lua": "9b5e9d819d7978ded852cbe211a3b911f34e1dab37f75e4f425ab1348204239b",
-    "F-23B/F-23B.lua": "06e008ea4552ec0ba3fb484b357f6773dc0ee2ede14787385df6d38c27254c94",
+    "F-23B/Entry/VisualConfig.lua": "d4d4ac76cb47b82192fd8701bdc5c11d967e6d089d2f1a4714190ecb60ecd796",
+    "F-23B/F-23B.lua": "240ba27dd7460e97b6a9b5d411cb651019a9c0534c7c316fb3e6a39f626c13fc",
     "F-23B/HORNET-VISUAL-DEPENDENCY.md": "270373c04334117e5ff0c9a6c97aae6a3af3be0d45716b1bfb63084bc36bb82c",
     "F-23B/Liveries/F-23B/Standard/description.lua": "90d6497157129423de6d1df5ad0d5e7929a4e7c8100524db30d2562d2930841b",
     "F-23B/Liveries/F-23B/USA/description.lua": "e9c7e74af5be498c8cee916e8efbddb28e21e526e6405a4fac8d0a746ee0c244",
@@ -35,7 +35,7 @@
     "F-23B/Missions/QuickStart/F-23B - Caucasus - Hot Start.miz": "2cfe84ff325cbd4983471de9deb6a9aeb166f972c3773b9affeb7c4922d70979",
     "F-23B/Missions/QuickStart/quickstart.lua": "971b42e42925c29c4b7278fb85e643305880e2fe750ba6cbfe87d415a987f342",
     "F-23B/README.md": "62fb1493b51e0fa78925e3c86d187416936b27dca7cfe9601192b01ed172ac4b",
-    "F-23B/Shapes/F-23B-contact.edm": "00b9f0d3b61933b9891f2990721e41c5d82d385d4cc3b06db78f1e42e157cd4a",
+    "F-23B/Shapes/F-23B-contact.edm": "f3c7c9ba72f61f952a03d0c6695855655f98e521651682ae55fde5ac9c3cba4e",
     "F-23B/Shapes/F-23B-visual.edm": "243004dc86830b0207e0ddce22b944edc9b05d284c5c3ef8d37aeed7805a2b52",
     "F-23B/Shapes/F-23B.lods": "08f98c287a79b19ce2eec9b2189320970d64e795af53b1cfab35f5a0c1e9173b",
     "F-23B/Shapes/F23B_MALICE.edm": "9d4862639b12a77c97654fd0d775bba29e7f60d86ae3d32970a5dbfb7f2a4e15",
@@ -104,14 +104,14 @@
     "F-23B/Entry/VisualConfig.lua"
   ],
   "validation_limits": [
-    "Unpublished candidate; owner core acceptance and release approval are pending.",
-    "Candidate 2 is the default. Development presets are off without the separate tuning file.",
-    "Full-aft corner release did not settle in the recorded 12-second check. Carefree handling is not qualified.",
-    "MALICE motor C hit one 58.7-mile fixture target. The owner long shot has not been flown on this motor.",
-    "AI MALICE can launch with closed main bay doors. AI Block II bay operation is unverified.",
-    "Block II post-launch datalink and lock-on after launch are not implemented.",
-    "Multiplayer and VR are untested. The previous contact model is retained.",
-    "Performance is a simulator design approximation, not measured YF-23 flight data."
+    "Final owner flight and multiplayer observation precede publication.",
+    "The default passes all fourteen six-axis offline corners; this is not a new DCS observation.",
+    "Recorded-thrust equilibrium: dry Mach 2.0 and afterburner Mach 2.47 at 35,000 ft; native ignition timing is unmeasured.",
+    "MALICE motor C retains the 58.7-mile fixture result; the owner long shot remains open.",
+    "Block II remains installed; owner flight, beam and look-down observations remain open.",
+    "AI MALICE may launch with closed main bay doors; AI Block II bay behavior is unverified.",
+    "Regional contact geometry passes offline checks; remaining native hit routing and terminal crash behavior are unproven.",
+    "Multiplayer and VR remain unverified. No public push has occurred."
   ],
   "livery_files": {
     "F23B-01-usaf-langley/description.lua": "757c6b84f8c919cde4a888f965f16a1fc4fcfceb7e8db62f6593ef93f847c11d",
@@ -147,9 +147,5 @@
   },
   "kind": "CANDIDATE",
   "runtime_is_final": true,
-  "final_core_dependent": [
-    "F-23B-Player/bin/F23B_ForceBridge.dll",
-    "Matching native/flight-core source and fitted_parameters.hpp",
-    "Build recipe, source archive, licence/credits scenario, package manifests and checksums"
-  ]
+  "final_core_dependent": []
 }

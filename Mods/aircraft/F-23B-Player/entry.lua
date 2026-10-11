@@ -18,7 +18,7 @@ declare_plugin(self_ID, {
     displayName = _("F-23B Black Widow II Player"),
     fileMenuName = _("F-23B Black Widow II Player"),
     shortName = "F-23B Player",
-    version = "1.4",
+    version = "1.5",
     state = "installed",
     developerName = _("F-23B Community Project"),
     info = _("F-23B Black Widow II player relationship. Requires the F-23B Core and an installed and activated DCS: F/A-18C."),

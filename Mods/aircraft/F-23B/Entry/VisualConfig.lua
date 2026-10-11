@@ -3,7 +3,7 @@
 -- compiled assets remain ignored; build and packaging fail closed if absent.
 return {
     content_class = "PRIVATE_LICENSED_DEVELOPMENT_REQUIRED",
-    package_version = "1.4",
+    package_version = "1.5",
     display_name = "F-23B Black Widow II",
     exterior_shape = "F-23B",
     cockpit_shape = "F-23B-cockpit",

@@ -1,10 +1,9 @@
 # F-23B licence and asset terms
 
-Draft for v1.5. No v1.5 package has been issued. The revised slate and MALICE
-motor option C are selected. Release hashes and flight-core acceptance are pending. This document grants only
-the rights described below; third-party terms continue to control their content.
+v1.5 final private acceptance build. Release manifests identify the exact files and source.
+The rights below and the complete third-party terms remain in force.
 
-Public creator name: **OPEN**. Public contact email: **OPEN**.
+Project maintainer: **Coaokalo**. Contact: [project issue tracker](https://github.com/Coaokalo/f23b-public/issues).
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.
 
@@ -15,13 +14,10 @@ The combined software is GNU GPL version 3 or, at your option, any later version
 MIT retain their file-level grants, including the original copyright name in
 Annex B. The native bridge, propulsion and steering retain their GPL notices.
 
-**Scenario A — OPEN until acceptance: the replacement flight core has passed.** The replacement core and its typed adapter must be identified by the accepted source commit, build recipe, full DLL SHA-256 and executable `.text` SHA-256 before publication. Do not describe a merely prepared or unit-tested candidate as the accepted core. Remove the old derived core from the v1.5 build and corresponding-source tree after verifying that the 16 previously identified derived functions/values are absent from the active replacement; preserve historical source and notices for previously conveyed releases. The remaining bridge/propulsion/steering GPL notices continue to govern their shipped scope.
-
-This candidate uses the F-23B replacement core with project-authored MIT file notices.
-Owner acceptance is pending. Historical Grinnelli Designs / Branden Hooper
-source and notices remain in this source tree pending that decision.
-The active build recipe selects the replacement. The older model is retained
-for historical tests and is not linked into the candidate flight DLL.
+The v1.5 flight core uses recorded project data and owner-selected control laws.
+Its typed SDK adapter is project code. The retired model and engine mapping
+are absent from this build and source archive. Existing bridge, propulsion and
+steering GPL grants remain; this is not a blanket relicense.
 
 Each binary release must include its matching corresponding software source,
 changes, build and installation scripts, notices and source/output hashes.
@@ -82,8 +78,7 @@ Blender, Matplotlib and Pillow are build tools; their programs are not bundled
 with the rendered pictures. The source archive retains existing file notices.
 
 The v1.5 candidate manifest and checksums identify this local package.
-DCS 2.9.30.28738 is pinned. Final core acceptance, licence scenario review
-and publication remain pending. The v1.4 pin is retained as historical evidence.
+DCS 2.9.30.28738 is pinned. The final owner flight and publication remain pending. The v1.4 pin is retained as historical evidence.
 
 ## Annex A: GNU GPL version 3
 

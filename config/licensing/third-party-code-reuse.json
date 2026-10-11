@@ -3,48 +3,7 @@
   "combined_software_license": "GPL-3.0-or-later",
   "license_text": "COPYING",
   "legacy_project_original_license_text": "LICENSES/MIT.txt",
-  "sources": [
-    {
-      "id": "GRINNELLI_F22A_V2_1_PERFORMANCE",
-      "repository": "https://github.com/grinnellidesigns/f-22a",
-      "revision": "24dc1f51a8d0d9427c7bd3c368ccabd3e0ade53c",
-      "license": "GPL-3.0-or-later",
-      "license_path": "LICENSE",
-      "license_sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986",
-      "upstream_sha256": {
-        "EFM/source/RAPTOR.h": "8A5B08CED6FFBA54BC2C6B19CE68DF19BA9578BE9FF6ECAD00E71277BED5413B",
-        "EFM/source/RAPTOR.cpp": "9BA22D94D39DEF7B9A0C713D399301D2317B16ED4001E81BBBBA60E75D5D309B",
-        "EFM/source/Utility.h": "167E091D30FACE154ACEFCCFA5D31AEA25335B308FFC90DDB10CB58D94EE72C0",
-        "EFM/source/Inputs.h": "26AA9950012B65391BCBAE121D79AE8F2CF93F5C6BC2FEA6CDDD15BB30E1801F",
-        "EFM/LICENSE": "A07BE02333B465758E4B2FDA6AD6A035F30B7EF05997637C42AFB55167188968",
-        "LICENSE": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986"
-      }
-    }
-  ],
-  "derived_files": [
-    {
-      "project_path": "native/flight-feel/src/efm/performance/include/f23b/performance/grinnelli_v21_reference.hpp",
-      "project_sha256": "c285d05a53caf662c465752378165af6bc4c47c970c06b5c7c3654a9beecdffc",
-      "source_id": "GRINNELLI_F22A_V2_1_PERFORMANCE",
-      "upstream_revision": "24dc1f51a8d0d9427c7bd3c368ccabd3e0ade53c",
-      "upstream_path": "EFM/source/RAPTOR.h",
-      "upstream_sha256": "8A5B08CED6FFBA54BC2C6B19CE68DF19BA9578BE9FF6ECAD00E71277BED5413B",
-      "license": "GPL-3.0-or-later",
-      "copyright_notice": "Copyright (C) 2025 Branden Hooper; Copyright (C) 2026 F-23B project contributors",
-      "modified_at": "2026-09-04",
-      "purpose": "Independent-throttle, fixed-force, time-based-trim flight model; no thrust vectoring."
-    },
-    {
-      "project_path": "native/flight-feel/src/efm/performance/performance_model.cpp",
-      "project_sha256": "8c5a463f8ab80edc4061b68fd4cb7a8880bce6df12dcc165ea24cfa68d86120e",
-      "source_id": "GRINNELLI_F22A_V2_1_PERFORMANCE",
-      "upstream_revision": "24dc1f51a8d0d9427c7bd3c368ccabd3e0ade53c",
-      "upstream_path": "EFM/source/RAPTOR.cpp",
-      "upstream_sha256": "9BA22D94D39DEF7B9A0C713D399301D2317B16ED4001E81BBBBA60E75D5D309B",
-      "license": "GPL-3.0-or-later",
-      "copyright_notice": "Copyright (C) 2025 Branden Hooper; Copyright (C) 2026 F-23B project contributors",
-      "modified_at": "2026-09-29",
-      "purpose": "Independent-throttle, fixed-force, time-based-trim flight model; no thrust vectoring."
-    }
-  ]
+  "sources": [],
+  "derived_files": [],
+  "note": "The v1.5 flight core and typed SDK adapter are project implementations. Earlier releases retain their own corresponding source and notices in Git history. Existing project GPL and MIT grants remain."
 }

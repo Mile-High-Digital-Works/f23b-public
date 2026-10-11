@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Startup-only development settings. No I/O or parsing enters evaluate().
 #pragma once
+#include "fitted_parameters.hpp"
 #include "core.hpp"
 #include "development_options.hpp"
 #include <charconv>
@@ -119,6 +120,7 @@ inline const Rule rules[]={
     {"dcd_flap",.015,.05,&Parameters::dcd_flap},{"flap_lift",0,.03,&Parameters::flap_lift},
     {"dcd_brake",.05,.12,&Parameters::dcd_brake},
     {"recovery_kias",200,280,&Parameters::recovery_kias},
+    {"high_alpha_roll_floor",0,1,&Parameters::high_alpha_roll_floor},
 };
 inline double clamp_value(const Entry& e,double low,double high,std::vector<std::string>& log) {
     const double result=std::clamp(e.value.scalar,low,high);
@@ -128,7 +130,7 @@ inline double clamp_value(const Entry& e,double low,double high,std::vector<std:
 }
 inline bool apply(const std::string& text,Parameters& parameters,std::vector<std::string>& log,DryThrustSettings* dry=nullptr) {
     std::vector<Entry> entries;
-    if(!Json(text).object(entries)){log.push_back("invalid JSON; candidate-2 defaults retained");return false;}
+    if(!Json(text).object(entries)){log.push_back("invalid JSON; v1.5 defaults retained");return false;}
     Parameters next=parameters;
     DryThrustSettings dry_next=dry?*dry:DryThrustSettings{};
     // Select the preset first so explicit scalar overrides have the same
@@ -136,22 +138,26 @@ inline bool apply(const std::string& text,Parameters& parameters,std::vector<std
     for(const auto& e:entries) if(e.key=="preset") {
         if(e.value.kind==Value::text&&e.value.string=="stable-1") {
             next.wp=6.;next.kn=.44;next.pitch_damping=5.2;
-            for(auto& v:next.roll_limit.y)v*=.765;
+            next.roll_limit=fitted_parameters().roll_limit;
             log.push_back("preset stable-1");
         } else if(e.value.kind==Value::text&&e.value.string=="speed-1") {
             dry_next.enabled=true;log.push_back("preset speed-1");
         } else if(e.value.kind==Value::text&&e.value.string=="protect-1") {
             next.recovery_kias=260;next.recovery_pitch_rad=45*3.141592653589793/180;
             next.recovery_path_rad=-5*3.141592653589793/180;log.push_back("preset protect-1");
+        } else if(e.value.kind==Value::text&&e.value.string=="candidate-2") {
+            // Comparison only: the October 11 candidate-2 handling without carefree protection.
+            next=candidate_2_parameters();dry_next.enabled=false;log.push_back("preset candidate-2");
         } else log.push_back(e.value.kind==Value::text&&e.value.string=="default"?"preset default":"ignored unknown preset");
     }
     for(const auto& e:entries) {
         if(e.key=="preset") {
             continue;
         }
-        if(e.key=="recovery_pitch_deg"||e.key=="recovery_path_deg") {
+        if(e.key=="recovery_pitch_deg"||e.key=="recovery_path_deg"||e.key=="roll_alpha_start_deg") {
             if(e.value.kind!=Value::number||!std::isfinite(e.value.scalar)){log.push_back("ignored nonfinite or nonnumeric value: "+e.key);continue;}
-            if(e.key=="recovery_pitch_deg")next.recovery_pitch_rad=clamp_value(e,30,60,log)*3.141592653589793/180;
+            if(e.key=="roll_alpha_start_deg")next.roll_alpha_start_rad=clamp_value(e,10,40,log)*3.141592653589793/180;
+            else if(e.key=="recovery_pitch_deg")next.recovery_pitch_rad=clamp_value(e,30,60,log)*3.141592653589793/180;
             else next.recovery_path_rad=clamp_value(e,-10,-2,log)*3.141592653589793/180;
             continue;
         }
@@ -181,7 +187,7 @@ inline bool apply(const std::string& text,Parameters& parameters,std::vector<std
 }
 inline bool load(const std::filesystem::path& path,Parameters& parameters,std::vector<std::string>& log,DryThrustSettings* dry=nullptr) {
     std::error_code error;
-    if(!std::filesystem::exists(path,error)){log.push_back("file absent; candidate-2 defaults");return false;}
+    if(!std::filesystem::exists(path,error)){log.push_back("file absent; v1.5 defaults");return false;}
     if(std::filesystem::file_size(path,error)>65536||error){log.push_back("unreadable or oversized file; defaults retained");return false;}
     std::ifstream file(path,std::ios::binary);
     if(!file){log.push_back("cannot read file; defaults retained");return false;}

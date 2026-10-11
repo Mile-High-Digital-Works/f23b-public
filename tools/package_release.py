@@ -17,7 +17,6 @@ DOCS = 'F-23B-docs/'
 TEXT = ('.lua', '.lods', '.txt')
 NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md',
            'config/licensing/third-party-code-reuse.json',
-           'native/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md',
            'config/licensing/liveries-v1.4.json', 'docs/PILOT_GUIDE.html']
 
 
