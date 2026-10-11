@@ -7,13 +7,15 @@ The aircraft retains the native Hornet cockpit, radar, datalink, engines, fuel,
 gear and steering. The present adapted flight core and its credits remain until
 the owner accepts a replacement. Current installation changes no DCS game files.
 
-The proposed menu renders and MALICE motor choice await selection. The licence
-and credits have been consolidated while preserving complete third-party texts.
+The revised slate is selected for both builds, and MALICE motor option C is
+selected. One copied medium-range fixture shot hit with one motor pulse;
+its direct velocity sample was not captured. The owner's long shot remains
+to be flown. The licence and credits retain complete third-party texts.
 With Block II selected, the helmet display shows 9X, count and the aiming cross;
 a helmet-cued shot has not been flown. Post-launch datalink is not implemented.
 
-In the local AI check, MALICE launched with the main bay doors closed. The
-Lua-only bay candidate was restored. A Block II bay sequence was not observed.
+AI F-23Bs can launch MALICE with their main bay doors closed. This visual
+limitation is retained for v1.5. The AI Block II bay sequence remains unverified.
 Multiplayer and VR remain untested. No damage-model change has been qualified.
 
 Read [installation instructions](../INSTALL.md), [known limits](../KNOWN_ISSUES.md),

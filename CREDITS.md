@@ -7,16 +7,17 @@ Public creator name: **OPEN**. Public contact email: **OPEN**.
 | --- | --- |
 | F-23B project contributors | Original integration, bridge/helper work, propulsion/steering integration, build/install tools, missions, documentation and eligible original artwork. |
 | Grinnelli Designs; Branden Hooper | F-22A v2.1.0 flight implementation retained in the current adaptation. Copyright (C) 2025 Branden Hooper for upstream portions; Copyright (C) 2026 F-23B project contributors for adaptation. |
-| SytaPastel | Purchased Northrop YF-23 Black Widow II exterior and paint foundation, CGTrader product 2046482; project-derived visual/contact mesh, liveries and proposed aircraft renders. |
+| SytaPastel | Purchased Northrop YF-23 Black Widow II exterior and paint foundation, CGTrader product 2046482; project-derived visual/contact mesh, liveries and selected menu aircraft renders. |
 | Eagle Dynamics SA and its licensors | The user's separately installed DCS World and activated F/A-18C Hornet, supplying cockpit, sensors, native engines, gear and installed resources. No proprietary game files are bundled. |
 | Python Software Foundation and holders named in its full notice | Bundled interpreter and components; LICENCE Annex D retains every recorded component notice. |
 | Tcl/Tk copyright holders named in their full notices | Installer GUI runtime; LICENCE Annexes E/F. |
 | PyInstaller Development Team and holders named in its full notice | Packaging, bootloader and runtime components; LICENCE Annex G preserves the complete notice and exception. |
-| Bitstream, Inc.; DejaVu contributors | DejaVu font in the original art proposal; LICENCE Annex H. |
-| Indian Type Foundry and the Rajdhani copyright holders | Rajdhani font in the revised art proposal; LICENCE Annex I. Font files are not bundled. |
+| Bitstream, Inc.; DejaVu contributors | DejaVu font in the earlier, unselected art proposal; LICENCE Annex H. |
+| Indian Type Foundry and the Rajdhani copyright holders | Rajdhani lettering in the selected revised slate; LICENCE Annex I. Font files are not bundled. |
 | Blender, Matplotlib and Pillow contributors | Existing rendering/composition tools; their programs are not bundled with the pictures. |
 
-Menu art, motor choice, final hashes and creator contact details are pending.
+The revised slate and MALICE motor option C are selected. Final package
+hashes, core acceptance and creator contact details remain pending.
 The weapon's numerical definitions are DCS game values. Source notices for an
 actual retained contribution must be preserved; a contributor is not inferred
 from matching fields alone. The final package must resolve that provenance.

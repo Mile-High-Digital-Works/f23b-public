@@ -60,20 +60,26 @@ The script runs the native test groups and writes the DLL to `build/native-radar
 build. `config/releases/release-v1.4.json` pins every flown file by
 SHA-256 and lists the unused files that the release removes, with reasons.
 Every shipped script and configuration file must equal the committed source.
-Pillow renders the original menu graphics from code; no old artwork is used.
-Quick Start mission corrections update the briefing and required Core/Player
-plugin identities and assign the Langley livery. Payloads, triggers and other mission data are preserved.
+For v1.5, `config/releases/menu-v1.5.json` selects the revised slate. Packaging
+reads those exact PNG bytes from the supplied runtime and checks hashes and
+dimensions; it does not regenerate the artwork. Font files are not bundled.
+An accepted v1.5 pin must set `runtime_is_final` to true. Then packaging preserves
+every module byte, including Quick Start missions, and checks installed parity.
+The v1.4 pin remains a historical baseline until v1.5 has passed its flight checks.
 
 ```powershell
 python -m pip install -r requirements-release.txt
 python -B tools/package_release.py --runtime-dir "PATH/TO/FLOWN/Mods/aircraft" --liveries-dir "PATH/TO/PACK/Liveries/F-23B"
 ```
 
+Select the committed accepted pin with `--pin config/releases/release-<version>.json`.
 The flown module folders are a private release input and are not downloaded by CI.
 They contain the licensed visual derivatives. The Blender source for these
 derivatives remains private; it is not corresponding software source.
-Both DLLs build from this source to identical code sections. Other sections
-contain build paths and timestamps, so whole-file hashes can differ.
+Before release, compare both rebuilt DLLs with the accepted runtime by code
+section hash. Other sections contain build paths and timestamps, so whole-file
+hashes can differ. The v1.5 candidate helper matches; final bridge parity awaits
+the accepted core and its corresponding source.
 Packaging produces a draft candidate; it does not change GitHub visibility or
 publish a release.
 

@@ -1,6 +1,10 @@
 # SPDX-License-Identifier: MIT
-"""Deterministic release content fixes and original menu graphics."""
+"""Release content checks and byte-preserving selected menu artwork."""
+import hashlib
 import io
+import json
+from pathlib import Path, PurePosixPath
+import struct
 import zipfile
 
 F35_TEXTURE_PREFIX = 'F-23B/Textures/F23A_V11_'
@@ -34,51 +38,31 @@ def fix_mission(data):
     return output.getvalue()
 
 
-def branding():
-    """Draw original UI graphics; no photographs, vendor art, or font files copied."""
-    from PIL import Image, ImageDraw, ImageFont
-
-    def make(width, height, icon=False):
-        image = Image.new('RGB', (width, height), '#0b1520')
-        draw = ImageDraw.Draw(image)
-        gold = '#d5b577'
-        if icon:
-            margin = max(2, width // 16)
-            draw.rounded_rectangle((margin, margin, width-margin-1, height-margin-1),
-                                   radius=width//7, outline=gold, width=max(1, width//64))
-            font = ImageFont.load_default(size=max(10, int(width*.37)))
-            draw.text((width/2, height/2), '23', font=font, fill=gold, anchor='mm')
-        else:
-            # Original geometric mark, drawn in normalized coordinates.
-            silhouette = [(0,-1),(.09,-.22),(.72,.55),(.33,.42),(.21,.76),
-                          (.10,.58),(0,.68),(-.10,.58),(-.21,.76),(-.33,.42),
-                          (-.72,.55),(-.09,-.22)]
-            scale = height*.30
-            points = [(width*.72+x*scale,height*.44+y*scale) for x,y in silhouette]
-            draw.polygon(points, fill='#192d3c')
-            draw.line(points+[points[0]], fill='#34505f', width=max(1,width//900))
-            left = int(width*.085)
-            draw.line((left,height*.26,left+width*.055,height*.26), fill=gold,
-                      width=max(2,height//230))
-            draw.text((left,height*.34), 'F-23B',
-                      font=ImageFont.load_default(size=int(height*.12)), fill=gold)
-            draw.text((left,height*.50), 'BLACK WIDOW II',
-                      font=ImageFont.load_default(size=int(height*.040)), fill='#e7edf0')
-            draw.text((left,height*.80), 'COMMUNITY AIRCRAFT / v1.4',
-                      font=ImageFont.load_default(size=int(height*.019)), fill='#91a3ad')
-            draw.text((left,height*.84), 'DCS WORLD / F/A-18C REQUIRED',
-                      font=ImageFont.load_default(size=int(height*.016)), fill='#91a3ad')
-        stream = io.BytesIO()
-        image.save(stream, format='PNG', optimize=False)
-        return stream.getvalue()
-
+def branding(runtime_dir, manifest_path=None):
+    """Read the selected, hash-pinned pictures without regenerating their pixels."""
+    if manifest_path is None:
+        manifest_path = Path(__file__).resolve().parents[1] / 'config/releases/menu-v1.5.json'
+    manifest = json.loads(Path(manifest_path).read_text(encoding='utf-8'))
+    runtime_dir = Path(runtime_dir).resolve()
     files = {}
-    background = make(1920, 1080)
-    for name in ['BackGround-F-23B.png', 'MainMenulogo.png', 'base-menu-window.png',
-                 'briefing-map-default.png', 'loading-window.png']:
-        files['F-23B/Theme/ME/'+name] = background
-    for name, size in [('icon 76x76.png',76), ('icon-38x38.png',38), ('icon.png',256),
-                       ('icon_active.png',256), ('icon_select.png',256)]:
-        files['F-23B/Theme/'+name] = make(size, size, icon=True)
-    files['F-23B/Encyclopedia/Plane/F-23B/F-23B.png'] = make(1280, 720)
+    for item in manifest['files']:
+        name = item['path']
+        relative = PurePosixPath(name)
+        if (not relative.parts or relative.is_absolute() or '..' in relative.parts or '\\' in name
+                or relative.parts[0] != 'F-23B' or relative.suffix != '.png'
+                or name in files):
+            raise ValueError('Unexpected menu asset path: ' + name)
+        path = (runtime_dir / name).resolve()
+        if not path.is_relative_to(runtime_dir):
+            raise ValueError('Menu asset resolves outside the runtime: ' + name)
+        data = path.read_bytes()
+        if hashlib.sha256(data).hexdigest() != item['sha256']:
+            raise ValueError('Selected menu asset hash mismatch: ' + name)
+        if (len(data) < 24 or data[:8] != b'\x89PNG\r\n\x1a\n'
+                or data[12:16] != b'IHDR'
+                or list(struct.unpack('>II', data[16:24])) != item['size']):
+            raise ValueError('Selected menu asset dimensions mismatch: ' + name)
+        files[name] = data
+    if not files:
+        raise ValueError('Selected menu asset manifest is empty')
     return files

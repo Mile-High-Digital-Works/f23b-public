@@ -243,7 +243,7 @@ static double engine(void* block, double time) {
     const double result = nativeEngine(block, time);
     if (fired) {
         Guard guard; char line[256];
-        std::snprintf(line, sizeof(line), "MALICE pulse: missile_id=%llx time=%.6f seeker_time=%.6f range=%.3f fuel_kg=77.3955 duration=18",
+        std::snprintf(line, sizeof(line), "MALICE pulse: missile_id=%llx time=%.6f seeker_time=%.6f range=%.3f fuel_kg=77.39472752 duration=17.55",
             static_cast<unsigned long long>(reinterpret_cast<uintptr_t>(system)), field<double>(block, 0x108), seekerAge, range);
         messages.emplace_back(line);
     }

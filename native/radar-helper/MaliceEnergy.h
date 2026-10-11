@@ -9,7 +9,7 @@ constexpr uintptr_t guidanceVtable = 0x3ba238, engineVtable = 0x3ac840;
 constexpr uintptr_t guidanceSimulate = 0x2cd270, engineSimulate = 0x18afc0;
 constexpr uintptr_t engineSwitch = 0x18b070, loftEntry = 0x2c7090;
 constexpr double delayedMarch = 1e9;
-constexpr const char* controllerRunHash = "da67df1aa596da32af38794536bcd4eddc8840977a8d90ced0f668222d93fc19";
+constexpr const char* controllerRunHash = "f4f764748943e476d4e9f0ddce22c2ed59b0ef4e796b4dda6bec11fe2ae74355";
 
 struct EnergyIdentity { void* scheme{}; void* guidance{}; void* boost{}; void* march{}; void* controller{}; };
 
@@ -28,8 +28,8 @@ int planEnergy(void* malice, void* stock, uintptr_t wb, uintptr_t bs,
         if (!access(boost, 0x88, false) || !access(march, 0x88, false)
             || !access(controller, 0xae8, false)) return -31;
         if (profileField<uintptr_t>(controller, 0) != bs+0x97968
-            || profileField<double>(boost, 0x60) != 385.2765 || profileField<double>(boost, 0x80) != 15.0
-            || profileField<double>(march, 0x60) != 77.3955 || profileField<double>(march, 0x80) != 18.0)
+            || profileField<double>(boost, 0x60) != 386.97363760 || profileField<double>(boost, 0x80) != 15.6
+            || profileField<double>(march, 0x60) != 77.39472752 || profileField<double>(march, 0x80) != 17.55)
             return -32;
         for (size_t other : {size_t(0xd8), size_t(0xcc8)}) {
             if (guidanceBlock(stock, other, wb, access) == gp
@@ -69,7 +69,7 @@ void* sibling(void* block, const EnergyIdentity& id, void* descriptor, uintptr_t
 // Project decision (October 2, 2026): suspend the loft while the coasting apex would pass the ceiling.
 // The owner's 384 and 524 km shots climbed 17-23 degrees and reached 57 and 97 km.
 // Accepted 80-130 km shots climbed 9-15 degrees to 13-17 km and stay below this limit.
-// The 30 km threshold is a coasting estimate. Remaining boost can carry the actual apex above it.
+// The 30 km ceiling is a project value set from those recorded flights; no shot has flown it yet.
 constexpr double loftCeiling = 30000, gravity = 9.80665;
 
 struct EnergyState {
@@ -93,7 +93,7 @@ struct EnergyState {
     }
     bool ignite(int boostState, int marchState, double ignition, double fuel) {
         if (fired || seekerAge < 0 || boostState != 3 || marchState != 0
-            || ignition != -1 || std::fabs(fuel-77.3955) > 1e-8) return false;
+            || ignition != -1 || std::fabs(fuel-77.39472752) > 1e-8) return false;
         fired = true;
         return true;
     }
@@ -128,7 +128,7 @@ struct EnergyActions {
 // The full bytecode hash also checks the two instructions that use this constant.
 template<class Hash>
 bool delayController(std::string& bytes, Hash hash) {
-    if (bytes.size() != 549 || profileField<double>(bytes.data(), 314) != 38.5
+    if (bytes.size() != 549 || profileField<double>(bytes.data(), 314) != 39.1
         || !hash(bytes.data(), bytes.size(), controllerRunHash)) return false;
     std::memcpy(bytes.data()+314, &delayedMarch, sizeof(delayedMarch));
     return true;

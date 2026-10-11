@@ -7,6 +7,8 @@ if ($LASTEXITCODE) { throw 'Native radar build failed' }
 if ($LASTEXITCODE) { throw 'Native radar test build failed' }
 & "$OutputDirectory/RadarTune_test.exe"
 if ($LASTEXITCODE) { throw 'Native radar tests failed' }
+& g++ -std=c++17 -O2 -Wall -Wextra -Werror -shared -static-libgcc -static-libstdc++ "$PSScriptRoot/NativeRanking_test.cpp" -o "$OutputDirectory/NativeRanking_test.dll"
+if ($LASTEXITCODE) { throw 'Native ranking test bridge build failed' }
 & g++ -std=c++17 -O2 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ "$PSScriptRoot/SupportHook_test.cpp" -o "$OutputDirectory/SupportHook_test.exe"
 if ($LASTEXITCODE) { throw 'Support hook test build failed' }
 & "$OutputDirectory/SupportHook_test.exe"
@@ -40,3 +42,7 @@ if ($LASTEXITCODE) { throw 'SA range test build failed' }
 & "$OutputDirectory/SaRangeHook_test.exe"
 if ($LASTEXITCODE) { throw 'SA range tests failed' }
 Get-FileHash -Algorithm SHA256 -LiteralPath "$OutputDirectory/F23B_Radar.dll"
+& g++ -std=c++17 -O2 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ "$PSScriptRoot/SeekerDecoyHook_test.cpp" -o "$OutputDirectory/SeekerDecoyHook_test.exe"
+if ($LASTEXITCODE) { throw 'Seeker decoy test build failed' }
+& "$OutputDirectory/SeekerDecoyHook_test.exe"
+if ($LASTEXITCODE) { throw 'Seeker decoy tests failed' }

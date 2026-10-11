@@ -39,17 +39,17 @@ int main() {
     EnergyState pulse;
     pulse.observe(0, 2, 2); CHECK(pulse.seekerAge == -1);
     pulse.observe(0, 1, 8); CHECK(pulse.seekerAge == 8);
-    CHECK(!pulse.ignite(0, 0, -1, 77.3955));
-    CHECK(!pulse.ignite(2, 0, -1, 77.3955));
-    CHECK(!pulse.ignite(3, 1, -1, 77.3955));
-    CHECK(!pulse.ignite(3, 0, 38.5, 77.3955));
+    CHECK(!pulse.ignite(0, 0, -1, 77.39472752));
+    CHECK(!pulse.ignite(2, 0, -1, 77.39472752));
+    CHECK(!pulse.ignite(3, 1, -1, 77.39472752));
+    CHECK(!pulse.ignite(3, 0, 39.1, 77.39472752));
     CHECK(!pulse.ignite(3, 0, -1, 75));
-    CHECK(pulse.ignite(3, 0, -1, 77.3955));
+    CHECK(pulse.ignite(3, 0, -1, 77.39472752));
     pulse.observe(0, 1, 40); CHECK(pulse.seekerAge == 8);
-    CHECK(!pulse.ignite(3, 0, -1, 77.3955));
+    CHECK(!pulse.ignite(3, 0, -1, 77.39472752));
     CHECK(!pulse.ignite(3, 2, 15.5, 20));
     CHECK(!pulse.ignite(3, 3, 15.5, 0));
-    EnergyState untriggered; CHECK(!untriggered.ignite(3, 0, -1, 77.3955));
+    EnergyState untriggered; CHECK(!untriggered.ignite(3, 0, -1, 77.39472752));
 
     // Recorded native order: simulate(0) has no launch range; the first loft call has it.
     EnergyState deferred;
@@ -95,8 +95,8 @@ int main() {
     const uintptr_t wb = 0x10000000, bs = 0x20000000;
     auto gp = descriptor("", wb+guidanceDescriptorVtable), boost = descriptor("boost"), march = descriptor("march");
     auto controller = descriptor("controller", bs+0x97968);
-    put(boost.data(), 0x60, 385.2765); put(boost.data(), 0x80, 15.0);
-    put(march.data(), 0x60, 77.3955); put(march.data(), 0x80, 18.0);
+    put(boost.data(), 0x60, 386.97363760); put(boost.data(), 0x80, 15.6);
+    put(march.data(), 0x60, 77.39472752); put(march.data(), 0x80, 17.55);
     std::array<char, 0xd00> ammo{}, stock{};
     void* descriptors[] = {gp.data(), boost.data(), march.data(), controller.data()};
     put(ammo.data(), 0xd8, descriptors); put(ammo.data(), 0xe0, descriptors+4);
@@ -108,7 +108,7 @@ int main() {
     stock.fill(0);
     put(march.data(), 0x80, 10.0);
     CHECK(planEnergy(ammo.data(), stock.data(), wb, bs, ids, count, access) == -32);
-    put(march.data(), 0x80, 18.0);
+    put(march.data(), 0x80, 17.55);
     CHECK(planEnergy(ammo.data(), stock.data(), wb, bs, ids, count, access) == 1);
 
     std::array<char, 0x98> system{};
@@ -128,18 +128,18 @@ int main() {
     put(stockLive.data(), 8, stock.data()); put(stockLive.data(), 0x10, stock.data());
     const auto before = stockLive;
     // Same dispatch contract as the native callback: an unmatched descriptor only calls native.
-    if (profileField<void*>(stockLive.data(), 8) != ids[0].march) native(stockLive.data(), 38.5);
+    if (profileField<void*>(stockLive.data(), 8) != ids[0].march) native(stockLive.data(), 39.1);
     CHECK(nativeCalls == 1 && stockLive == before);
     CHECK(!sibling(stockLive.data(), ids[0], march.data(), wb+engineVtable, access));
 
-    std::string bytes(549, '\0'); put(bytes.data(), 314, 38.5);
+    std::string bytes(549, '\0'); put(bytes.data(), 314, 39.1);
     const auto original = bytes;
     CHECK(!delayController(bytes, [](const void*, size_t, const char*) { return false; }) && bytes == original);
     CHECK(delayController(bytes, [](const void*, size_t n, const char* hash) {
         return n == 549 && std::strcmp(hash, controllerRunHash) == 0;
     }));
     CHECK(profileField<double>(bytes.data(), 314) == delayedMarch);
-    put(bytes.data(), 314, 38.5); CHECK(bytes == original);
+    put(bytes.data(), 314, 39.1); CHECK(bytes == original);
 
     // Actual pointer exchange and actual instruction interception, with executable native fixtures.
     alignas(8) uintptr_t slot = reinterpret_cast<uintptr_t>(&native);

@@ -2,9 +2,11 @@
 -- Project-original MALICE simulation; public dimensions, project-defined flight tune.
 -- Independent weapon registered here; every stock AIM-120 definition stays unchanged.
 -- The F-23B radar DLL presents it to the Hornet as its AMRAAM store, F-23B player only.
--- The 680.4 kg body uses MAKO's propellant fractions and burn schedule, with
--- higher specific impulse (280/245 versus 254/170 s). This is a gameplay
--- benchmark, not a claim about the real MALICE motor or classified performance.
+-- Option C: ED stock AIM-120C game values plus the stated project rule.
+-- Fuel = 680.4 * (51.26 / 161.48) * 2.15, split five to one.
+-- Burns = 6.5 * 2.4 and 6.5 * 2.7; impulse = 234 * 1.2 and 234 * 1.05.
+-- Start = 0.4; fallback = 0.4 + 15.6 + 2.1 * 11.0.
+-- These are DCS design choices. Range and terminal behavior require flights.
 -- Network designation and midcourse support use native Hornet MSI services.
 -- Model is a full-scale project approximation, not an official MALICE drawing.
 -- See docs/design/F23B_MALICE_BLOCKII.md for limits and verification.
@@ -16,7 +18,7 @@ local MALICE_TYPE = { 4, 4, 7, WSTYPE_PLACEHOLDER }
 local MALICE_MASS_KG = 680.4
 local MALICE_ACTIVE_SEARCH_RANGE_M = 16.0 * 1852.0
 local MALICE_SENSOR_FAR_RANGE_M = 40000.0
-local aim260_warhead = enhanced_a2a_warhead(60.0, 340.0)
+local malice_warhead = enhanced_a2a_warhead(60.0, 340.0)
 
 local F23B_AIM424_MALICE = {
     category = CAT_AIR_TO_AIR,
@@ -47,8 +49,8 @@ local F23B_AIM424_MALICE = {
     v_mid = 2400.0,
     Mach_max = 8.0,
     t_b = 0.0,
-    t_acc = 15.0,
-    t_marsh = 18.0,
+    t_acc = 15.6,
+    t_marsh = 17.55,
     Range_max = 500000.0,
     H_min_t = 1.0,
     Fi_start = math.rad(60.0),
@@ -63,8 +65,8 @@ local F23B_AIM424_MALICE = {
     Reflection = 0.035,
     KillDistance = 18.0,
 
-    warhead = aim260_warhead,
-    warhead_air = aim260_warhead,
+    warhead = malice_warhead,
+    warhead_air = malice_warhead,
     proximity_fuze = {
         radius = 18.0,
         arm_delay = 1.5,
@@ -91,14 +93,14 @@ local F23B_AIM424_MALICE = {
         },
     },
     controller = {
-        boost_start = 0.5,
-        march_start = 38.5, -- Fallback without the DLL. Its checked native profile delays this controller timer.
+        boost_start = 0.4,
+        march_start = 39.1, -- Fallback without the DLL. Its checked native profile delays this controller timer.
     },
 
     boost = {
-        impulse = 280.0,
-        fuel_mass = 385.2765,
-        work_time = 15.0,
+        impulse = 280.8,
+        fuel_mass = 386.97363760,
+        work_time = 15.6,
         nozzle_position = { { -2.055, 0.0, 0.0 } },
         nozzle_orientationXYZ = { { 0.0, 0.0, 0.0 } },
         nozzle_exit_area = 0.0132,
@@ -109,9 +111,9 @@ local F23B_AIM424_MALICE = {
     },
 
     march = {
-        impulse = 245.0,
-        fuel_mass = 77.3955,
-        work_time = 18.0,
+        impulse = 245.7,
+        fuel_mass = 77.39472752,
+        work_time = 17.55,
         nozzle_position = { { -2.055, 0.0, 0.0 } },
         nozzle_orientationXYZ = { { 0.0, 0.0, 0.0 } },
         nozzle_exit_area = 0.0125,
@@ -296,9 +298,9 @@ local F23B_AIM424_MALICE = {
         0.32,
         0.022, 0.050, 0.010, -0.205, 0.055, 0.66,
         1.05, 0.56, 1.00, 0.50, 0.0,
-        -1.0, -1.0, 15.0, 18.0, 0.0, 0.0, 1.0e9,
-        0.0, 0.0, 385.2765 / 15.0, 77.3955 / 18.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 385.2765 / 15.0 * 9.80665 * 280.0, 77.3955 / 18.0 * 9.80665 * 245.0, 0.0, 0.0, 0.0,
+        -1.0, -1.0, 15.6, 17.55, 0.0, 0.0, 1.0e9,
+        0.0, 0.0, 386.97363760 / 15.6, 77.39472752 / 17.55, 0.0, 0.0, 0.0,
+        0.0, 0.0, 386.97363760 / 15.6 * 9.80665 * 280.8, 77.39472752 / 17.55 * 9.80665 * 245.7, 0.0, 0.0, 0.0,
         1.0e9,
         600.0,
         0.0,

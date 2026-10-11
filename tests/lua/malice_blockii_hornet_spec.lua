@@ -18,12 +18,27 @@ assert(s.name=='F23B_AIM9X_BLOCKII' and s.wsTypeOfWeapon[4]==WSTYPE_PLACEHOLDER 
 assert(m.shape_table_data[1].name==m.name and s.shape_table_data[1].name==s.name, 'no stock shape identity')
 assert(math.abs(m.sensor.FOV-math.rad(15))<1e-12, 'MALICE seeker cone is 15 degrees')
 assert(m.M==680.4 and m.M==m.fm.mass and m.fm.caliber==.34)
+-- Option C stock-rule identity; all related declarations must change together.
+assert(math.abs(m.boost.fuel_mass-386.97363760)<1e-10)
+assert(math.abs(m.march.fuel_mass-77.39472752)<1e-10)
+assert(m.boost.work_time==15.6 and m.march.work_time==17.55)
+assert(m.boost.impulse==280.8 and m.march.impulse==245.7)
+assert(m.controller.boost_start==0.4 and m.controller.march_start==39.1)
+assert(m.ModelData[16]==15.6 and m.ModelData[17]==17.55)
+assert(math.abs(m.ModelData[23]*15.6-m.boost.fuel_mass)<1e-8)
+assert(math.abs(m.ModelData[24]*17.55-m.march.fuel_mass)<1e-8)
+assert(math.abs(m.ModelData[30]-m.boost.fuel_mass/15.6*9.80665*280.8)<1e-6)
+assert(math.abs(m.ModelData[31]-m.march.fuel_mass/17.55*9.80665*245.7)<1e-6)
+
 assert(m.boost.fuel_mass+m.march.fuel_mass<m.M)
 assert(m.controller.march_start>=m.controller.boost_start+m.boost.work_time)
 assert(m.controller.march_start+m.march.work_time<m.Life_Time)
 assert(m.scheme=='aa_missile_amraam2' and m.Head_Type==2 and s.Head_Type==1)
 assert(m.model=='F23B_MALICE' and m.shape_table_data[1].file==m.model)
-assert(s.ModelData[16]*s.ModelData[23]<s.M and s.ModelData[30]>14802)
+-- Block II motor: project rule of 48.5 kg over 7 s at 262 s specific impulse. Named and solver values agree.
+assert(math.abs(s.ModelData[16]*s.ModelData[23]-48.5)<1e-9 and s.ModelData[16]==7 and s.t_acc==s.ModelData[16])
+assert(math.abs(s.ModelData[30]-48.5/7*9.80665*262)<1e-6 and s.ModelData[16]*s.ModelData[30]>120000)
+assert(s.Life_Time==s.ModelData[36] and s.D_max==11*1852 and s.Range_max==16*1852 and #s.ModelData==59)
 assert(s.Fi_search==.09 and s.Fi_start==1.57 and s.Fi_excort==1.57,
     'Hornet seeker contract: retain native search cone and gimbal limits')
 assert(m.go_active_by_default==nil and m.send_off_data==nil)

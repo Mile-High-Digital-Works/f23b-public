@@ -1,0 +1,121 @@
+{
+  "selection": "Revised slate selected by the owner for both v1.5 builds, October 10, 2026",
+  "render_sha256": "9b6d1aed869a2d199ce3dfd505ec9411abaa5c6abd3418c57d7a6c196ed55ec6",
+  "render_origin": "Licensed SytaPastel YF-23 exterior, CGTrader product 2046482; neutral project rendering",
+  "font": "Rajdhani; Indian Type Foundry; SIL Open Font License 1.1",
+  "font_commit": "8772f86137e17678cbd3584ca9a3c9486c3e7e50",
+  "font_inputs": [
+    {
+      "file": "Rajdhani-Bold.ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/8772f86137e17678cbd3584ca9a3c9486c3e7e50/ofl/rajdhani/Rajdhani-Bold.ttf",
+      "sha256": "691470dd3286a14e9677940d0bf75796179841ba5215cbda1a2c8910a3226afd"
+    },
+    {
+      "file": "Rajdhani-Regular.ttf",
+      "url": "https://raw.githubusercontent.com/google/fonts/8772f86137e17678cbd3584ca9a3c9486c3e7e50/ofl/rajdhani/Rajdhani-Regular.ttf",
+      "sha256": "6e1fc228a8318251a6e569502ec57bac1e4656c582f92f59ccecc4688e039b98"
+    },
+    {
+      "file": "OFL.txt",
+      "url": "https://raw.githubusercontent.com/google/fonts/8772f86137e17678cbd3584ca9a3c9486c3e7e50/ofl/rajdhani/OFL.txt",
+      "sha256": "f62ef357d3a1c3d27edd35a6e1ba350e8a8d13499797964eeadefbf0b3b15d1f"
+    },
+    {
+      "file": "METADATA.pb",
+      "url": "https://raw.githubusercontent.com/google/fonts/8772f86137e17678cbd3584ca9a3c9486c3e7e50/ofl/rajdhani/METADATA.pb",
+      "sha256": "1b8e7333c6bd3449be6d576f7a2a4c06087c94591860cc470e95f0812ba847ed"
+    }
+  ],
+  "font_files_bundled": false,
+  "composite_terms": "Purchased exterior terms plus original project background; LICENCE.md",
+  "files": [
+    {
+      "path": "F-23B/Theme/ME/BackGround-F-23B.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "b154ae5e66012dcae027726a6fd54f14b18f83f2f5c2665a2e6411f953e80c26"
+    },
+    {
+      "path": "F-23B/Theme/ME/MainMenulogo.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "b154ae5e66012dcae027726a6fd54f14b18f83f2f5c2665a2e6411f953e80c26"
+    },
+    {
+      "path": "F-23B/Theme/ME/base-menu-window.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "b154ae5e66012dcae027726a6fd54f14b18f83f2f5c2665a2e6411f953e80c26"
+    },
+    {
+      "path": "F-23B/Theme/ME/briefing-map-default.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "b154ae5e66012dcae027726a6fd54f14b18f83f2f5c2665a2e6411f953e80c26"
+    },
+    {
+      "path": "F-23B/Theme/ME/loading-window.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "b154ae5e66012dcae027726a6fd54f14b18f83f2f5c2665a2e6411f953e80c26"
+    },
+    {
+      "path": "F-23B/Encyclopedia/Plane/F-23B/F-23B.png",
+      "size": [
+        1280,
+        720
+      ],
+      "sha256": "a0d6ffce57470c502f7f2749f612b9f2095ce940e02095561ac5b4b4032d64fe"
+    },
+    {
+      "path": "F-23B/Theme/icon 76x76.png",
+      "size": [
+        76,
+        76
+      ],
+      "sha256": "7aad966e488daf08792dfa43dcf7d4e477392fdb5a779dfe4aa1ac666e871920"
+    },
+    {
+      "path": "F-23B/Theme/icon-38x38.png",
+      "size": [
+        38,
+        38
+      ],
+      "sha256": "55cb6afd8f499430353e7b4fb4ed448390606402d5a940ce130442f0194f8ef2"
+    },
+    {
+      "path": "F-23B/Theme/icon.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01"
+    },
+    {
+      "path": "F-23B/Theme/icon_active.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01"
+    },
+    {
+      "path": "F-23B/Theme/icon_select.png",
+      "size": [
+        256,
+        256
+      ],
+      "sha256": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01"
+    }
+  ]
+}

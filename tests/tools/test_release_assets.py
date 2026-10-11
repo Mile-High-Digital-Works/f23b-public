@@ -1,19 +1,59 @@
 # SPDX-License-Identifier: MIT
 import io
+import hashlib
 import json
 from pathlib import Path
 import re
 import sys
+import tempfile
 import unittest
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools'))
 from release_assets import (fix_mission, MISSION_TEXT_OLD, MISSION_TEXT_NEW,
-                            MISSION_MODULES_OLD, MISSION_MODULES_NEW, MISSION_LIVERY)
+                            MISSION_MODULES_OLD, MISSION_MODULES_NEW, MISSION_LIVERY, branding)
 
 
 class ContentTests(unittest.TestCase):
+    def selected_art_fixture(self, folder):
+        runtime = Path(folder) / 'runtime'
+        name = 'F-23B/Theme/icon.png'
+        data = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01'
+        image = runtime / name
+        image.parent.mkdir(parents=True)
+        image.write_bytes(data)
+        manifest = Path(folder) / 'menu.json'
+        manifest.write_text(json.dumps({'files': [{'path': name, 'size': [1, 1],
+                            'sha256': hashlib.sha256(data).hexdigest()}]}))
+        return runtime, manifest, image, name, data
+
+    def test_selected_art_is_preserved_and_changed_pixels_are_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            runtime, manifest, image, name, data = self.selected_art_fixture(folder)
+            self.assertEqual(branding(runtime, manifest), {name: data})
+            image.write_bytes(data + b'changed')
+            with self.assertRaisesRegex(ValueError, 'hash mismatch'):
+                branding(runtime, manifest)
+
+    def test_selected_art_dimensions_must_match_the_manifest(self):
+        with tempfile.TemporaryDirectory() as folder:
+            runtime, manifest, _, _, _ = self.selected_art_fixture(folder)
+            value = json.loads(manifest.read_text())
+            value['files'][0]['size'] = [2, 1]
+            manifest.write_text(json.dumps(value))
+            with self.assertRaisesRegex(ValueError, 'dimensions mismatch'):
+                branding(runtime, manifest)
+
+    def test_selected_art_cannot_escape_the_runtime(self):
+        with tempfile.TemporaryDirectory() as folder:
+            runtime, manifest, _, _, _ = self.selected_art_fixture(folder)
+            value = json.loads(manifest.read_text())
+            value['files'][0]['path'] = '../outside.png'
+            manifest.write_text(json.dumps(value))
+            with self.assertRaisesRegex(ValueError, 'asset path'):
+                branding(runtime, manifest)
+
     def test_mission_requirements_match_plugins_and_other_content_is_preserved(self):
         original = ('mission = {descriptionText="' + MISSION_TEXT_OLD + '",'
                     'descriptionBlueTask="' + MISSION_TEXT_OLD + '",'

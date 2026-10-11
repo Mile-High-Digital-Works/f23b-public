@@ -1,7 +1,7 @@
 # F-23B licence and asset terms
 
-Draft for v1.5. No v1.5 package has been issued. Release hashes, selected menu art,
-motor choice and flight-core acceptance are pending. This document grants only
+Draft for v1.5. No v1.5 package has been issued. The revised slate and MALICE
+motor option C are selected. Release hashes and flight-core acceptance are pending. This document grants only
 the rights described below; third-party terms continue to control their content.
 
 Public creator name: **OPEN**. Public contact email: **OPEN**.
@@ -45,10 +45,11 @@ applicable share-alike terms. This grant covers only rights the project holds.
 Depicted game content, purchased visuals, external fonts and trademarks retain
 their separate rights. The whole menu composite is not offered under CC BY-SA.
 
-The v1.5 art choice is pending. The proposed renders use the licensed exterior
-over an original backdrop. DejaVu and Rajdhani notices are included in Annexes
-H and I for the two proposals. No font file is part of the aircraft package.
-The final release must identify its selected images and hashes.
+The selected v1.5 revised slate uses the licensed exterior over an original
+backdrop, with Rajdhani lettering. Annex I retains the complete font notice.
+Annex H records the earlier DejaVu proposal; that proposal is not selected.
+No font file is part of the aircraft package. The eleven selected image hashes
+are in [the menu manifest](config/releases/menu-v1.5.json).
 The F-35 cockpit insert and eight V11 maps are excluded from the public package.
 
 ## Weapons and installed dependencies
@@ -57,9 +58,9 @@ MALICE is the project's DCS game version of the publicly reported Navy AIM-424
 name. The [naming report](https://aviationweek.com/defense/missile-defense-weapons/us-navy-testing-new-long-range-air-air-missile)
 is not a source of game values. Motor, seeker and trajectory definitions are
 game values; they make no claim about real weapon performance or endorsement.
-The motor choice is pending. Retain the applicable source notices and value-origin
-records for the version actually shipped; changing the motor does not settle
-the origin of other retained fields.
+Motor option C is selected: DCS stock AIM-120C game-motor scaling and
+project pulse choices. Retain source notices and value-origin records for the
+version actually shipped; this change does not settle other retained fields.
 
 DCS World and an installed, activated DCS: F/A-18C Hornet are required.
 Their cockpit, sensors, engines, gear and other installed resources are not

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Curated software source. Aircraft scripts match the October 2, 2026 owner-flown build. Flight bridge source remains at private commit 931b267fb7d3; native radar source matches private commit 9ada987c176f. No private development history imported.",
+  "description": "Curated software source. Aircraft scripts match the October 2, 2026 owner-flown build. Flight bridge source remains at private commit 931b267fb7d3; native radar source matches private commit 9ada987c176f. No private development history imported. Local v1.5 draft includes owner-selected MALICE C source; acceptance and release remain pending.",
   "runtime_source": "9ada987c176f562bfd28cbe74a1346c73f4bf9a2",
   "flight_source": "931b267fb7d3",
   "unchanged_files": {
@@ -20,7 +20,6 @@
     "Mods/aircraft/F-23B/Missions/QuickStart/quickstart.lua": "971b42e42925c29c4b7278fb85e643305880e2fe750ba6cbfe87d415a987f342",
     "Mods/aircraft/F-23B/Shapes/F-23B.lods": "08f98c287a79b19ce2eec9b2189320970d64e795af53b1cfab35f5a0c1e9173b",
     "Mods/aircraft/F-23B/UnitPayloads/F-23B.lua": "46b0fd00706469ad17d700d765aad1a728e7fcf0bafadf3a4a172d5106ae47e2",
-    "Mods/aircraft/F-23B/Weapons/F23B_AIM424_MALICE.lua": "4f9d07af7153efa867fd20d6118b2907d0d80842eedd4bdb0a01d4789c320de7",
     "Mods/aircraft/F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "744e402aeb2f798a1e47f4e121b011f188a20ff0f47cef93c2912bab9633d6a2",
     "Mods/aircraft/F-23B/entry.lua": "8bcdf76922f6484216679b7af5b3d1d737cf4a5116b79a97d5e3fea69c02ec2a",
     "native/flight-feel/CMakeLists.txt": "363acf9bc20fce1479500de89b04ae3ac123b876873452a7cf08fa4f576b0c3d",
@@ -50,17 +49,10 @@
     "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
     "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
     "native/radar-helper/LaunchZone_test.cpp": "9f0d2d35e49d8f2871a4f0e66e7bee1ddc49b36dc6efffbbac4af5f44ec2b96e",
-    "native/radar-helper/MaliceEnergy.h": "32477d081bf3bf82be706d28dd5a0e58299796a0a3c950e342163953a1242646",
-    "native/radar-helper/MaliceEnergy_test.cpp": "61b7460d7744cb253dda132f43adf073f953d87bfcbcc9f3120b8867fd97eb76",
     "native/radar-helper/MaliceLoftHook.h": "966f9ab173efb602b861375140a906f53e21e9c80ac0a9a1296c6ffa74d2f919",
-    "native/radar-helper/MaliceRuntime.h": "ea492a3a12fbf5b95771e9901e9673985c3b2eb9c8ee99c87becd1ea23b244cb",
-    "native/radar-helper/MissileProfile_test.cpp": "b0cc4a04be09c50ef54b4a2cd1afa0f47d3e0872eb3cfb4c97d43aa78f3dc91e",
     "native/radar-helper/NativeTarget.h": "2695f3dc9de1fa13f45c8b425cb3d9024da052e98554c6779994d00db27c6982",
     "native/radar-helper/PayloadAccessHook.h": "a92f4cf9757b198e1670f04084f1042a8095e9d7db254a766462983440ae15d4",
     "native/radar-helper/PayloadAccessHook_test.cpp": "d6b32e86998b04bad9a9cd87edc7917779fb356720e481ed6ea3e6e2b0d5807d",
-    "native/radar-helper/PayloadAlias_test.cpp": "93cc025e94ecac8acf7ddd50fa774136ac0919a702a966f57747d7f9b3dddc0d",
-    "native/radar-helper/RadarTune.h": "62cdc42d912fc296e8b61209266ae2fc98027893f447085d7007c8eab1de8cfa",
-    "native/radar-helper/RadarTune_test.cpp": "5a125f3eef0c771bec969c4005d1335fd3e52b61174f4fbe99e30f293769d3f6",
     "native/radar-helper/RankingHook.h": "86ea7474004580543a4bf33e36c165ec7bc98d0a7beb4fd6510ddf49ef94a219",
     "native/radar-helper/SaRangeHook.h": "ee31eef97df3fcb8c160f4b9c054fab8c7d8047bda981bcf692cd4ed27a717b4",
     "native/radar-helper/SaRangeHook_test.cpp": "759596c5d6678310e57881bb65c4c55b87fe7834bdfde3aed9602d4cacfcea1f",
@@ -133,6 +125,66 @@
     "native/flight-feel/docs/provenance/GRINNELLI_V2_1_PERFORMANCE_REFERENCE.md": {
       "inherited_sha256": "6da5da14a5658735ea7e80fca8788345667ce0f44711ffd8a839ab1b6b5ded96",
       "reason": "Remove obsolete product status wording while retaining source attribution."
+    }
+  },
+  "v15_selected_motor": {
+    "choice": "C",
+    "published": false,
+    "files": {
+      "Mods/aircraft/F-23B/Weapons/F23B_AIM424_MALICE.lua": {
+        "previous_public_sha256": "4f9d07af7153efa867fd20d6118b2907d0d80842eedd4bdb0a01d4789c320de7",
+        "selected_sha256": "28016ff03e35f5f78fb9ed5ec6e054bf69f9192bb7d4710694091185fd3c5dc9"
+      },
+      "native/radar-helper/MaliceEnergy.h": {
+        "previous_public_sha256": "32477d081bf3bf82be706d28dd5a0e58299796a0a3c950e342163953a1242646",
+        "selected_sha256": "bae9171c7f08a58f303f6c5e0b0795196d8d1010a50b15fcf054624d29a06c3c"
+      },
+      "native/radar-helper/MaliceRuntime.h": {
+        "previous_public_sha256": "ea492a3a12fbf5b95771e9901e9673985c3b2eb9c8ee99c87becd1ea23b244cb",
+        "selected_sha256": "94c8bc55fc77a037e853070f0bd40bc3b5dcab451676752bf1afaeccb5d0b171"
+      },
+      "native/radar-helper/MaliceEnergy_test.cpp": {
+        "previous_public_sha256": "61b7460d7744cb253dda132f43adf073f953d87bfcbcc9f3120b8867fd97eb76",
+        "selected_sha256": "8013bd4e222d49b9d31c336d9f50fa19334dd3321444036306e6c2ea1e345cc6"
+      },
+      "tests/lua/malice_blockii_hornet_spec.lua": {
+        "previous_public_sha256": "c69ff14e871ddf6ed794415083c6d3d0a0e994928d4b9f520270aa465c392bd9",
+        "selected_sha256": "05a06a38879634ced6902a600dc9fc0b8fe03c1bb993ac6956768f44713d7275"
+      }
+    }
+  },
+  "v15_original_radar_inputs": {
+    "native/radar-helper/MissileProfile_test.cpp": {
+      "previous_public_sha256": "b0cc4a04be09c50ef54b4a2cd1afa0f47d3e0872eb3cfb4c97d43aa78f3dc91e",
+      "selected_sha256": "6bb5b0cf3678dff06675fd2f46f63370c8e791486aaf7ca5bfba729a38f54b2d"
+    },
+    "native/radar-helper/NativeRanking_test.cpp": {
+      "previous_public_sha256": null,
+      "selected_sha256": "b011a5f201fcf570959a4b44804b617d54c2623da2ef4e300ead8a890cfa71e1"
+    },
+    "native/radar-helper/PayloadAlias_test.cpp": {
+      "previous_public_sha256": "93cc025e94ecac8acf7ddd50fa774136ac0919a702a966f57747d7f9b3dddc0d",
+      "selected_sha256": "ecc32e778d3fc392aa08c359649f9d9ab3e66a3115f1fc35af07d655dde4f5f4"
+    },
+    "native/radar-helper/Radar.cpp": {
+      "previous_public_sha256": "c5f58caa4cb619eb26e50986660a557edf96ec446d2cb9009ebe4c84ffa23ea2",
+      "selected_sha256": "aadf2d76a48d48ce3a734fef6590da2263dcbf63cb271a437851fc8eb0c54791"
+    },
+    "native/radar-helper/RadarTune.h": {
+      "previous_public_sha256": "62cdc42d912fc296e8b61209266ae2fc98027893f447085d7007c8eab1de8cfa",
+      "selected_sha256": "63ee964d3fd57db923b494a7f7628d3541b7c9eb337d1b867526b4f97882a9f8"
+    },
+    "native/radar-helper/RadarTune_test.cpp": {
+      "previous_public_sha256": "5a125f3eef0c771bec969c4005d1335fd3e52b61174f4fbe99e30f293769d3f6",
+      "selected_sha256": "dd85a58e60e6e883665849a1b3995cddafa46364807ec76699c3951058fb09d8"
+    },
+    "native/radar-helper/SeekerDecoyHook.h": {
+      "previous_public_sha256": null,
+      "selected_sha256": "c8dd897f3cf9700c126e936e6a5303d38d4d2dcf8592f543fea14d49b4b09f35"
+    },
+    "native/radar-helper/SeekerDecoyHook_test.cpp": {
+      "previous_public_sha256": null,
+      "selected_sha256": "fbb564bcc1200d1f47e3a26ca98cb6796063d930561af16998b7feb30aab2d00"
     }
   }
 }

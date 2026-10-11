@@ -4,7 +4,7 @@ v1.5 release draft. The current download remains v1.4; no v1.5 package has been 
 
 The full Hornet radar, datalink and SA page in a stealth airframe, with adapted F-23 flight dynamics.
 Player internal bays open before weapon release. MALICE has a recorded **336-mile A-50 kill** with continuing target support.
-AI F-23Bs fly and fight with MALICE and Block II. Current installs change **no DCS game files**.
+AI F-23Bs can use MALICE; their main bay doors can remain closed during launch. Current installs change **no DCS game files**.
 
 ![F-23B in DCS World](docs/images/f23b-exterior.jpg)
 
@@ -83,7 +83,7 @@ Use [a compatible release](https://github.com/Coaokalo/f23b-public/releases/late
 The 336-mile kill is one supported flight, not a guaranteed launch range. Exact 350-mile shots remain unverified.
 MALICE's coasting-apex estimate is not a hard altitude cap. With Block II selected, the helmet display shows `9X`, its count and the aiming cross. A helmet-cued shot has not been flown. Block II post-launch datalink is not implemented.
 AI uses the extended MALICE energy profile when the player also flies an F-23B.
-AI main bay doors remain closed during the observed MALICE launch.
+For v1.5, AI F-23Bs can launch MALICE with their main bay doors closed. The AI Block II bay sequence remains unverified.
 MALICE is this project's DCS game version of the [publicly reported Navy AIM-424 name](https://aviationweek.com/defense/missile-defense-weapons/us-navy-testing-new-long-range-air-air-missile); its numerical definitions are game values.
 See [known limitations](KNOWN_ISSUES.md).
 

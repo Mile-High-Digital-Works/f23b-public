@@ -18,6 +18,7 @@
 #include "PayloadAlias.h"
 #include "PayloadAccessHook.h"
 #include "SaRangeHook.h"
+#include "SeekerDecoyHook.h"
 #include <tlhelp32.h>
 #include <array>
 
@@ -68,6 +69,19 @@ static SetMissileDataFunction stockSetMissileData = nullptr;
 static DescriptorByTypeFunction stockDescriptorByType = nullptr;
 static SidewinderNewFunction stockSidewinderNew = nullptr;
 static f23radar::WsType aliasStation[64], aliasContainer[64], projectMissileData, projectDescriptor, projectSeeker;
+// Block II flare rejection in the Hornet cockpit seeker (see SeekerDecoyHook.h).
+using LockDistanceFunction = float(*)(const void*, void*);
+static LockDistanceFunction stockLockDistance = nullptr;
+static const void* (*movingObjectType)(const void*) = nullptr;   // WorldGeneral MovingObject::Type
+static f23radar::SlotHook seekerDecoyHook;
+static int decoyStatus = 0;      // 1 active; 0 not attempted; negative refused (see install_seeker_decoy)
+static std::atomic<unsigned long long> decoyRejects{0};
+using RelockFunction = float(*)(void*, void*, const float*, const float*);
+static RelockFunction stockRelock = nullptr;      // WeaponsBase getIRTargetRelockProbability
+static f23radar::SlotHook flightDecoyHook;
+static uint32_t objectTypeOffset = 0;             // wsType inside a MovingObject, read from MovingObject::Type
+static int flightDecoyStatus = 0;                 // 1 active; 0 not attempted; negative refused
+static std::atomic<unsigned long long> flightDecoyRejects{0};
 struct LaunchVector { float x, y, z; };
 using LaunchZoneFunction = void(*)(void*, float, float, float, float,
     const LaunchVector&, const LaunchVector&, const LaunchVector&, float&, float&, float&);
@@ -673,6 +687,64 @@ static std::wstring expected_hornet_path() {
     }
     return root + L"\\Mods\\aircraft\\FA-18C\\bin\\FA18C.dll";
 }
+// The Hornet seeker asks this for each nearby object. A flare gets 0 while the seeker carries the
+// project Block II, so it cannot become a lock candidate. All other answers are the stock function's.
+static float block2_lock_distance(const void* seeker, void* object) {
+    if (object) {
+        const auto parent = field<f23radar::WsType>(seeker, f23radar::seekerParentType);
+        if (const void* type = movingObjectType(object)) {
+            if (f23radar::rejectDecoy(parent, aliasPairs[1].project, field<f23radar::WsType>(type, 0))) {
+                ++decoyRejects;
+                return 0.0f;
+            }
+        }
+    }
+    return stockLockDistance(seeker, object);
+}
+// Codes: 1 active; -41 symbols missing; -42 the vtable slot is not the reviewed function; -43 install failed.
+// A refusal leaves the native seeker unchanged. It does not affect the weapon connection.
+static int install_seeker_decoy(HMODULE cockpit) {
+    if (decoyStatus == 1) return 1;
+    const auto table = reinterpret_cast<uintptr_t>(
+        GetProcAddress(cockpit, "??_7avSidewinderSeeker@cockpit@@6BavPlatform@1@@"));
+    stockLockDistance = symbol<LockDistanceFunction>(cockpit,
+        "?getLockonDistance@avSidewinderSeeker@cockpit@@UEBAMPEAVMovingObject@@@Z");
+    movingObjectType = symbol<const void*(*)(const void*)>(GetModuleHandleW(L"WorldGeneral.dll"),
+        "?Type@MovingObject@@QEBAAEBVwsType@@XZ");
+    if (!table || !stockLockDistance || !movingObjectType) return decoyStatus = -41;
+    auto slot = reinterpret_cast<uintptr_t*>(table + f23radar::seekerLockDistanceSlot);
+    if (!accessible(slot, 8) || !seekerDecoyHook.prepare(slot, reinterpret_cast<uintptr_t>(stockLockDistance),
+            reinterpret_cast<void*>(&block2_lock_distance))) return decoyStatus = -42;
+    return decoyStatus = seekerDecoyHook.install() ? 1 : -43;
+}
+// A launched legacy IR missile asks this for each decoy. A flare gets 0 when the missile is the project
+// Block II. The position argument is the asking missile's own position field (see SeekerDecoyHook.h).
+static float block2_relock_probability(void* candidate, void* current, const float* position, const float* ccm) {
+    if (candidate && position) {
+        const auto missile = reinterpret_cast<const char*>(position) - f23radar::missilePositionOffset;
+        if (f23radar::rejectDecoy(field<f23radar::WsType>(missile, objectTypeOffset), aliasPairs[1].project,
+                field<f23radar::WsType>(candidate, objectTypeOffset))) {
+            ++flightDecoyRejects;
+            return 0.0f;
+        }
+    }
+    return stockRelock(candidate, current, position, ccm);
+}
+// Codes: 1 active; -44 symbols missing; -45 MovingObject::Type is not the reviewed accessor;
+// -46 the import slot is not the reviewed function; -47 install failed. A refusal leaves stock behaviour.
+static int install_flight_decoy(HMODULE weaponRuntime, HMODULE weaponsBase) {
+    if (flightDecoyStatus == 1) return 1;
+    stockRelock = symbol<RelockFunction>(weaponsBase,
+        "?getIRTargetRelockProbability@@YAMPEAVMovingObject@@0AEBVVec3f@osg@@AEBM@Z");
+    const auto accessor = reinterpret_cast<const unsigned char*>(movingObjectType);
+    if (!stockRelock || !accessor || !accessible(accessor, 8)) return flightDecoyStatus = -44;
+    objectTypeOffset = f23radar::typeAccessorOffset(accessor);
+    if (!objectTypeOffset) return flightDecoyStatus = -45;
+    auto slot = reinterpret_cast<uintptr_t*>(reinterpret_cast<uintptr_t>(weaponRuntime) + f23radar::weaponsRelockImport);
+    if (!accessible(slot, 8) || !flightDecoyHook.prepare(slot, reinterpret_cast<uintptr_t>(stockRelock),
+            reinterpret_cast<void*>(&block2_relock_probability))) return flightDecoyStatus = -46;
+    return flightDecoyStatus = flightDecoyHook.install() ? 1 : -47;
+}
 // Codes: 1/2/3 as aliasStatus; -20 native accessors missing; -25 unsupported native build;
 // -26 load notification unavailable.
 static int early_install() {
@@ -696,6 +768,8 @@ static int early_install() {
     stockSidewinderNew = symbol<SidewinderNewFunction>(cockpit, "??0eqSidewinderNew@cockpit@@QEAA@AEBVwsType@@@Z");
     if (!weaponResourceName || !currentPayload || !stockSetMissileData || !stockDescriptorByType
         || !stockSidewinderNew) return -20;
+    install_seeker_decoy(cockpit);
+    install_flight_decoy(weaponRuntime, weapons);
     auto ntdll = GetModuleHandleW(L"ntdll.dll");
     auto registerNotification = symbol<LdrRegister>(ntdll, "LdrRegisterDllNotification");
     HMODULE pinned{};
@@ -864,7 +938,11 @@ static int update(lua_State* L) {
     else pushNil(L);
     pushString(L, malice_energy::diagnostics().c_str());
     pushNumber(L, saRangeStatus);
-    return 21;
+    pushNumber(L, decoyStatus);
+    pushNumber(L, static_cast<double>(decoyRejects.load()));
+    pushNumber(L, flightDecoyStatus);
+    pushNumber(L, static_cast<double>(flightDecoyRejects.load()));
+    return 25;
 }
 extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
     auto lua = GetModuleHandleW(L"lua.dll");

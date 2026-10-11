@@ -42,6 +42,8 @@ def main():
                         help='Folder that contains the flown F-23B and F-23B-Player module folders')
     parser.add_argument('--liveries-dir', type=Path, required=True,
                         help='Folder containing the ten pinned F23B livery folders')
+    parser.add_argument('--pin', default=PIN,
+                        help='Committed config/releases/release-*.json for the accepted runtime')
     args = parser.parse_args()
     if subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT).strip():
         raise SystemExit('Commit the source changes before packaging')
@@ -50,7 +52,12 @@ def main():
     source = subprocess.check_output(['git', 'archive', '--format=zip', 'HEAD'], cwd=ROOT)
     with zipfile.ZipFile(io.BytesIO(source)) as z:
         source_files = {n: z.read(n) for n in z.namelist() if not n.endswith('/')}
-    pin = json.loads(source_files[PIN])
+    pin_path = Path(args.pin)
+    if (pin_path.is_absolute() or '..' in pin_path.parts
+            or pin_path.parent.as_posix() != 'config/releases'
+            or not pin_path.name.startswith('release-') or pin_path.suffix != '.json'):
+        raise SystemExit('The release pin must be a committed config/releases/release-*.json')
+    pin = json.loads(source_files[pin_path.as_posix()])
     name = pin['name']
 
     runtime = {p.relative_to(args.runtime_dir).as_posix(): p.read_bytes()
@@ -71,13 +78,18 @@ def main():
     for n in committed - set(pin['from_source']):
         if files[n] != source_files['Mods/aircraft/' + n]:
             raise SystemExit(f'Shipped file differs from committed source: {n}')
-    graphics = branding()
+    graphics = branding(args.runtime_dir)
     if not graphics.keys() <= files.keys():
         raise SystemExit('Unexpected menu graphics inventory')
     files.update(graphics)
     missions = [n for n in files if n.endswith('.miz')]
-    for n in missions:
-        files[n] = fix_mission(files[n])
+    if not pin.get('runtime_is_final', False):
+        for n in missions:
+            files[n] = fix_mission(files[n])
+    if pin.get('runtime_is_final', False):
+        for n, data in files.items():
+            if data != runtime[n]:
+                raise SystemExit('Final runtime differs from the installed aircraft: ' + n)
 
     # Both installation methods use this exact profile-relative inventory.
     files = {'Mods/aircraft/' + n: data for n, data in files.items()}
