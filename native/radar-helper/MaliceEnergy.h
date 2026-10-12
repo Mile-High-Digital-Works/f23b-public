@@ -71,11 +71,34 @@ void* sibling(void* block, const EnergyIdentity& id, void* descriptor, uintptr_t
 // Accepted 80-130 km shots climbed 9-15 degrees to 13-17 km and stay below this limit.
 // The 30 km ceiling is a project value set from those recorded flights; no shot has flown it yet.
 constexpr double loftCeiling = 30000, gravity = 9.80665;
+// Project decision (October 12, 2026): hold the second pulse when the missile is about to arrive.
+// On a short shot the seeker is active from launch, so the pulse fired at boost burnout. The owner's
+// 21.6 km shot got it at 9.1 km to go at Mach 7, where a 40 g turn has a radius near 12 km.
+// Accepted shots lit the pulse 14 to 19 s before the hit (94 km, 122 km and 541 km launches).
+// The limit is 10 s of flight at the present closing speed. It is not latched: a target that opens
+// the range again can still get the pulse.
+constexpr double minimumPulseTime = 10.0;
 
 struct EnergyState {
     double lastAge = -1, seekerAge = -1, loftEnd = 0, loftGain = 0;
     double climbAge = -1, climbAltitude = 0, climbSine = 0;
+    double closingAge = -1, closingRange = 0, closing = 0;
     bool fired = false, loftPlanned = false, loftStopped = false, loftReported = false, ceilingReported = false;
+    bool withheld = false, withheldReported = false;
+    // Closing speed from the believed range, over windows of 0.25 s or more.
+    void track(double age, double range) {
+        if (!(range > 0) || !std::isfinite(range) || !std::isfinite(age)) return;
+        if (closingAge < 0 || age < closingAge) { closingAge = age; closingRange = range; return; }
+        if (age-closingAge < 0.25) return;
+        closing = (closingRange-range)/(age-closingAge);
+        closingAge = age; closingRange = range;
+    }
+    // Seconds to the target at the measured closing speed, or at the missile's speed before one exists.
+    // Unknown inputs give a long time, so they never hold the pulse.
+    double timeToGo(double range, double speed) const {
+        const double rate = closing > 1 ? closing : speed;
+        return range >= 0 && rate > 1 && std::isfinite(range) && std::isfinite(rate) ? range/rate : 1e9;
+    }
     bool initialize(double age, double launchRange, double targetAltitude) {
         // The first simulate call can precede the native launch-range initialization.
         // Preserve native loft until readInputData supplies the launch geometry.
@@ -91,9 +114,11 @@ struct EnergyState {
     void observe(int before, int after, double age) {
         if (before == 0 && after == 1 && seekerAge < 0) seekerAge = age;
     }
-    bool ignite(int boostState, int marchState, double ignition, double fuel) {
+    // range < 0 skips the arrival limit (the caller has no believed range).
+    bool ignite(int boostState, int marchState, double ignition, double fuel, double range = -1, double speed = 0) {
         if (fired || seekerAge < 0 || boostState != 3 || marchState != 0
             || ignition != -1 || std::fabs(fuel-77.39472752) > 1e-8) return false;
+        if (range >= 0 && timeToGo(range, speed) < minimumPulseTime) { withheld = true; return false; }
         fired = true;
         return true;
     }

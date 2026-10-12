@@ -51,6 +51,31 @@ int main() {
     CHECK(!pulse.ignite(3, 3, 15.5, 0));
     EnergyState untriggered; CHECK(!untriggered.ignite(3, 0, -1, 77.39472752));
 
+    // Arrival limit: the pulse holds inside 10 s of flight and fires outside it. It is not latched.
+    // Owner shot of October 2: boost burnout at 9.1 km to go, about 2,130 m/s. 4.3 s to go: held.
+    EnergyState shortRange; shortRange.observe(0, 1, 1.5);
+    CHECK(shortRange.timeToGo(9100, 2130) < 5 && shortRange.closing == 0);
+    CHECK(!shortRange.ignite(3, 0, -1, 77.39472752, 9100, 2130) && shortRange.withheld && !shortRange.fired);
+    CHECK(!shortRange.ignite(3, 0, -1, 77.39472752, 6000, 2130));
+    // The target opens the range: closing speed falls to 300 m/s, 20 s to go. The pulse can fire.
+    shortRange.track(20.0, 6000); shortRange.track(20.1, 5985);              // Under 0.25 s: no new rate.
+    CHECK(shortRange.closing == 0);
+    shortRange.track(21.0, 5700); CHECK(std::fabs(shortRange.closing-300) < 1e-9);
+    CHECK(shortRange.timeToGo(6000, 2130) == 20);
+    CHECK(shortRange.ignite(3, 0, -1, 77.39472752, 6000, 2130) && shortRange.fired);
+    // Accepted 94 km shot: seeker handoff at 29.6 km, closing about 2,050 m/s. 14.4 s: the pulse fires.
+    EnergyState accepted; accepted.observe(0, 1, 36.56);
+    accepted.track(36.0, 30780); accepted.track(36.5, 29755);
+    CHECK(std::fabs(accepted.closing-2050) < 1e-6 && accepted.timeToGo(29632, 1800) > 14);
+    CHECK(accepted.ignite(3, 0, -1, 77.39472752, 29632, 1800) && !accepted.withheld);
+    // A receding target (negative closing) uses the missile speed. Unknown inputs never hold the pulse.
+    EnergyState receding; receding.observe(0, 1, 5); receding.track(5, 20000); receding.track(6, 20100);
+    CHECK(receding.closing < 0 && receding.timeToGo(20000, 1000) == 20);
+    EnergyState unknownRate; unknownRate.observe(0, 1, 5);
+    CHECK(unknownRate.timeToGo(5000, 0) == 1e9 && unknownRate.ignite(3, 0, -1, 77.39472752, 5000, 0));
+    EnergyState noRange; noRange.observe(0, 1, 5); CHECK(noRange.ignite(3, 0, -1, 77.39472752));
+    EnergyState badTrack; badTrack.track(1, -5); badTrack.track(2, 0); CHECK(badTrack.closingAge < 0);
+
     // Recorded native order: simulate(0) has no launch range; the first loft call has it.
     EnergyState deferred;
     CHECK(!deferred.initialize(0, 0, 0));

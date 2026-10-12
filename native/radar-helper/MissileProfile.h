@@ -21,7 +21,10 @@ namespace f23radar {
 // MALICE's declared 16 NM active search and 40 km sensor range never reached these unnamed or
 // radar-base fields through Lua; the profile applies them in memory, MALICE only.
 // Updates still flow only while the launcher supports a real track.
-constexpr double stockUpdateWindow = 3.9, maliceUpdateWindow = 60.0;
+// Update window: 600 s since October 12, 2026 (was 60 s). After a gap longer than the window the INS
+// never takes a message again. With 60 s a track that the Hornet lost and found again could not
+// resume guidance on a long shot. 600 s equals the INS operating time, so the gap cannot expire first.
+constexpr double stockUpdateWindow = 3.9, maliceUpdateWindow = 600.0;
 constexpr double stockInsTime = 100.0, maliceInsTime = 600.0;
 constexpr double maliceSensorTime = 600.0;   // MALICE-only sensor op_time: identity check
 constexpr double radians = 3.14159265358979323846 / 180.0;

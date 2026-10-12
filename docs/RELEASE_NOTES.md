@@ -13,7 +13,9 @@ Eighteen regional contact shells replace the single airframe shell. Wheels and
 ground lines retain their verified geometry. Native damage behavior still needs observation.
 
 MALICE retains motor C and its 58.7-mile fixture result. Its long shot remains open.
-Block II stays as installed. The selected revised slate appears in both builds.
+Block II does not lock other air-to-air missiles. With a designated hostile aircraft it locks only that aircraft.
+MALICE holds its second motor pulse within about 10 seconds of the target, and accepts target updates again after a long gap.
+These helper changes have three fixture shots; wider flight confirmation is pending. The selected revised slate appears in both builds.
 AI MALICE may launch with closed main bay doors. No AI bay controller is added.
 Block II post-launch datalink is not implemented. Multiplayer and VR remain unverified.
 

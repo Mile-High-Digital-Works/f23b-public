@@ -76,6 +76,9 @@ static const void* (*movingObjectType)(const void*) = nullptr;   // WorldGeneral
 static f23radar::SlotHook seekerDecoyHook;
 static int decoyStatus = 0;      // 1 active; 0 not attempted; negative refused (see install_seeker_decoy)
 static std::atomic<unsigned long long> decoyRejects{0};
+// Same slot: air-to-air missiles, and aircraft other than the radar's hostile designated target.
+static std::atomic<unsigned long long> missileRejects{0}, designationRejects{0};
+static std::atomic<const void*> designatedAircraft{nullptr};   // compared by address only, never read through
 using RelockFunction = float(*)(void*, void*, const float*, const float*);
 static RelockFunction stockRelock = nullptr;      // WeaponsBase getIRTargetRelockProbability
 static f23radar::SlotHook flightDecoyHook;
@@ -154,7 +157,8 @@ template<class T> static T method(const void* object, size_t offset) {
     if (!accessible(address,1)) return nullptr;
     T out; std::memcpy(&out,&address,sizeof(out));return out;
 }
-static int object_side(unsigned id) {
+static int object_side_at(unsigned id, const void** found) {
+    if (found) *found = nullptr;
     if (!holderCoalition || !objectCoalition || !accessible(registryAddress,8)) return -1;
     if (!id) return 0;
     auto registry=field<void*>(registryAddress,0);
@@ -164,17 +168,20 @@ static int object_side(unsigned id) {
     auto registered=lookup(registry,id);
     auto object=moving_object(registered,[](const void* p,size_t n){ return accessible(p,n); });
     if (!object) return -1;
+    if (found) *found = object;
     const int own=holderCoalition(), other=objectCoalition(object);
     if (own<1 || own>2 || other<0 || other>2) return -1;
     // Project rule: skip same-coalition and neutral targets. This uses the
     // object's simulation coalition, not a fabricated native IFF result.
     return other==own || other==0 ? 1 : 2;
 }
-static int target_side(void* responder, unsigned& id) {
+static int object_side(unsigned id) { return object_side_at(id, nullptr); }
+static int target_side(void* responder, unsigned& id, const void** object = nullptr) {
+    if (object) *object = nullptr;
     auto target=method<unsigned(*)(void*)>(responder,0x10);
     if (!target) return -1;
     id=target(responder);
-    return object_side(id);
+    return object_side_at(id, object);
 }
 // Use the same aircraft-frame handoff as the working independent IR controller.
 // The native Hornet seeker still decides whether it has an infrared lock.
@@ -693,8 +700,18 @@ static float block2_lock_distance(const void* seeker, void* object) {
     if (object) {
         const auto parent = field<f23radar::WsType>(seeker, f23radar::seekerParentType);
         if (const void* type = movingObjectType(object)) {
-            if (f23radar::rejectDecoy(parent, aliasPairs[1].project, field<f23radar::WsType>(type, 0))) {
+            const auto candidate = field<f23radar::WsType>(type, 0);
+            if (f23radar::rejectDecoy(parent, aliasPairs[1].project, candidate)) {
                 ++decoyRejects;
+                return 0.0f;
+            }
+            if (f23radar::rejectMissile(parent, aliasPairs[1].project, candidate)) {
+                ++missileRejects;
+                return 0.0f;
+            }
+            if (f23radar::rejectUndesignated(parent, aliasPairs[1].project, candidate, object,
+                    designatedAircraft.load())) {
+                ++designationRejects;
                 return 0.0f;
             }
         }
@@ -846,6 +863,7 @@ static int close_owner(lua_State* L) {
     auto token = static_cast<unsigned*>(toUserdata(L, 1));
     if (token && *token == generation) {
         rankingOwner.store(nullptr);
+        designatedAircraft.store(nullptr);
         supportRadar.store(nullptr);
         supportMc.store(nullptr);
         malice_energy::stop();
@@ -867,6 +885,7 @@ static int update(lua_State* L) {
     double cueAz=0, cueEl=0;
     bool cueValid=false;
     void* owner = nullptr;
+    const void* designated = nullptr;
     const auto token = static_cast<unsigned*>(toUserdata(L, -10003)); // Lua 5.1 upvalue 1.
     if (!token || *token != generation) { pushNumber(L, -4); return 1; }
     if (supported) {
@@ -883,7 +902,13 @@ static int update(lua_State* L) {
                     && field<uintptr_t>(radar, 0) == module + 0x6359e8
                     && field<void*>(radar, 0x18) == context) {
                     if (supportRadar.exchange(radar) != radar) supportMc.store(nullptr);
-                    side=target_side(reinterpret_cast<void*>(responder),targetID);
+                    const void* targetObject = nullptr;
+                    side=target_side(reinterpret_cast<void*>(responder),targetID,&targetObject);
+                    // Block II designation rule: only a hostile aircraft restricts the seeker (SeekerDecoyHook.h).
+                    if (side == 2 && targetObject && movingObjectType) {
+                        const void* type = movingObjectType(targetObject);
+                        designated = type && f23radar::aircraftType(field<f23radar::WsType>(type, 0)) ? targetObject : nullptr;
+                    }
                     if (side == 2 && toBoolean(L, 2))
                         cueValid=target_angles(context,targetID,cueAz,cueEl);
                     auto model = field<void*>(radar, 0x46f0);
@@ -901,6 +926,7 @@ static int update(lua_State* L) {
         }
     }
     rankingOwner.store(owner);
+    designatedAircraft.store(designated);
     pushNumber(L, status);
     pushNumber(L, targetID);
     pushNumber(L, side);
@@ -942,7 +968,9 @@ static int update(lua_State* L) {
     pushNumber(L, static_cast<double>(decoyRejects.load()));
     pushNumber(L, flightDecoyStatus);
     pushNumber(L, static_cast<double>(flightDecoyRejects.load()));
-    return 25;
+    pushNumber(L, static_cast<double>(missileRejects.load()));
+    pushNumber(L, static_cast<double>(designationRejects.load()));
+    return 27;
 }
 extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
     auto lua = GetModuleHandleW(L"lua.dll");
@@ -963,6 +991,7 @@ extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
         || !createTable || !setField || !setMetatable || !pushString || !pushNil) return 0;
     rankingOwner.store(nullptr);
     rankingResult.store(0);
+    designatedAircraft.store(nullptr);
     supportRadar.store(nullptr);
     supportMc.store(nullptr);
     ++generation;

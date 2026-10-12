@@ -23,6 +23,28 @@ inline bool rejectDecoy(const WsType& parent, uint16_t projectBlockII, const WsT
     return projectBlockII && airToAirMissile(parent) && parent.level4 == projectBlockII && flareType(object);
 }
 
+// Owner decision, October 12, 2026. Two more answers of the same slot, Block II seeker only.
+// 1. An air-to-air missile is not a lock candidate. The stock handler accepts missiles, and a second
+//    Block II then left the rail with the first Block II as its target (fixture run values-headon2).
+//    Other missiles, bombs and every aircraft keep the stock answer from this rule.
+// 2. While the radar's designated target is a hostile aircraft, another aircraft is not a lock candidate.
+//    Two MiGs 1.3 degrees apart were both inside the seeker cone; the seeker took the one that was not
+//    designated (owner flight, October 2). With no hostile designation the stock answer applies.
+//    The comparison uses object addresses only. The designated address is never read through.
+inline bool aircraftType(const WsType& type) {
+    return type.level1 == 1 && (type.level2 == 1 || type.level2 == 2);   // airplane or helicopter
+}
+inline bool blockIISeeker(const WsType& parent, uint16_t projectBlockII) {
+    return projectBlockII && airToAirMissile(parent) && parent.level4 == projectBlockII;
+}
+inline bool rejectMissile(const WsType& parent, uint16_t projectBlockII, const WsType& object) {
+    return blockIISeeker(parent, projectBlockII) && airToAirMissile(object);
+}
+inline bool rejectUndesignated(const WsType& parent, uint16_t projectBlockII, const WsType& object,
+                               const void* candidate, const void* designated) {
+    return blockIISeeker(parent, projectBlockII) && designated && candidate != designated && aircraftType(object);
+}
+
 // In flight. A legacy IR missile (woMissile, Weapons RVA 0x161ab0) rates each decoy with WeaponsBase
 // getIRTargetRelockProbability(candidate, current target, &position, &ccm_k0). Weapons.dll has one call
 // (RVA 0x162387) through one import slot, and it passes the missile's own position, missile + 0x1a4.

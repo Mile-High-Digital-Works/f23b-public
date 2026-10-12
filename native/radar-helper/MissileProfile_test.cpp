@@ -78,7 +78,7 @@ int main() {
     f23radar::ProfilePatch patches[f23radar::profilePatchCapacity]; int count = 0;
     CHECK(f23radar::planMaliceProfile(malice.ammo.data(), stock.ammo.data(), base, patches, count, access) == 1 && count == 6);
     f23radar::applyProfile(patches, count, true);
-    CHECK(get<double>(ins.data(), 0xa0) == 60.0 && get<double>(ins.data(), 0x60) == 600.0);
+    CHECK(get<double>(ins.data(), 0xa0) == 600.0 && get<double>(ins.data(), 0x60) == 600.0);
     CHECK(get<double>(sensor.data(), 0x70) == f23radar::maliceFov);
     CHECK(get<double>(gp.data(), 0x60) == 29632.0);
     CHECK(get<double>(sensor.data(), 0xd0) == 40000.0 && get<double>(sensor.data(), 0x100) == 4.0);
@@ -94,7 +94,7 @@ int main() {
     // Planning again while the profile is applied is accepted and changes nothing.
     f23radar::applyProfile(patches, count, true);
     CHECK(f23radar::planMaliceProfile(malice.ammo.data(), stock.ammo.data(), base, patches, count, access) == 1); // idempotent
-    CHECK(get<double>(ins.data(), 0xa0) == 60.0 && get<double>(sensor.data(), 0x70) == f23radar::maliceFov);
+    CHECK(get<double>(ins.data(), 0xa0) == 600.0 && get<double>(sensor.data(), 0x70) == f23radar::maliceFov);
     f23radar::applyProfile(patches, count, false);   // stale restore values are the applied ones; put the fixture back
     put<double>(ins.data(), 0xa0, 3.9); put<double>(ins.data(), 0x60, 100.0);
     put<double>(sensor.data(), 0x70, f23radar::stockMaliceFov); put<double>(gp.data(), 0x60, f23radar::stockHandoff);

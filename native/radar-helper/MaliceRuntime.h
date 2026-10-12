@@ -208,8 +208,11 @@ static double guidance(void* block, double time) {
     const double result = nativeGuidance(block, time);
     if (before >= 0) {
         Guard guard;
-        if (identify(block, false) && accessible(block, 0x230))
-            stateFor(block, time).observe(before, field<int>(block, 0x158), time);
+        if (identify(block, false) && accessible(block, 0x230)) {
+            auto& value = stateFor(block, time);
+            value.observe(before, field<int>(block, 0x158), time);
+            value.track(time, field<double>(block, 0x180));
+        }
     }
     return result;
 }
@@ -226,15 +229,24 @@ static double engine(void* block, double time) {
                 auto gp = f23radar::sibling(block, *id, id->guidance, weaponBase+f23radar::guidanceVtable, accessible);
                 if (boost && gp && accessible(gp, 0x230) && accessible(block, 0x138)) {
                     auto& value = it->second;
+                    const double believed = field<double>(gp, 0x180), speed = field<double>(gp, 0x190);
                     fired = value.ignite(field<int>(boost, 0x100), field<int>(block, 0x100),
-                        field<double>(block, 0x108), field<double>(block, 0x130));
+                        field<double>(block, 0x108), field<double>(block, 0x130), believed, speed);
+                    if (value.withheld && !value.withheldReported) {
+                        value.withheldReported = true; char line[256];
+                        std::snprintf(line, sizeof(line), "MALICE pulse withheld: missile_id=%llx range=%.3f closing=%.1f speed=%.1f time_to_go=%.2f limit=%.1f",
+                            static_cast<unsigned long long>(reinterpret_cast<uintptr_t>(system)), believed, value.closing, speed,
+                            value.timeToGo(believed, speed), f23radar::minimumPulseTime);
+                        messages.emplace_back(line);
+                    }
                     if (fired) {
                         seekerAge = value.seekerAge; range = field<double>(gp, 0x180);
                         // Classify the actual action target immediately before the single native switch call.
                         actions.record(field<void*>(block, 8) == id->march);
                         nativeSwitch(block, 1);
                     }
-                } else if (status == 1) {
+                } else if (status == 1 && !it->second.withheld) {
+                    // A held pulse is checked again until the missile ends; only the first decision reports a fault.
                     status = -45; messages.emplace_back("ERROR MALICE energy: sibling identity check failed; no ignition");
                 }
             }

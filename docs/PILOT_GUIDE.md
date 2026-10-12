@@ -13,8 +13,8 @@ Open it in a browser and select Print.
 | Arm | Use your Hornet controls. Set MASTER ARM to ARM and select A/A. |
 | Select | Select AMRAAM for MALICE, or Sidewinder for Block II. The Hornet display retains those labels. |
 | Fire | Press the trigger. The correct bay opens, the weapon fires, then the bay closes. A brief press queues the sequence. |
-| MALICE | Designate a valid radar or supported network target. Maintain target updates through midcourse. The second pulse starts at seeker search. |
-| Block II | Enable IR cooling and obtain a seeker lock before firing. Helmet cueing and post-launch datalink are not implemented. |
+| MALICE | Designate a valid radar or supported network target. Maintain target updates through midcourse. The second pulse starts at seeker search, except within about 10 seconds of the target. |
+| Block II | Enable IR cooling and obtain a seeker lock before firing. With a designated hostile aircraft, the seeker locks only that aircraft; undesignate to let it choose. It does not lock other air-to-air missiles. Helmet cueing and post-launch datalink are not implemented. |
 | SA scale | Open SA on a DDI. Press SCL to cycle through the available scales, including 640 NM (about 737 miles). |
 | Ground | Use small steering inputs. Steering authority reduces with speed. Use rudder and differential braking at higher speeds. |
 

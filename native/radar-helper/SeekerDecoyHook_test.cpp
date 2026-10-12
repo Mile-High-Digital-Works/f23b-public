@@ -35,6 +35,30 @@ int main() {
     const WsType notMissile{1, 4, 7, 0, project, 0};
     require(!rejectDecoy(notMissile, project, flare), "non-missile parent rejected a flare");
 
+    // Air-to-air missiles are not lock candidates for a Block II seeker. Everything else is unchanged.
+    const WsType cruise{4, 4, 8, 0, 60, 0}, bomb{4, 5, 9, 0, 31, 0}, helicopter{1, 2, 6, 0, 160, 0};
+    require(rejectMissile(blockII, project, missile) && rejectMissile(blockII, project, blockII)
+        && rejectMissile(blockII, project, malice), "Block II seeker accepted an air-to-air missile");
+    require(!rejectMissile(blockII, project, cruise) && !rejectMissile(blockII, project, bomb)
+        && !rejectMissile(blockII, project, fighter) && !rejectMissile(blockII, project, flare)
+        && !rejectMissile(blockII, project, wingPart), "missile rule rejected another object");
+    require(!rejectMissile(stock9X, project, missile) && !rejectMissile(malice, project, missile)
+        && !rejectMissile(blockII, 0, missile) && !rejectMissile(notMissile, project, missile),
+        "missile rule changed another seeker");
+
+    // With a designated hostile aircraft, a Block II seeker takes that aircraft only.
+    FakeObject leader{fighter}, wingman{fighter}, hind{helicopter}, incoming{cruise};
+    require(aircraftType(fighter) && aircraftType(helicopter) && !aircraftType(flare) && !aircraftType(wingPart)
+        && !aircraftType(missile) && !aircraftType(cruise), "aircraft identity");
+    require(!rejectUndesignated(blockII, project, fighter, &wingman, &wingman), "designated aircraft rejected");
+    require(rejectUndesignated(blockII, project, fighter, &leader, &wingman)
+        && rejectUndesignated(blockII, project, helicopter, &hind, &wingman), "undesignated aircraft accepted");
+    require(!rejectUndesignated(blockII, project, cruise, &incoming, &wingman)
+        && !rejectUndesignated(blockII, project, wingPart, &incoming, &wingman), "designation rule rejected a non-aircraft");
+    require(!rejectUndesignated(blockII, project, fighter, &leader, nullptr), "no designation changed the seeker");
+    require(!rejectUndesignated(stock9X, project, fighter, &leader, &wingman)
+        && !rejectUndesignated(blockII, 0, fighter, &leader, &wingman), "designation rule changed another seeker");
+
     // Slot behaviour: one aligned vtable pointer, stock content required, exact restore.
     uintptr_t table[32]{};
     table[seekerLockDistanceSlot / 8] = reinterpret_cast<uintptr_t>(&stock_distance);

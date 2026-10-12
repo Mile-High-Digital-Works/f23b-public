@@ -56,7 +56,8 @@ return function(ranking_scope, cue_ir)
     if not native_update then return end
     local ok, status, target, side, ranking, az, el, cue_valid, support, grants, granted, profile, diag,
         alias, malice_type, blockii_type, alias_diag, launch_zone_diag, energy_status, energy_message, energy_diag,
-        sa_range_status, decoy_status, decoy_rejects, flight_decoy_status, flight_decoy_rejects = pcall(
+        sa_range_status, decoy_status, decoy_rejects, flight_decoy_status, flight_decoy_rejects,
+        missile_rejects, designation_rejects = pcall(
         native_update, ranking_scope == true, cue_ir == true)
     if not ok then
         connection_failed("Update failed: " .. tostring(status))
@@ -93,7 +94,7 @@ return function(ranking_scope, cue_ir)
     end
     -- MALICE profile: widened INS limits, 15-degree seeker FOV, earlier handoff and seeker reference, MALICE only.
     if profile ~= nil and profile ~= profile_reported and profile ~= 0 then
-        report(profile == 1 and ("MALICE profile active: update window 60 s, INS time 600 s, seeker FOV 15 deg, "
+        report(profile == 1 and ("MALICE profile active: update window 600 s, INS time 600 s, seeker FOV 15 deg, "
             .. "handoff 29.6 km, 5 m2 reference 40 km, Doppler filter 4 m/s")
             or ("MALICE profile unavailable (code " .. tostring(profile) .. "); native INS and seeker values apply"), false)
         profile_reported = profile
@@ -106,7 +107,7 @@ return function(ranking_scope, cue_ir)
         report("Launch zone diag: " .. launch_zone_diag, false)
     end
     if energy_status and energy_status ~= 0 and energy_status ~= energy_reported then
-        report(energy_status == 1 and "MALICE energy profile active: dynamic loft; second pulse at seeker activation"
+        report(energy_status == 1 and "MALICE energy profile active: dynamic loft; second pulse at seeker activation, held inside 10 s of flight"
             or ("MALICE energy profile unavailable (code " .. tostring(energy_status) .. "); no native energy change"), energy_status < 0)
         energy_reported = energy_status
     end
@@ -131,6 +132,12 @@ return function(ranking_scope, cue_ir)
     if ((decoy_rejects or 0) > 0 or (flight_decoy_rejects or 0) > 0) and alias_ticks % 1000 == 1 then
         report(string.format("Block II flare rejection diag: seeker=%d flight=%d", decoy_rejects or 0,
             flight_decoy_rejects or 0), false)
+    end
+    -- Block II seeker, same hook: air-to-air missiles are not lock candidates, and with a hostile
+    -- designated aircraft the seeker takes that aircraft only.
+    if ((missile_rejects or 0) > 0 or (designation_rejects or 0) > 0) and alias_ticks % 1000 == 1 then
+        report(string.format("Block II seeker diag: missiles=%d undesignated=%d", missile_rejects or 0,
+            designation_rejects or 0), false)
     end
     if type(energy_message) == "string" then report(energy_message, energy_message:sub(1, 5) == "ERROR") end
     if type(energy_diag) == "string" and alias_ticks % 1000 == 1 then report("MALICE energy diag: " .. energy_diag, false) end
