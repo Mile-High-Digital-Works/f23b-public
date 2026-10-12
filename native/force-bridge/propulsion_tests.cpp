@@ -84,4 +84,31 @@ int main() {
     near(bridge::development_engine_gain(.9,2.,false,defaults),defaults.end_gain);
     near(bridge::development_engine_gain(.9,2.,true,defaults),2.);
     near(bridge::development_engine_gain(.9,1.2221,false,defaults),2.);
+
+    // Requested idle checks use the real force/moment/fuel output path.
+    for(double mach:{0.,.9,1.2,1.25,1.3,1.6,2.,2.47})
+        for(double throttle:{0.,.2,.5,.774,.775,.9,1.})
+            for(double rpm:{.212,.5,.93,1.05}) {
+                performance::Output before,after;
+                const bool augmented=throttle>.775001;
+                bridge::add_native_engine(before,mass,0,10000,.1,rpm,mach,augmented,defaults);
+                bridge::add_native_engine(after,mass,0,10000,.1,rpm,mach,augmented,defaults,throttle);
+                if(mach<=1.2||throttle>=.775) {
+                    if(after.force_n.x!=before.force_n.x||after.moment_n_m.y!=before.moment_n_m.y
+                        ||after.moment_n_m.z!=before.moment_n_m.z)std::abort();
+                }
+                near(after.fuel_flow_kg_s,before.fuel_flow_kg_s);
+                near(bridge::supersonic_idle_factor(mach,throttle,DryThrustSettings{false}),1.);
+            }
+    performance::Output idle,military;
+    bridge::add_native_engine(military,mass,0,10000,.1,.93,1.6,false,defaults,.775);
+    bridge::add_native_engine(idle,mass,0,10000,.1,.93,1.6,false,defaults,0.);
+    near(idle.force_n.x,bridge::supersonic_idle_fraction*military.force_n.x);
+    double previous_thrust=-1.;
+    for(int i=0;i<=1000;++i) {
+        performance::Output sample;
+        bridge::add_native_engine(sample,mass,0,10000,.1,.93,1.6,false,defaults,.775*i/1000.);
+        if(sample.force_n.x<=previous_thrust)std::abort();
+        previous_thrust=sample.force_n.x;
+    }
 }

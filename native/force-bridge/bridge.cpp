@@ -141,7 +141,7 @@ void simulate_native_engines(double dt) {
         // the accepted gain immediately; native combustion/spool remain native.
         const double throttle=i==0?runtime.input.throttle_left:runtime.input.throttle_right;
         f23b::bridge::add_native_engine(runtime.output,runtime.mass,i,thrust[i],flow[i],related_rpm,
-            runtime.output.mach,throttle>.775001,f23b::flight_core::runtime_dry_thrust);
+            runtime.output.mach,throttle>.775001,f23b::flight_core::runtime_dry_thrust,throttle);
 #else
         f23b::bridge::add_native_engine(runtime.output,runtime.mass,i,thrust[i],flow[i],related_rpm);
 #endif

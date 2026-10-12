@@ -110,6 +110,42 @@ end
 check(aircraft.SFM_Data.engine.type == "TurboFan",
     "SFM engine type must be TurboFan so DCS treats the stack as a turbofan")
 
+-- Stock Hornet engine table; use the installed definition when available.
+-- The frozen rows keep the same check runnable on source-only CI machines.
+local stock_engine = {
+    {0,68000,140000}, {0.2,68000,140000}, {0.4,73000,140000},
+    {0.6,80000,137000}, {0.7,92000,140000}, {0.8,90000,145000},
+    {0.9,86000,143000}, {1,60000,143000}, {1.11,27000,145000},
+    {1.2,13000,149000}, {1.3,7000,145000}, {1.4,5000,147000},
+    {1.6,3000,149000}, {1.8,2000,145000}, {2.2,1500,113000},
+    {2.35,1000,94000}, {3.9,0,30000},
+}
+local stock_path = (os.getenv("DCS_ROOT") or "D:/Eagle Dynamics/DCS World")
+    .. "/CoreMods/aircraft/FA-18C/FA-18C_hornet.lua"
+local stock_file = io.open(stock_path, "rb")
+if stock_file then
+    local source = stock_file:read("*a"); stock_file:close()
+    local block = assert(source:match("SFM_Data%s*=%s*{.-engine%s*=%s*{.-table_data%s*=%s*(%b{})"),
+        "installed Hornet engine table not found")
+    stock_engine = assert((loadstring or load)("return " .. block))()
+end
+local engine_table = aircraft.SFM_Data.engine.table_data
+check(#engine_table == #stock_engine, "AI engine table row count changed")
+for i, stock in ipairs(stock_engine) do
+    local row = engine_table[i]
+    local b = math.max(0, math.min(1, (stock[1] - 1.3) / 0.7))
+    local s = b*b*(3 - 2*b)
+    local dry_gain = 2 + (1.4735572004347315 - 2) * s^3
+    check(row[1] == stock[1], "AI Mach node differs from stock row " .. i)
+    check(near(row[2], stock[2] * dry_gain), "AI dry multiplier differs at row " .. i)
+    check(row[3] == stock[3] * 2, "AI afterburner multiplier differs at row " .. i)
+end
+check(aircraft.thrust_sum_max == 24000 and aircraft.thrust_sum_ab == 39160,
+    "AI static thrust totals differ from the selected multipliers")
+check(aircraft.Mach_max == 2.47 and aircraft.V_max_h == 732,
+    "AI declared high-altitude speed differs from the project target")
+print("[PASS] AI: stock Hornet rows use the player's dry gain and twice stock afterburner thrust")
+
 local left = nozzles[1]
 local right = nozzles[2]
 check(near(left.pos[1], right.pos[1])

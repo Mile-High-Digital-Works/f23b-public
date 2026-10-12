@@ -27,17 +27,28 @@ inline double development_engine_gain(double related_rpm,double mach,bool augmen
     // Keep the idle correction and native spool response; only powered gain changes.
     return 1.+(original-1.)*(powered_gain-1.);
 }
+// Recorded run-env-15k, Mach 0.9 to 1.0: mean applied idle thrust / mean
+// applied maximum-dry thrust. Native spool and fuel flow remain unchanged.
+inline constexpr double supersonic_idle_fraction = 0.07753250092245408;
+inline double supersonic_idle_factor(double mach,double throttle,const DryThrustSettings& settings) {
+    // candidate-2 disables the development dry settings, preserving its thrust.
+    if(!settings.enabled||!std::isfinite(mach)||!std::isfinite(throttle)||mach<=1.2||throttle>=.775)return 1.;
+    const double blend=std::clamp((mach-1.2)/.1,0.,1.);
+    const double weight=blend*blend*(3.-2.*blend);
+    return 1.-weight*(1.-supersonic_idle_fraction)*(1.-std::clamp(throttle/.775,0.,1.));
+}
 inline double add_native_engine(performance::Output& output,
     const performance::MassState& mass, std::size_t engine,
     double native_thrust_n, double native_flow_kg_s, double related_rpm,
-    double mach=0.,bool augmented=false,const DryThrustSettings& settings={}) {
+    double mach=0.,bool augmented=false,const DryThrustSettings& settings={},double throttle=.775) {
     // Accepted engine-axis locations in VisualConfig.lua. Straight axial thrust;
     // no virtual vectoring or independently running second engine simulation.
     constexpr double axis_y_m = -0.320670754;
     constexpr double half_spacing_m = 1.311020017;
     const bool burning = std::isfinite(native_flow_kg_s) && native_flow_kg_s > .0001;
     const double thrust = burning && std::isfinite(native_thrust_n)
-        ? std::max(0.0, native_thrust_n) * development_engine_gain(related_rpm,mach,augmented,settings) : 0.0;
+        ? std::max(0.0, native_thrust_n) * development_engine_gain(related_rpm,mach,augmented,settings)
+            * supersonic_idle_factor(mach,throttle,settings) : 0.0;
     const double axis_z_m = engine == 0 ? -half_spacing_m : half_spacing_m;
     output.force_n.x += thrust;
     output.moment_n_m.y += (axis_z_m - mass.center_of_mass_m.z) * thrust;

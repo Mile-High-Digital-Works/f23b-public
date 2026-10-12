@@ -1,5 +1,8 @@
 # F-23B v1.5
 
+AI F-23Bs use the player's engine multipliers; AI top speed in DCS is unverified.
+Idle thrust now falls above Mach 1.3 to slow the jet; flight confirmation is pending.
+
 This build is prepared for the final owner flight. It has not been published.
 
 The default core provides carefree protection, a calmer roll response, smoother
