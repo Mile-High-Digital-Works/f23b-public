@@ -10,7 +10,7 @@ local alias_ticks = 0
 local energy_reported, sa_range_reported, decoy_reported, flight_decoy_reported
 local connection_off = "F-23B weapon and radar connection OFF. MALICE, Block II, radar upgrades and SA 640 are unavailable. "
     .. "Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available. "
-    .. "Get a compatible F-23B release: github.com/Coaokalo/f23b-public/releases/latest"
+    .. "Get a compatible F-23B release: github.com/Mile-High-Digital-Works/f23b-public/releases/latest"
 local function report(message, failed, player_message)
     if type(log) == "table" and type(log.write) == "function" then
         log.write("F23B_RADAR", failed and log.ERROR or log.INFO, message)

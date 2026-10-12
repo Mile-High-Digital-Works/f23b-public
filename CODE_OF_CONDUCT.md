@@ -28,7 +28,7 @@ See [GitHub's reporting guide](https://docs.github.com/en/communities/maintainin
 GitHub Support receives these reports. They are not private messages to the project maintainer.
 Do not put personal information or sensitive allegations in a public issue.
 
-For project moderation, mention [@Coaokalo](https://github.com/Coaokalo) in the relevant discussion when it is safe to do so.
+For project moderation, mention [@Mile-High-Digital-Works](https://github.com/Mile-High-Digital-Works) in the relevant discussion when it is safe to do so.
 The maintainer can remove content, close or lock discussions, and limit participation.
 Serious or repeated violations can result in a permanent block from the repository.
 Moderation considers the behavior, its impact, and previous violations.

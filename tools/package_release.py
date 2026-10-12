@@ -117,14 +117,14 @@ def main():
     files[DOCS + 'SOURCE.md'] = (
         '# Corresponding software source\n\n'
         f'Companion archive: `{name}-source.zip`.\n\n'
-        f'Repository: https://github.com/Coaokalo/f23b-public/tree/{commit}\n\n'
+        f'Repository: https://github.com/Mile-High-Digital-Works/f23b-public/tree/{commit}\n\n'
         'The companion contains source, build scripts, tests, license notices, and\n'
         'BUILDING.md. SDK headers and licensed visual sources are external inputs.\n'
         f'Source archive SHA-256: `{sha(source)}`.\n'
     ).encode()
     manifest = dict(name=name, kind=pin.get('kind', 'RELEASE'), dcs_version=pin['dcs_version'],
                     description=pin['description'], validation_limits=pin['validation_limits'],
-                    source_repository='https://github.com/Coaokalo/f23b-public',
+                    source_repository='https://github.com/Mile-High-Digital-Works/f23b-public',
                     corresponding_source_commit=commit, release_tooling_source=commit,
                     corresponding_source_archive=name + '-source.zip',
                     corresponding_source_sha256=sha(source),

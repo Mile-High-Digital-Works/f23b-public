@@ -27,7 +27,7 @@ UNMANAGED = 'Move the existing F-23B aircraft, supplied livery and F-23B-docs fo
 CONNECTION_OFF = ('The F-23B weapon and radar connection is OFF for this DCS build. '
                   'MALICE, Block II, radar upgrades and the 640 NM SA scale are unavailable. '
                   'Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available. '
-                  'Get a compatible release at https://github.com/Coaokalo/f23b-public/releases/latest.')
+                  'Get a compatible release at https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest.')
 LEGACY_RELEASE = '35a471ede1df312a8af8ca10283a7cd7cf7ba95f'
 # The September 18 release added HOOK to the Hornet cockpit script. Setup removes it.
 HOOK_RELEASE = '804920ad2fc51de498fed81daab072c1351aa6a7'

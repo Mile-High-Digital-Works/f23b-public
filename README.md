@@ -16,8 +16,8 @@ Single-player; VR and multiplayer not yet tested.
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.4.zip](https://github.com/Coaokalo/f23b-public/releases/latest/download/F-23B-v1.4.zip) |
-| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Coaokalo/f23b-public/releases/latest/download/F-23B-v1.4-Setup.exe), which does the same thing for you |
+| Copy and paste | [F-23B-v1.4.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4.zip) |
+| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4-Setup.exe), which does the same thing for you |
 
 Both include the same aircraft, weapons, ten liveries and documentation.
 
@@ -44,8 +44,8 @@ For setup, close DCS, run the EXE, confirm both folders, then select **Install /
 Start an **F-23B Quick Start** mission. Your first flight uses the Langley livery and your Hornet controls.
 
 [Illustrated pilot guide](docs/PILOT_GUIDE.md) ·
-[Release details](https://github.com/Coaokalo/f23b-public/releases/latest) ·
-[Feedback and questions](https://github.com/Coaokalo/f23b-public/discussions)
+[Release details](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest) ·
+[Feedback and questions](https://github.com/Mile-High-Digital-Works/f23b-public/discussions)
 
 ## In the aircraft
 
@@ -70,7 +70,7 @@ Start an **F-23B Quick Start** mission. Your first flight uses the Langley liver
 
 **What happens after a DCS update?** Installation remains available. If the connection cannot start, an in-game message says **connection OFF**.
 Custom weapons, radar upgrades and SA 640 are then unavailable. Flight, the native cockpit and radar, bays, lights and liveries remain available.
-Use [a compatible release](https://github.com/Coaokalo/f23b-public/releases/latest).
+Use [a compatible release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest).
 
 **Multiplayer or VR?** Single-player; VR and multiplayer not yet tested.
 
@@ -95,11 +95,11 @@ Purchased models and derived textures retain separate asset terms.
 Credits: **F-23B project contributors** for the flight core and integration; **SytaPastel** for the licensed YF-23 visual source.
 
 [Licence and asset terms](LICENCE.md) · [Credits and component notices](CREDITS.md) ·
-[Report a bug](https://github.com/Coaokalo/f23b-public/issues/new?template=bug_report.yml)
+[Report a bug](https://github.com/Mile-High-Digital-Works/f23b-public/issues/new?template=bug_report.yml)
 
 [Build and test](BUILDING.md) · [Source layout](docs/SOURCE_LAYOUT.md) · [Contributing](CONTRIBUTING.md)
 
 The release includes the corresponding software source archive and SHA-256 checksums.
-The [September 29 release](https://github.com/Coaokalo/f23b-public/releases/tag/release-2026-09-29) remains available for DCS 2.9.29.27468.
+The [September 29 release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/tag/release-2026-09-29) remains available for DCS 2.9.29.27468.
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.

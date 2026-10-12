@@ -1,6 +1,6 @@
 # F-23B credits
 
-v1.5. Project maintainer: **Coaokalo**. Contact: [project issue tracker](https://github.com/Coaokalo/f23b-public/issues).
+v1.5. Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue tracker](https://github.com/Mile-High-Digital-Works/f23b-public/issues).
 
 | Contributor | Contribution |
 | --- | --- |

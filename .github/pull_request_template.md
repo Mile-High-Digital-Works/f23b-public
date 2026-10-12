@@ -10,10 +10,10 @@ Include the release or commit, DCS version, mission, and relevant steps for flig
 
 ## Contributor checklist
 
-- [ ] I read the [contribution guide](https://github.com/Coaokalo/f23b-public/blob/main/CONTRIBUTING.md) and [code of conduct](https://github.com/Coaokalo/f23b-public/blob/main/CODE_OF_CONDUCT.md).
+- [ ] I read the [contribution guide](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/CONTRIBUTING.md) and [code of conduct](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/CODE_OF_CONDUCT.md).
 - [ ] I kept this change focused and updated relevant documentation.
 - [ ] I described the validation results and remaining limits above.
 - [ ] I have permission to contribute these files and retained required attribution.
 - [ ] I excluded credentials, personal information, purchased models, game assets, and SDK files.
 
-Report security vulnerabilities privately through the [security policy](https://github.com/Coaokalo/f23b-public/blob/main/SECURITY.md).
+Report security vulnerabilities privately through the [security policy](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/SECURITY.md).

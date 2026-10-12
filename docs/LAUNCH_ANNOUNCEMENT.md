@@ -1,8 +1,8 @@
-![F-23B v1.4 in DCS](https://raw.githubusercontent.com/Coaokalo/f23b-public/v1.4/docs/images/f23b-exterior.jpg)
+![F-23B v1.4 in DCS](https://raw.githubusercontent.com/Mile-High-Digital-Works/f23b-public/v1.4/docs/images/f23b-exterior.jpg)
 
-![Ten included liveries](https://raw.githubusercontent.com/Coaokalo/f23b-public/v1.4/docs/images/f23b-liveries.jpg)
+![Ten included liveries](https://raw.githubusercontent.com/Mile-High-Digital-Works/f23b-public/v1.4/docs/images/f23b-liveries.jpg)
 
-![Afterburner at dusk](https://raw.githubusercontent.com/Coaokalo/f23b-public/v1.4/docs/images/f23b-afterburner.jpg)
+![Afterburner at dusk](https://raw.githubusercontent.com/Mile-High-Digital-Works/f23b-public/v1.4/docs/images/f23b-afterburner.jpg)
 
 Hi everyone, v1.4 is up. Quite a bit has changed since my September 19 post, so this brings everything together.
 
@@ -21,8 +21,8 @@ Two equal ways to install, both with the same aircraft, weapons, liveries and do
 
 | Method | Download from the current release |
 | --- | --- |
-| Copy and paste | [F-23B-v1.4.zip](https://github.com/Coaokalo/f23b-public/releases/latest) |
-| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Coaokalo/f23b-public/releases/latest), which does the same thing for you |
+| Copy and paste | [F-23B-v1.4.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest) |
+| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest), which does the same thing for you |
 
 **Manual install**
 
@@ -52,8 +52,8 @@ Custom weapons, radar upgrades and SA 640 are then unavailable. Flight, the nati
 Use a compatible release before firing the custom weapons.
 
 Start an F-23B Quick Start mission to fly the Langley livery, or choose any supplied `F-23B |` scheme.
-The [pilot guide](https://github.com/Coaokalo/f23b-public/blob/main/docs/PILOT_GUIDE.md) covers arming, bays, both weapons, SA and ground handling.
-[Installation details](https://github.com/Coaokalo/f23b-public/blob/main/INSTALL.md) are included too.
+The [pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/docs/PILOT_GUIDE.md) covers arming, bays, both weapons, SA and ground handling.
+[Installation details](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/INSTALL.md) are included too.
 
-Feedback is welcome here or in [GitHub Discussions](https://github.com/Coaokalo/f23b-public/discussions).
+Feedback is welcome here or in [GitHub Discussions](https://github.com/Mile-High-Digital-Works/f23b-public/discussions).
 Please include the F-23B version and DCS version when reporting a problem.

@@ -3,7 +3,7 @@
 v1.5 final private acceptance build. Release manifests identify the exact files and source.
 The rights below and the complete third-party terms remain in force.
 
-Project maintainer: **Coaokalo**. Contact: [project issue tracker](https://github.com/Coaokalo/f23b-public/issues).
+Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue tracker](https://github.com/Mile-High-Digital-Works/f23b-public/issues).
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.
 

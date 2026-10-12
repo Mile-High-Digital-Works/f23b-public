@@ -7,7 +7,7 @@
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "8d196bf834f0c340c0265abe512cc923be00fca2da1130a0dfddc794059335b0",
     "F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": "ef2195296924f9762d962a2b50ecb18eada7f6eefdf1af3d08533865c414847f",
     "F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f1e29e1af13b700c0de8d2f80435cfc14d3daa28a526ccd10044e0b069b25840",
-    "F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "f37d87a72161c1437552da83a72527ec6bc6d510da976adc91e7abfb7160830a",
+    "F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "0b44f54057e0432c294e4f2cdf06fdbef1c7a34f4742337de46933e16a373828",
     "F-23B-Player/Cockpit/ExteriorVisuals/device_init.lua": "ea83bca0fd4c71f30d31299df4fd5fdee005f6f01821225ec6c50d566046d28a",
     "F-23B-Player/Cockpit/ExteriorVisuals/mainpanel_init.lua": "97dfa1765db99940be84955b322d8fb286c04dfb316eb46d3a7debb81d674d18",
     "F-23B-Player/Cockpit/HornetHost/PrimarySensors.lua": "bede3c62eab4f4c5efe9f634d1bf47b7aa527e495732a221a30d95cf38321100",

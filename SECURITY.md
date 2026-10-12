@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Security fixes target the [latest public release](https://github.com/Coaokalo/f23b-public/releases/latest).
+Security fixes target the [latest public release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest).
 Older releases do not receive separate security updates.
 Reports about the current source on `main` are also welcome.
 
@@ -11,7 +11,7 @@ Report vulnerabilities in DCS or other third-party products to their maintainers
 
 ## Report a vulnerability
 
-Use [Report a vulnerability](https://github.com/Coaokalo/f23b-public/security/advisories/new) to send a private report through GitHub.
+Use [Report a vulnerability](https://github.com/Mile-High-Digital-Works/f23b-public/security/advisories/new) to send a private report through GitHub.
 A GitHub account is required.
 Do not publish vulnerability details in an issue, pull request, or forum post.
 
@@ -31,4 +31,4 @@ Response and resolution times depend on maintainer availability. No fixed respon
 Coordinate public disclosure through the private report so users can receive a correction or mitigation first.
 
 For installation problems or aircraft bugs without a security impact, use the
-[bug-report form](https://github.com/Coaokalo/f23b-public/issues/new?template=bug_report.yml).
+[bug-report form](https://github.com/Mile-High-Digital-Works/f23b-public/issues/new?template=bug_report.yml).

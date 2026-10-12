@@ -13,5 +13,5 @@
 - Steering authority reduces with speed. Use rudder and differential braking at higher speeds.
 - The installer is unsigned. Use the ZIP if Windows warns about it.
 
-[Feedback and questions](https://github.com/Coaokalo/f23b-public/discussions) ·
-[Report a bug](https://github.com/Coaokalo/f23b-public/issues/new?template=bug_report.yml)
+[Feedback and questions](https://github.com/Mile-High-Digital-Works/f23b-public/discussions) ·
+[Report a bug](https://github.com/Mile-High-Digital-Works/f23b-public/issues/new?template=bug_report.yml)

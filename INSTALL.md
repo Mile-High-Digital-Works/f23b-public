@@ -6,8 +6,8 @@ Both options install the same aircraft, weapons, ten liveries and documentation.
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.4.zip](https://github.com/Coaokalo/f23b-public/releases/latest/download/F-23B-v1.4.zip) |
-| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Coaokalo/f23b-public/releases/latest/download/F-23B-v1.4-Setup.exe), which does the same thing for you |
+| Copy and paste | [F-23B-v1.4.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4.zip) |
+| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4-Setup.exe), which does the same thing for you |
 
 ## One-time step for September 17 or 18 users
 
@@ -77,18 +77,18 @@ Both methods allow installation on other DCS builds. The ZIP has no installation
 The aircraft checks the connection in game and shows **weapon and radar connection OFF** when it cannot connect.
 MALICE, Block II, radar upgrades and the 640 NM SA scale are then unavailable.
 Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available.
-Get a compatible build from [the latest release](https://github.com/Coaokalo/f23b-public/releases/latest).
-DCS 2.9.29.27468 users can retain the [September 29 release](https://github.com/Coaokalo/f23b-public/releases/tag/release-2026-09-29).
+Get a compatible build from [the latest release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest).
+DCS 2.9.29.27468 users can retain the [September 29 release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/tag/release-2026-09-29).
 
 ## First flight and help
 
 Start DCS and select an **F-23B Quick Start** mission. It uses the Langley livery.
-Your Hornet controls apply. Read the [pilot guide](https://github.com/Coaokalo/f23b-public/blob/main/docs/PILOT_GUIDE.md).
+Your Hornet controls apply. Read the [pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/docs/PILOT_GUIDE.md).
 Choose any supplied `F-23B |` livery in the mission editor or rearming menu.
 
 **Windows warns about the unsigned installer:** use the ZIP.
 
-[Feedback and questions](https://github.com/Coaokalo/f23b-public/discussions) ·
-[Report a bug](https://github.com/Coaokalo/f23b-public/issues/new?template=bug_report.yml)
+[Feedback and questions](https://github.com/Mile-High-Digital-Works/f23b-public/discussions) ·
+[Report a bug](https://github.com/Mile-High-Digital-Works/f23b-public/issues/new?template=bug_report.yml)
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.

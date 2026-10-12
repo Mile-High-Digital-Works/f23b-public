@@ -3,7 +3,7 @@
 AI F-23Bs use the player's engine multipliers; AI top speed in DCS is unverified.
 Idle thrust now falls above Mach 1.3 to slow the jet; flight confirmation is pending.
 
-[Download the one-page printable guide](https://github.com/Coaokalo/f23b-public/releases/latest/download/F-23B-v1.5-Pilot-Guide.html).
+[Download the one-page printable guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.5-Pilot-Guide.html).
 Open it in a browser and select Print.
 
 ![The Hornet cockpit used by the F-23B](images/f23b-cockpit.jpg)
@@ -23,4 +23,4 @@ The bay sequence also operates the gun door. Do not bypass it with donor trigger
 If **weapon and radar connection OFF** appears, get a compatible release before using custom weapons or SA 640.
 
 Single-player; VR and multiplayer not yet tested.
-[Installation](../INSTALL.md) · [Feedback](https://github.com/Coaokalo/f23b-public/discussions)
+[Installation](../INSTALL.md) · [Feedback](https://github.com/Mile-High-Digital-Works/f23b-public/discussions)
