@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Build the project-original bay HARM with the verified MALICE EDM route.
+"""Build project-original HARM and Block II visuals with the MALICE EDM route.
 
 Only stock bounding length and descriptor diameter inform this mesh. Every
 vertex, fin planform, material and marking below is authored by this project.
@@ -20,6 +20,7 @@ parser.add_argument('--stock-size', required=True)
 parser.add_argument('--output', required=True)
 parser.add_argument('--mesh-output', required=True)
 parser.add_argument('--blend-output', required=True)
+parser.add_argument('--blockii', action='store_true', help='Build the original Block II visual instead of HARM')
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 # Same official addon setup as the accepted MALICE builder. This generator
 # stays self-contained so its corresponding source can ship with the mesh.
@@ -38,15 +39,17 @@ from materials.materials import build_material_descriptions
 
 stock = json.loads(Path(args.stock_size).read_text(encoding='utf-8'))
 assert stock['geometry_decoded'] is False
-SCALE = .75
+SCALE = 1.0 if args.blockii else .75
+SHAPE = 'F23B_AIM9X_BLOCKII' if args.blockii else 'F23B_AGM88G'
+PREFIX = 'BLOCKII' if args.blockii else 'AGM88G'
 LENGTH = stock['length_m'] * SCALE
 DIAMETER = stock['diameter_m'] * SCALE
 RADIUS = DIAMETER / 2
 # The running modern stock motor uses nozzle_position.x = -2.1.
-TAIL = -2.1 * SCALE
+TAIL = -1.6 if args.blockii else -2.1 * SCALE
 NOSE = TAIL + LENGTH
-WING_RADIUS = .214
-FIN_RADIUS = .174
+WING_RADIUS = .105 if args.blockii else .214
+FIN_RADIUS = .135 if args.blockii else .174
 inverse = ROOT_TRANSFORM_MATRIX.inverted()
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)
@@ -64,15 +67,16 @@ def material(name, color):
     return m
 
 
-body = material('F23B_AGM88G_body', (.71, .72, .69))
-radome = material('F23B_AGM88G_radome', (.24, .26, .24))
-metal = material('F23B_AGM88G_metal', (.28, .30, .29))
-dark = material('F23B_AGM88G_nozzle', (.022, .027, .025))
-ink = material('F23B_AGM88G_stencil', (.025, .035, .028))
-yellow = material('F23B_AGM88G_band', (.73, .49, .08))
+body = material(SHAPE + '_body', (.10, .125, .15))
+radome = material(SHAPE + '_radome', (.045, .055, .068))
+metal = material(SHAPE + '_metal', (.075, .09, .105))
+dark = material(SHAPE + '_nozzle', (.018, .023, .028))
+ink = material(SHAPE + '_stencil', (.25, .28, .30))
+yellow = material(SHAPE + '_band', (.24, .20, .105))
 
 
 def mesh(name, vertices, faces, mat, smooth=False):
+    name = name.replace('AGM88G', PREFIX)
     data = bpy.data.meshes.new(name)
     data.from_pydata([inverse @ Vector(v) for v in vertices], [], faces)
     data.update()
@@ -114,20 +118,23 @@ def lathe(name, rings, mat, caps=True, reverse=False):
     return mesh(name, vertices, faces, mat, True)
 
 
-lathe('AGM88G_body', [(TAIL, .073), (TAIL + .04, .081),
+body_factor = RADIUS / (.1905 / 2) if args.blockii else 1.0
+lathe('AGM88G_body', [(TAIL, .073 * body_factor), (TAIL + .04, .081 * body_factor),
                      (TAIL + .13, RADIUS - .0006),
                      (NOSE - .53, RADIUS - .0006)], body, caps=False)
 # An original pointed ogive and eight swept surfaces give a HARM-like layout.
-lathe('AGM88G_radome', [(NOSE - .53, RADIUS - .0006)] +
-      [(NOSE - .53 + .53 * i / 24,
+NOSE_LENGTH = .10 if args.blockii else .53
+nose_rings = ([(NOSE - .53, RADIUS - .0006)] if args.blockii else []) + [(NOSE - NOSE_LENGTH, RADIUS - .0006)]
+lathe('AGM88G_radome', nose_rings +
+      [(NOSE - NOSE_LENGTH + NOSE_LENGTH * i / 24,
         (RADIUS - .0006) * math.cos(i / 24 * math.pi / 2))
        for i in range(1, 24)] + [(NOSE, 0)], radome)
-lathe('AGM88G_exit_lip', [(TAIL, .073), (TAIL, .057),
-                        (TAIL + .022, .054)], metal, caps=False, reverse=True)
-lathe('AGM88G_nozzle_wall', [(TAIL + .022, .054),
-                           (TAIL + .10, .035)], dark, caps=False, reverse=True)
-lathe('AGM88G_nozzle_throat', [(TAIL + .099, .035),
-                             (TAIL + .101, .035)], dark)
+lathe('AGM88G_exit_lip', [(TAIL, .073 * body_factor), (TAIL, .057 * body_factor),
+                        (TAIL + .022, .054 * body_factor)], metal, caps=False, reverse=True)
+lathe('AGM88G_nozzle_wall', [(TAIL + .022, .054 * body_factor),
+                           (TAIL + .10, .035 * body_factor)], dark, caps=False, reverse=True)
+lathe('AGM88G_nozzle_throat', [(TAIL + .099, .035 * body_factor),
+                             (TAIL + .101, .035 * body_factor)], dark)
 for label, x, width, mat in [('warhead_band', NOSE - .64, .025, yellow),
                            ('fore_joint', NOSE - .54, .004, metal),
                            ('mid_joint', .15, .004, metal),
@@ -155,17 +162,26 @@ def fin(name, angle, outline):
 
 for k in range(4):
     angle = math.pi / 4 + k * math.pi / 2
-    fin('AGM88G_mid_wing_' + str(k), angle,
-        [(-.63, .088), (.34, .088), (-.05, WING_RADIUS), (-.49, WING_RADIUS)])
-    fin('AGM88G_tail_fin_' + str(k), angle,
-        [(TAIL + .045, .084), (TAIL + .62, .092),
-         (TAIL + .33, FIN_RADIUS), (TAIL + .07, FIN_RADIUS)])
+    if args.blockii:
+        # Project-authored short foreplanes and swept tails; no ED geometry.
+        fin('AGM88G_mid_wing_' + str(k), angle,
+            [(NOSE - .67, .057), (NOSE - .38, .057),
+             (NOSE - .42, WING_RADIUS), (NOSE - .62, WING_RADIUS)])
+        fin('AGM88G_tail_fin_' + str(k), angle,
+            [(TAIL + .045, .051), (TAIL + .52, .061),
+             (TAIL + .24, FIN_RADIUS), (TAIL + .075, FIN_RADIUS)])
+    else:
+        fin('AGM88G_mid_wing_' + str(k), angle,
+            [(-.63, .088), (.34, .088), (-.05, WING_RADIUS), (-.49, WING_RADIUS)])
+        fin('AGM88G_tail_fin_' + str(k), angle,
+            [(TAIL + .045, .084), (TAIL + .62, .092),
+             (TAIL + .33, FIN_RADIUS), (TAIL + .07, FIN_RADIUS)])
 
 
 def stencil(text, x, angle, size, direction):
     bpy.ops.object.text_add()
     obj = bpy.context.object
-    obj.name = 'AGM88G_label_' + text
+    obj.name = PREFIX + '_label_' + text
     obj.data.body = text
     obj.data.size = size
     obj.data.resolution_u = 3
@@ -183,8 +199,10 @@ def stencil(text, x, angle, size, direction):
 
 
 for angle, direction in [(math.pi / 2, 1), (3 * math.pi / 2, -1)]:
-    stencil('AGM-88G', .46, angle, .032, direction)
-    stencil('F-23B PROJECT', .46, angle + direction * .27, .017, direction)
+    stencil('AIM-9X BLOCK II' if args.blockii else 'AGM-88G', .10 if args.blockii else .46,
+            angle, .021 if args.blockii else .032, direction)
+    stencil('F-23B PROJECT', .10 if args.blockii else .46,
+            angle + direction * .27, .012 if args.blockii else .017, direction)
 
 bpy.context.view_layer.update()
 quality = {'degenerate_triangles': 0, 'closed_solids': {}}
@@ -229,6 +247,7 @@ report = dict(status='OFFLINE_PASS', visual_scale=SCALE, body_length_m=LENGTH,
               bytes=output.stat().st_size, mesh_quality=quality,
               stock_model_sha256=stock['sha256'], stock_geometry_decoded=False,
               source='tools/blender/build_agm88g_model.py',
+              shape=SHAPE, finish='Project charcoal grey; subdued identification band and grey stencils; visual only',
               provenance='Project-original procedural mesh; stock metadata gives overall length and body diameter only.',
               licence='CC-BY-SA-4.0; attribution: F-23B project contributors',
               simulation_performance_changed=False)

@@ -77,11 +77,19 @@
       "native/radar-helper/Radar.cpp": "921b3f4cc7bc887ad15f5d51f8ce58dc20d0a164126588d2af639b631d1a72a2",
       "tests/lua/exterior_visual_adapter_spec.lua": "993ca4ca0555e454cd1cd22e8de0db4c410c94ecbdc46691c5761ee150533f89",
       "tests/lua/input_bridge_profile_spec.lua": "46c9f145451a59afea7fdcfeaab48434179ff19c0b7d73172b026fcb53061ca1",
-      "tools/blender/build_agm88g_model.py": "314b7185c45cc1d1e6c26a00094c8ff4aebcac717b211414c32285bcce980851",
+      "tools/blender/build_agm88g_model.py": "752b8b7f7947ebf68265a3873f1090c04787a8e45a0fba127cf956c3a7802b8b",
       "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md": "3f90ab7409f0a151abc6159771bd0ee2b115e95d738fb8101291b6c514f10708",
       "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/stock-size.json": "e82c7bcd00b6ff60bd5b253c0dd920fe54994a1d2c0a70c14cea309a7c1d69ad",
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "6b0b5bf2d0ea33678489716d06a4807c0b8915eec990be91668b600258967076",
-      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/model.json": "02b19cc3ef2f9345e4a7fee70f660ddb1575002c7b91f4a2b84610901f9853d0"
+      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/model.json": "02b19cc3ef2f9345e4a7fee70f660ddb1575002c7b91f4a2b84610901f9853d0",
+      "Mods/aircraft/F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "a6832ebc924ddf746fdd9c51552f3301a95fb7f9e17f237d6366bd15ffc64f57",
+      "tools/blender/build_malice_model.py": "7f8fc03919cf71b4d5a0add72003ecfa62c7fc86613ff80067e4bf007c5e3675",
+      "tools/blender/render_project_missiles.py": "7383497613fe462649820eaf51dbf948c641367dae0c8b3b03ec6cb08b025e79",
+      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/blockii-stock-size.json": "c6f7db3d25a7ba661a9d6da6042215b5da5fb3428f5313a4aad8f320fb4d1dff",
+      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_AGM88G.json": "15d205585c79d251ce7e76f40574af58a9e715319e98fff21aed1581104d3742",
+      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_AIM9X_BLOCKII.json": "6569fcc6abde5ac807b80815ccc74382357b00ede807880b63e0801225319f0e",
+      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_MALICE.json": "5805747332ff0c7d24c77c83d846ea6b89e5d3c4dc1e59600450267885668b1c",
+      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13.md": "681113778a69db826f02ac8ada9cb31efe10557a9644be3d12945e2b62c6c609"
     },
     "helper_sha256": "62b62f2a2c4a4de1e3186eb37c04bba98953d11a897f704a06595de7ec6f0ef6"
   }

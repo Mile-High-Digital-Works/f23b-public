@@ -1,0 +1,74 @@
+{
+  "status": "OFFLINE_PASS",
+  "visual_scale": 0.75,
+  "body_length_m": 3.1777535676956177,
+  "body_diameter_m": 0.1905,
+  "mid_wing_span_m": 0.428,
+  "tail_fin_span_m": 0.348,
+  "dcs_bounds_m": [
+    [
+      -1.5750000476837158,
+      1.6027535200119019
+    ],
+    [
+      -0.15181583166122437,
+      0.15181583166122437
+    ],
+    [
+      -0.15181583166122437,
+      0.15181583166122437
+    ]
+  ],
+  "exhaust_x_m": -1.5750000000000002,
+  "sha256": "f4f9b91626576cf979c87335ed4cd020f71a5f04137a9e9d0e3c073b5d94ec9d",
+  "bytes": 193883,
+  "mesh_quality": {
+    "degenerate_triangles": 0,
+    "closed_solids": {
+      "AGM88G_radome": {
+        "outward_winding": true,
+        "volume_m3": 0.00744096396292096
+      },
+      "AGM88G_mid_wing_0": {
+        "outward_winding": true,
+        "volume_m3": 0.0004859070024470687
+      },
+      "AGM88G_tail_fin_0": {
+        "outward_winding": true,
+        "volume_m3": 0.0001992996828145503
+      },
+      "AGM88G_mid_wing_1": {
+        "outward_winding": true,
+        "volume_m3": 0.0004859070024470687
+      },
+      "AGM88G_tail_fin_1": {
+        "outward_winding": true,
+        "volume_m3": 0.0001992996828145503
+      },
+      "AGM88G_mid_wing_2": {
+        "outward_winding": true,
+        "volume_m3": 0.0004859070024470687
+      },
+      "AGM88G_tail_fin_2": {
+        "outward_winding": true,
+        "volume_m3": 0.0001992996828145503
+      },
+      "AGM88G_mid_wing_3": {
+        "outward_winding": true,
+        "volume_m3": 0.0004859070024470687
+      },
+      "AGM88G_tail_fin_3": {
+        "outward_winding": true,
+        "volume_m3": 0.0001992996828145503
+      }
+    }
+  },
+  "stock_model_sha256": "85ceacb0875db6072b37581e9a351a051376f0385ffd3bd72c173fec3372242f",
+  "stock_geometry_decoded": false,
+  "source": "tools/blender/build_agm88g_model.py",
+  "shape": "F23B_AGM88G",
+  "finish": "Project charcoal grey; subdued identification band and grey stencils; visual only",
+  "provenance": "Project-original procedural mesh; stock metadata gives overall length and body diameter only.",
+  "licence": "CC-BY-SA-4.0; attribution: F-23B project contributors",
+  "simulation_performance_changed": false
+}

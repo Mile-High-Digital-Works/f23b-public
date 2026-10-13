@@ -35,7 +35,7 @@ No additional right to extract or redistribute the purchased content is granted.
 the Incorporated Product conditions, rendered-image uses and access safeguards.
 The actual purchase terms and final package inventory remain controlling.
 
-Eligible project-original documentation, missions, procedural MALICE and AGM-88G meshes,
+Eligible project-original documentation, missions, procedural MALICE, AGM-88G and Block II meshes,
 engine texture drawings and original artwork components use CC BY-SA 4.0,
 with attribution to **F-23B project contributors**. Annex C contains the full text.
 Retain supplied attribution and source references, identify changes and retain

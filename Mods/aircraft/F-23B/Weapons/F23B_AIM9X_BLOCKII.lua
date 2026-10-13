@@ -2,7 +2,8 @@
 -- Project-defined AIM-9X Block II approximation, registered as an independent weapon.
 -- The stock AIM-9X stays unchanged. The F-23B radar DLL presents this missile to the
 -- Hornet as its AIM-9X store, F-23B player only.
--- Baseline: ED's stock AIM-9X definition (mass, diameter, drag and lift inputs, warhead, shape).
+-- Baseline: ED's stock AIM-9X definition (mass, diameter, drag and lift inputs, warhead).
+-- Visual: project-original charcoal-grey mesh; stock overall length and diameter only.
 -- Project decisions of October 9, each a stated rule and not a copy of another mod's values:
 --   motor: 48.5 kg of propellant over 7 s at 262 s specific impulse;
 --   airframe: stock 55 g x 1.3; 1.57 rad incidence while the motor burns; 0.5 s control delay;
@@ -16,8 +17,10 @@ local MOTOR_BURN_S, MOTOR_PROPELLANT_KG, MOTOR_SPECIFIC_IMPULSE_S = 7, 48.5, 262
 local MOTOR_FLOW_KG_S = MOTOR_PROPELLANT_KG / MOTOR_BURN_S
 local MOTOR_THRUST_N = MOTOR_FLOW_KG_S * 9.80665 * MOTOR_SPECIFIC_IMPULSE_S
 local BATTERY_S = 75
+local SHAPE = "F23B_AIM9X_BLOCKII"
 local weapon = {
     category = CAT_AIR_TO_AIR, name = "F23B_AIM9X_BLOCKII",
+    model = SHAPE,
     user_name = _("AIM-9X Block II (F-23B project-defined)"),
     display_name_short = "AIM-9XII",
     wsTypeOfWeapon = {4, 4, 7, WSTYPE_PLACEHOLDER},
@@ -36,7 +39,7 @@ local weapon = {
     X_back = -1.6, Y_back = 0, Z_back = 0, Reflection = 0.03, KillDistance = 10,
     SeekerGen = 4, SeekerSensivityDistance = 30000, ccm_k0 = 0.0005,
     SeekerCooled = true, x_wing_anim = -1, PN_gain = 6,
-    shape_table_data = {{name = "F23B_AIM9X_BLOCKII", file = "aim-9x", life = 1,
+    shape_table_data = {{name = "F23B_AIM9X_BLOCKII", file = SHAPE, life = 1,
         fire = {0, 1}, username = "AIM-9XII", index = WSTYPE_PLACEHOLDER}},
     supersonic_A_coef_skew = 0.3, nozzle_exit_area = 0.0068,
     -- Native legacy solver: area/drag/lift, stage times, flow, force, guidance,
@@ -58,6 +61,6 @@ declare_loadout({
     Picture = "us_AIM-9X.png", displayName = weapon.user_name,
     attribute = weapon.wsTypeOfWeapon, wsTypeOfWeapon = weapon.wsTypeOfWeapon,
     Count = 1, Weight = weapon.M, Cx_pil = 0.0005,
-    Elements = {{ShapeName = "aim-9x", DrawArgs = {{1, 1}, {2, 1}}}},
+    Elements = {{ShapeName = SHAPE, DrawArgs = {{1, 1}, {2, 1}}}},
 })
 return weapon

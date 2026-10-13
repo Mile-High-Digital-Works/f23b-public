@@ -1,0 +1,53 @@
+{
+  "status": "OFFLINE_PASS",
+  "approximation": true,
+  "dcs_bounds_m": [
+    [
+      -1.5420000553131104,
+      1.5412499904632568
+    ],
+    [
+      -0.1781909167766571,
+      0.1781909167766571
+    ],
+    [
+      -0.1781909167766571,
+      0.1781909167766571
+    ]
+  ],
+  "mesh_quality": {
+    "degenerate_triangles": 0,
+    "inward_skin_faces": 0,
+    "closed_solids": {
+      "MALICE_radome": {
+        "outward_winding": true,
+        "volume_m3": 0.01558119281182254
+      },
+      "MALICE_fin_0": {
+        "outward_winding": true,
+        "volume_m3": 0.0006384230194574533
+      },
+      "MALICE_fin_1": {
+        "outward_winding": true,
+        "volume_m3": 0.0006384230194574533
+      },
+      "MALICE_fin_2": {
+        "outward_winding": true,
+        "volume_m3": 0.0006384230194574533
+      },
+      "MALICE_fin_3": {
+        "outward_winding": true,
+        "volume_m3": 0.0006384230194574533
+      }
+    }
+  },
+  "visual_scale": 0.75,
+  "body_length_m": 3.0825000000000005,
+  "body_diameter_m": 0.255,
+  "span_m": 0.5025000000000001,
+  "finish": "Project charcoal grey; subdued identification bands and grey stencils; visual only",
+  "sha256": "28e7fc067a793ab2650a5d415c63d09ff8f3693318fbcd75c11c29266e9bdb1f",
+  "bytes": 194333,
+  "provenance": "Project-original procedural mesh; owner-approved uniform visual reduction, illustrative fin/nose geometry; simulation physics unchanged",
+  "bay_clearance": "See capacity audit; DCS flight release not observed"
+}
