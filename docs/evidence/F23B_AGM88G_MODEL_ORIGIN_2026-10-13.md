@@ -14,7 +14,7 @@ Both sets are clocked 45 degrees. Their largest transverse width or height is 11
 The export has 5,658 triangles and six project materials.
 
 Model SHA-256: `0ca4fec728c1f8f4ba6251894bcbbd6d5cb2cd698c43f047ef94f328000532f3`.
-The model metadata is `Mods/aircraft/F-23B/Shapes/F23B_AGM88G.json`.
+The source metadata is [model.json](F23B_AGM88G_MODEL_ORIGIN_2026-10-13/model.json).
 The mesh uses **CC BY-SA 4.0**, with attribution to **F-23B project contributors**.
 The generator uses its existing **MIT** file grant. Canonical release terms are in `LICENCE.md` and `CREDITS.md`.
 

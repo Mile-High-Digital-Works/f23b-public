@@ -77,11 +77,11 @@
       "native/radar-helper/Radar.cpp": "921b3f4cc7bc887ad15f5d51f8ce58dc20d0a164126588d2af639b631d1a72a2",
       "tests/lua/exterior_visual_adapter_spec.lua": "993ca4ca0555e454cd1cd22e8de0db4c410c94ecbdc46691c5761ee150533f89",
       "tests/lua/input_bridge_profile_spec.lua": "46c9f145451a59afea7fdcfeaab48434179ff19c0b7d73172b026fcb53061ca1",
-      "Mods/aircraft/F-23B/Shapes/F23B_AGM88G.json": "02b19cc3ef2f9345e4a7fee70f660ddb1575002c7b91f4a2b84610901f9853d0",
       "tools/blender/build_agm88g_model.py": "314b7185c45cc1d1e6c26a00094c8ff4aebcac717b211414c32285bcce980851",
-      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md": "428bcace8a21931f57a72a32ea35b21b161ef5e2944c014201d18fdb3f61e83b",
+      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md": "3f90ab7409f0a151abc6159771bd0ee2b115e95d738fb8101291b6c514f10708",
       "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/stock-size.json": "e82c7bcd00b6ff60bd5b253c0dd920fe54994a1d2c0a70c14cea309a7c1d69ad",
-      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "6b0b5bf2d0ea33678489716d06a4807c0b8915eec990be91668b600258967076"
+      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "6b0b5bf2d0ea33678489716d06a4807c0b8915eec990be91668b600258967076",
+      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/model.json": "02b19cc3ef2f9345e4a7fee70f660ddb1575002c7b91f4a2b84610901f9853d0"
     },
     "helper_sha256": "62b62f2a2c4a4de1e3186eb37c04bba98953d11a897f704a06595de7ec6f0ef6"
   }
