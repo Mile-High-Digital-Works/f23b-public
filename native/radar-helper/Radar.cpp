@@ -59,7 +59,7 @@ using PayloadTypeFunction = const void*(*)(void*, int);
 using SetMissileDataFunction = void(*)(void*, const void*);
 using DescriptorByTypeFunction = void*(*)(const void*);
 using SidewinderNewFunction = void*(*)(void*, const void*);
-static f23radar::AliasPair aliasPairs[2] = {{0, f23radar::stockAim120B}, {0, f23radar::stockAim9X}};
+static f23radar::AliasPair aliasPairs[3] = {{0, f23radar::stockAim120B}, {0, f23radar::stockAim9X}, {0, f23radar::stockAgm88C, 8}};
 static void* (*currentPayload)() = nullptr;   // CockpitBase c_payload, the unpatched export
 static f23radar::PayloadAccessHook payloadExportHook;
 static f23radar::SlotHook stationTypeHook, containerTypeHook, missileDataHook, descriptorHook, sidewinderHook,
@@ -277,7 +277,7 @@ struct NativeStringView { const char* data; size_t length; };
 // MSVC returns this 16-byte value through an explicit first result pointer.
 static NativeStringView* (*weaponResourceName)(NativeStringView*, const void*) = nullptr;
 static char classifiedName[96] = "none";
-static uint16_t classifiedType[64];
+static uint32_t classifiedType[64];
 static unsigned char classifiedKind[64];
 static int classifiedCount = 0;
 static SRWLOCK classifyLock = SRWLOCK_INIT;
@@ -287,21 +287,22 @@ struct ExclusiveLock {
     ~ExclusiveLock() { ReleaseSRWLockExclusive(lock); }
 };
 static int classify(const f23radar::WsType& type) {
-    if (!f23radar::airToAirMissile(type) || type.level4 == f23radar::stockAim120B
-        || type.level4 == f23radar::stockAim9X || type.level4 == 106) return 0;
+    if (type.level1 != 4 || type.level2 != 4 || (type.level3 != 7 && type.level3 != 8)) return 0;
+    const uint32_t identity = (uint32_t(type.level3) << 16) | type.level4;
     ExclusiveLock guard(&classifyLock);
     for (int i = 0; i < classifiedCount; ++i)
-        if (classifiedType[i] == type.level4) return classifiedKind[i];
+        if (classifiedType[i] == identity) return classifiedKind[i];
     int kind = 0;
     NativeStringView name{};
     if (weaponResourceName) weaponResourceName(&name, &type);
     if (name.length > 0 && name.length < sizeof(classifiedName) && accessible(name.data, name.length)) {
         kind = f23radar::projectWeaponKind(name.data, name.length);
+        if (kind && !f23radar::sameMissileFamily(type, aliasPairs[kind - 1])) kind = 0;
         std::memcpy(classifiedName, name.data, name.length);
         classifiedName[name.length] = 0;
     }
     if (classifiedCount < 64) {
-        classifiedType[classifiedCount] = type.level4;
+        classifiedType[classifiedCount] = identity;
         classifiedKind[classifiedCount++] = static_cast<unsigned char>(kind);
     }
     if (kind && !aliasPairs[kind - 1].project) aliasPairs[kind - 1].project = type.level4;
@@ -327,7 +328,7 @@ static const void* alias_type(void* self, int station, const void* type, f23rada
         | (unsigned(value.level3) << 16) | value.level4);
     classify(value);
     if (kind != CallerHornet || station < 0 || station >= 64) return type;
-    const auto stock = f23radar::stockFor(value, aliasPairs, 2);
+    const auto stock = f23radar::stockFor(value, aliasPairs, 3);
     if (!stock) return type;
     aliasHits[kind].fetch_add(1);
     buffer[station] = f23radar::withLevel4(type, stock);
@@ -344,8 +345,8 @@ __attribute__((noinline)) static const void* alias_container_type(void* self, in
 }
 // Which project missiles the current payload carries. It mirrors the Hornet's own station loop
 // (FA18C RVA 0x31b600): stations 0 .. count-2, skipping an empty station.
-static void scan_payload(bool (&found)[2]) {
-    found[0] = found[1] = false;
+static void scan_payload(bool (&found)[3]) {
+    found[0] = found[1] = found[2] = false;
     auto payload = currentPayload ? currentPayload() : nullptr;
     if (!payload || !stockStationType || !stockContainerType) return;
     auto stationCount = method<int(*)(void*)>(payload, f23radar::payloadStationCountSlot);
@@ -359,8 +360,8 @@ static void scan_payload(bool (&found)[2]) {
             if (!type || !accessible(type, sizeof(f23radar::WsType))) continue;
             f23radar::WsType value; std::memcpy(&value, type, sizeof(value));
             classify(value);
-            for (int i = 0; i < 2; ++i)
-                if (aliasPairs[i].project && f23radar::airToAirMissile(value) && value.level4 == aliasPairs[i].project)
+            for (int i = 0; i < 3; ++i)
+                if (aliasPairs[i].project && f23radar::sameMissileFamily(value, aliasPairs[i]) && value.level4 == aliasPairs[i].project)
                     found[i] = true;
         }
     }
@@ -370,10 +371,11 @@ static void scan_payload(bool (&found)[2]) {
 static const void* project_type(const void* type, f23radar::WsType& buffer) {
     if (!type || !accessible(type, sizeof(f23radar::WsType))) return type;
     f23radar::WsType value; std::memcpy(&value, type, sizeof(value));
-    if (!f23radar::airToAirMissile(value)) return type;
-    const int index = value.level4 == f23radar::stockAim120B ? 0 : value.level4 == f23radar::stockAim9X ? 1 : -1;
+    int index = -1;
+    for (int i = 0; i < 3; ++i)
+        if (f23radar::sameMissileFamily(value, aliasPairs[i]) && value.level4 == aliasPairs[i].stock) index = i;
     if (index < 0) return type;
-    bool found[2];
+    bool found[3];
     scan_payload(found);
     if (!found[index]) return type;
     buffer = f23radar::withLevel4(type, aliasPairs[index].project);

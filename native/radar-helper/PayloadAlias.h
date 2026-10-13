@@ -24,18 +24,18 @@ struct WsType {
 };
 static_assert(sizeof(WsType) == 8, "wsType key is 8 bytes");
 
-struct AliasPair { uint16_t project, stock; };
+struct AliasPair { uint16_t project, stock; unsigned char family = 7; };
 
 // Exact database resource identities. Physical similarity is not an identity test.
 inline int projectWeaponKind(const char* text, size_t length) {
     if (!text) return 0;
-    constexpr const char* names[] = {"weapons.missiles.F23B_AIM424_MALICE", "weapons.missiles.F23B_AIM9X_BLOCKII"};
-    for (int i = 0; i < 2; ++i)
+    constexpr const char* names[] = {"weapons.missiles.F23B_AIM424_MALICE", "weapons.missiles.F23B_AIM9X_BLOCKII", "weapons.missiles.F23B_AGM88G"};
+    for (int i = 0; i < 3; ++i)
         if (length == std::strlen(names[i]) && std::memcmp(text, names[i], length) == 0) return i + 1;
     return 0;
 }
 
-constexpr uint16_t stockAim120B = 24, stockAim9X = 136;
+constexpr uint16_t stockAim120B = 24, stockAim9X = 136, stockAgm88C = 65;
 constexpr uintptr_t payloadStationTypeSlot = 0x98, payloadContainerTypeSlot = 0xa0;
 constexpr uintptr_t payloadStationCountSlot = 0x1b8, payloadWeaponCountSlot = 0xd0;
 // FA18C import-table slots (2.9.30.28738, loaded image) that consume a wsType.
@@ -117,19 +117,23 @@ inline bool airToAirMissile(const WsType& type) {
     return type.level1 == 4 && type.level2 == 4 && type.level3 == 7;
 }
 
+inline bool sameMissileFamily(const WsType& type, const AliasPair& pair) {
+    return type.level1 == 4 && type.level2 == 4 && type.level3 == pair.family;
+}
+
 // Project level4 -> stock level4, or 0 when the type is not a project missile.
 inline uint16_t stockFor(const WsType& type, const AliasPair* pairs, int count) {
-    if (!airToAirMissile(type)) return 0;
     for (int i = 0; i < count; ++i)
-        if (pairs[i].project && type.level4 == pairs[i].project) return pairs[i].stock;
+        if (sameMissileFamily(type, pairs[i]) && pairs[i].project
+            && type.level4 == pairs[i].project) return pairs[i].stock;
     return 0;
 }
 
 // Stock level4 -> project level4, or 0 when the type is not an aliased stock missile.
 inline uint16_t projectFor(const WsType& type, const AliasPair* pairs, int count) {
-    if (!airToAirMissile(type)) return 0;
     for (int i = 0; i < count; ++i)
-        if (pairs[i].project && type.level4 == pairs[i].stock) return pairs[i].project;
+        if (sameMissileFamily(type, pairs[i]) && pairs[i].project
+            && type.level4 == pairs[i].stock) return pairs[i].project;
     return 0;
 }
 

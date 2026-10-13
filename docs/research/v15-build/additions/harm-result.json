@@ -1,0 +1,92 @@
+{
+  "initial_target_miles": 30,
+  "initial_altitude_ft": 15000,
+  "shipped_step": 2,
+  "helper_sha256": "7cb318e9f0764be3213a593fc476a689013cb7879eea3c669a94ce6643ebb553",
+  "bridge_sha256": "67b3bbc747fa44d8336d83e7ca87b30d1158ea0944c2895ac70c6226d3b20a96",
+  "weapon_sha256": "02c829d527081dea51b34201b0efc827b9e4ef1478bc16d6fa1bac93c05552fc",
+  "runs": {
+    "harm-1": {
+      "run": ".devstate/weapons-20261012/run-harm-1",
+      "mission_sha256": "728ae750f1f6ff04a9e79ebd3791d6be296df8709f17c47bb843f1c0e8de51f6",
+      "log_sha256": "f9f883886bdf1db12bb0f1c64cbe903bccbbd33a7ec4cfc938a44c99e9fac332",
+      "shots": [],
+      "hits": [],
+      "bay_max": 1.0,
+      "bay_final": 0.0,
+      "payload_first": 3,
+      "payload_last": 3,
+      "duration_s": 179.993,
+      "profile_restored": true,
+      "restored_files": 27,
+      "prelaunch_ready": false,
+      "prelaunch_handoff": false,
+      "max_speed_knots": 0,
+      "result": "NOT PROVEN"
+    },
+    "harm-1-2": {
+      "run": ".devstate/weapons-20261012/run-harm-1-2",
+      "mission_sha256": "728ae750f1f6ff04a9e79ebd3791d6be296df8709f17c47bb843f1c0e8de51f6",
+      "log_sha256": "a9c9709860c796b3d31bed02193f29bcc5da7449f2181801997404e2f9196d52",
+      "shots": [
+        {
+          "weapon": "AGM_88",
+          "model_s": 39.44,
+          "launch_miles": 23.015658993186666
+        }
+      ],
+      "hits": [
+        [
+          "AGM_88",
+          "HarmEmitter"
+        ]
+      ],
+      "bay_max": 1.0,
+      "bay_final": 0.0,
+      "payload_first": 3,
+      "payload_last": 2,
+      "duration_s": 180.009,
+      "profile_restored": true,
+      "restored_files": 27,
+      "prelaunch_ready": true,
+      "prelaunch_handoff": true,
+      "max_speed_knots": 1784.62373796,
+      "result": "RUNTIME PASS"
+    },
+    "harm-2": {
+      "run": ".devstate/weapons-20261012/run-harm-2",
+      "mission_sha256": "fdb2df7f4596055dd82168d89e6d4dc5014089cc6504953400e1d31d784d7d83",
+      "log_sha256": "b7617b4c51a7e909debdc21668c7b43ee37692f4c1dd7d32a69c15bc1e1a538b",
+      "shots": [
+        {
+          "weapon": "F23B_AGM88G",
+          "model_s": 39.54,
+          "launch_miles": 22.986269750513873
+        }
+      ],
+      "hits": [
+        [
+          "F23B_AGM88G",
+          "HarmEmitter"
+        ]
+      ],
+      "bay_max": 1.0,
+      "bay_final": 0.0,
+      "payload_first": 3,
+      "payload_last": 2,
+      "duration_s": 180.002,
+      "profile_restored": true,
+      "restored_files": 27,
+      "prelaunch_ready": true,
+      "prelaunch_handoff": true,
+      "max_speed_knots": 2521.77797886,
+      "result": "RUNTIME PASS"
+    }
+  },
+  "limits": [
+    "Only station 3 was fired; stations 4 and 6 are declared but unflown.",
+    "TOO was flown; PB and SP are not proven.",
+    "Stock HARM mesh is unchanged. Reduced simulated dimensions do not shrink the rendered mesh; complete bay clearance is not proven.",
+    "This is one initial 30-mile geometry, not a measured maximum range or load envelope."
+  ]
+}

@@ -28,6 +28,7 @@ Output Model::step(double dt,const Atmosphere& air,const MassState& mass,
         vector(body.angular_rate_rad_s),vector(mass.inertia_kg_m2),air.density_kg_m3,
         air.speed_of_sound_m_s,mass.mass_kg,body.angle_of_attack_rad,body.sideslip_rad,
         core::sdk_pitch_rad,body.roll_rad,body.normal_load_g,body.weight_on_wheels};
+    s.damage=core::sdk_damage;
     low_speed_recovery_=core::recovery_switch(low_speed_recovery_,parameters,s);
     s.recovery_active=low_speed_recovery_;
     core::Input u{input.pitch,input.roll,input.yaw,double(input.speedbrake),

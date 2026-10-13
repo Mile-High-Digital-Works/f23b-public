@@ -62,13 +62,21 @@ decltype(&own_ed_fm_get_internal_fuel) native_fuel{};
 decltype(&own_ed_fm_set_draw_args_v2) native_draw{};
 decltype(&own_ed_fm_get_shake_amplitude) native_shake{};
 std::array<float, 3> last_native_gear_draw{};
-#ifdef F23B_DAMAGE_LOGGER
-f23b::bridge::damage::Native native_damage{};
+void(*native_damage)(int,double){};
+void(*native_repair)(){};
 double damage_bridge_time{};
 void damage_callback(int element,double integrity) {
+    f23b::flight_core::sdk_damage.set(element,integrity);
+#ifdef F23B_DAMAGE_LOGGER
     f23b::bridge::damage::emit_and_forward(damage_bridge_time,element,integrity,native_damage);
-}
+#else
+    if(native_damage)native_damage(element,integrity);
 #endif
+}
+void repair_callback() {
+    if(native_repair)native_repair();
+    f23b::flight_core::sdk_damage={};
+}
 std::array<double, 3> contact_vertical_force{};
 
 double ground_speed() {
@@ -123,8 +131,8 @@ void simulate_native_engines(double dt) {
     runtime.internal_fuel_kg = std::max(0.0, native_fuel());
     runtime.input.gear_down = native_parameter(ED_FM_SUSPENSION_0_GEAR_POST_STATE) > 0.5;
     runtime.input.wheel_brake = native_parameter(ED_FM_SUSPENSION_1_RELATIVE_BRAKE_MOMENT) > 0.1;
-    // Native engines exclusively own spool, combustion and fuel. The independent
-    // core supplies aerodynamics/FCS only, so it must not burn fuel a second time.
+    // Native engines own spool, combustion and base fuel burn. The independent
+    // core supplies aerodynamics/FCS. Thrust-linked extra burn is applied below.
     runtime.input.engine_left_running = false;
     runtime.input.engine_right_running = false;
     own_ed_fm_simulate(dt);
@@ -146,11 +154,19 @@ void simulate_native_engines(double dt) {
         f23b::bridge::add_native_engine(runtime.output,runtime.mass,i,thrust[i],flow[i],related_rpm);
 #endif
     }
+    double extra_flow=0.;
+    for(std::size_t i=0;i<2;++i)
+        extra_flow+=f23b::bridge::extra_fuel_flow(flow[i],thrust[i],runtime.output.engines[i].thrust_n,
+            unlimited_fuel,f23b::flight_core::runtime_dry_thrust);
+    if(extra_flow>0&&std::isfinite(dt)&&dt>0) {
+        const double amount=std::min(runtime.internal_fuel_kg,extra_flow*dt);
+        if(amount>0&&Both<&own_ed_fm_refueling_add_fuel>::native)
+            Both<&own_ed_fm_refueling_add_fuel>::native(-amount);
+        runtime.internal_fuel_kg=std::max(0.,native_fuel());
+    }
     static double time = 0.0, last = -1.0;
     time += dt;
-#ifdef F23B_DAMAGE_LOGGER
     damage_bridge_time=time;
-#endif
     if (time - last >= 0.05) {
         last = time;
         record_fit_sample(time, dt, aerodynamic_output);
@@ -195,12 +211,14 @@ void simulate_native_engines(double dt) {
 }
 
 FARPROC f23b_select_callback(const char* name, FARPROC original) {
-#ifdef F23B_DAMAGE_LOGGER
     if(std::strcmp(name,"ed_fm_on_damage")==0&&original) {
-        native_damage=reinterpret_cast<f23b::bridge::damage::Native>(original);
+        native_damage=reinterpret_cast<decltype(native_damage)>(original);
         return reinterpret_cast<FARPROC>(&damage_callback);
     }
-#endif
+    if(std::strcmp(name,"ed_fm_repair")==0&&original) {
+        native_repair=reinterpret_cast<decltype(native_repair)>(original);
+        return reinterpret_cast<FARPROC>(&repair_callback);
+    }
     if (std::strcmp(name, "ed_fm_get_shake_amplitude") == 0) {
         native_shake = reinterpret_cast<decltype(native_shake)>(original);
         return reinterpret_cast<FARPROC>(&shake_for_active_forces);
@@ -237,6 +255,7 @@ FARPROC f23b_select_callback(const char* name, FARPROC original) {
     INPUT(ed_fm_set_command)
     INPUT(ed_fm_set_internal_fuel)
     INPUT(ed_fm_refueling_add_fuel)
+    INPUT(ed_fm_unlimited_fuel)
     INPUT(ed_fm_cold_start)
     INPUT(ed_fm_hot_start)
     INPUT(ed_fm_hot_start_in_air)

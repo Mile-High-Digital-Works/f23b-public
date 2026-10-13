@@ -22,6 +22,20 @@ int main() {
     for (auto name : {"weapons.missiles.AIM_9X", "weapons.missiles.F23B_AIM9X_BLOCKII_OTHER", "F23B_AIM9X_BLOCKII"})
         check(projectWeaponKind(name, std::strlen(name)) == 0, "stock, prefix collisions and incomplete identities rejected");
     check(projectWeaponKind(nullptr, 0) == 0, "missing identity rejected");
+    const char* harmName = "weapons.missiles.F23B_AGM88G";
+    check(projectWeaponKind(harmName, std::strlen(harmName)) == 3, "project HARM exact resource identity");
+    const AliasPair all[3] = {{474, stockAim120B}, {475, stockAim9X}, {476, stockAgm88C, 8}};
+    WsType harm{4, 4, 8, 0xcd, 476, 0xabcd}, stockHarm{4, 4, 8, 0, stockAgm88C, 0};
+    check(stockFor(harm, all, 3) == stockAgm88C, "project HARM reports stock AGM-88C");
+    check(projectFor(stockHarm, all, 3) == 476, "stock HARM reads project data when carried");
+    WsType wrongFamily{4, 4, 7, 0, 476, 0}, wrongStock{4, 4, 7, 0, stockAgm88C, 0};
+    check(stockFor(wrongFamily, all, 3) == 0 && projectFor(wrongStock, all, 3) == 0,
+        "cross-family numeric identity collisions cannot alias");
+    auto harmCopy = withLevel4(&harm, stockAgm88C);
+    check(harmCopy.level3 == 8 && harmCopy.pad == 0xcd && harmCopy.tail == 0xabcd,
+        "HARM family and padding preserved");
+    check(stockFor(malice, all, 3) == stockAim120B && stockFor(blockII, all, 3) == stockAim9X,
+        "adding HARM preserves both A/A aliases");
 
     check(stockFor(malice, pairs, 2) == stockAim120B, "MALICE reports AIM-120B");
     check(stockFor(blockII, pairs, 2) == stockAim9X, "Block II reports AIM-9X");

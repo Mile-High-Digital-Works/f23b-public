@@ -8,6 +8,14 @@
 namespace f23b::bridge {
 // Owner-requested moderate speed tune; project simulation settings.
 inline constexpr double native_thrust_scale = 2.0; // previously 1.75 (+14.29%)
+// Owner rule: supplement native burn only when the applied thrust exceeds it.
+inline double extra_fuel_flow(double native_flow,double native_thrust,double applied_thrust,
+    bool unlimited,const DryThrustSettings& settings) {
+    if(unlimited||!settings.enabled||!std::isfinite(native_flow)||!std::isfinite(native_thrust)
+       ||!std::isfinite(applied_thrust)||native_flow<=0||native_thrust<=0||applied_thrust<=native_thrust)return 0.;
+    const double extra=native_flow*(applied_thrust/native_thrust-1.);
+    return std::isfinite(extra)?std::max(0.,extra):0.;
+}
 // Native SDK fan-speed fraction, not cockpit core RPM or a sampled HOTAS axis.
 // Measured hot-start idle is 0.212 steady / below 0.269 during settling.
 // Keep that range unaugmented; recover the accepted gain before MIL power.

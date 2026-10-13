@@ -17,6 +17,7 @@ local LIGHT_BLACKOUT_ARGUMENT = 1021
 
 local HORNET_HOTAS_DEVICE = 13
 local HORNET_TRIGGER_SECOND_DETENT = 3002
+local HORNET_WEAPON_RELEASE = 3003
 local HORNET_SELECT_SPARROW = 3009
 local HORNET_SELECT_GUN = 3010
 local HORNET_SELECT_AMRAAM = 3011
@@ -37,6 +38,8 @@ local TRIGGER_TAP_SECONDS = 0.05
 -- bounded consent pulse through those native delays, independent of button up.
 local IR_TRIGGER_SECONDS = 0.30
 local RADAR_TRIGGER_SECONDS = 1.25
+-- PROJECT CHOICE: one bounded A/G consent pulse behind the fully open bay.
+local AG_RELEASE_SECONDS = 1.25
 local GUN_DOOR_OPEN_RATE = 12.5
 local GUN_DOOR_CLOSE_RATE = 12.5
 local GUN_EFFECT_HOLD_SECONDS = 0.65
@@ -61,6 +64,7 @@ self:listen_command(bridge_commands.SELECT_SIDEWINDER)
 self:listen_command(bridge_commands.SELECT_AMRAAM)
 self:listen_command(bridge_commands.SELECT_GUN)
 self:listen_command(bridge_commands.SELECT_SPARROW)
+self:listen_command(bridge_commands.WEAPON_RELEASE)
 
 local state = {
     main_bay = 0.0,
@@ -72,6 +76,10 @@ local state = {
     trigger_pending = false,
     native_trigger_down = false,
     trigger_tap_remaining = 0.0,
+    release_input = false,
+    release_pending = false,
+    native_release_down = false,
+    release_remaining = 0.0,
     main_bay_hold = 0.0,
     gun_effect_hold = 0.0,
     hud_sample_ticks = HUD_SAMPLE_INTERVAL_TICKS,
@@ -152,8 +160,9 @@ local function update_light_blackout()
     write_argument(LIGHT_BLACKOUT_ARGUMENT, blackout and 1.0 or 0.0)
     -- Both lamps on can mean lamp test. Unknown/ambiguous mode must not
     -- send an automatic HOTAS command into another native sensor mode.
-    return ok and type(aa) == "number" and type(ag) == "number"
-        and aa > 0.001 and ag <= 0.001
+    local known = ok and type(aa) == "number" and type(ag) == "number"
+    return known and aa > 0.001 and ag <= 0.001,
+        known and ag > 0.001 and aa <= 0.001
 end
 
 local function trim(value)
@@ -274,6 +283,17 @@ local function set_weapon_mode(mode, name)
     end
 end
 
+local function end_native_release()
+    if state.native_release_down then
+        if not forward_hornet(HORNET_WEAPON_RELEASE, 0.0, "weapon-release") then
+            return false
+        end
+        state.native_release_down = false
+        state.main_bay_hold = MAIN_BAY_POST_TRIGGER_HOLD_SECONDS
+    end
+    return true
+end
+
 local selection_routes = {
     [bridge_commands.SELECT_SIDEWINDER] = {
         mode = MODE_MISSILE, name = "SIDEWINDER",
@@ -293,6 +313,21 @@ local selection_routes = {
 }
 
 function SetCommand(command, value)
+    if command == bridge_commands.WEAPON_RELEASE then
+        local _, air_to_ground = update_light_blackout()
+        local pressed = value >= PRESS_THRESHOLD
+        if air_to_ground then
+            if pressed and not state.release_input then
+                state.release_pending = true
+                state.visual_probe_pending = true
+                note("sequenced A/G weapon-release request")
+            end
+        elseif not state.release_pending and not state.native_release_down then
+            forward_hornet(HORNET_WEAPON_RELEASE, value, "weapon-release")
+        end
+        state.release_input = pressed
+        return
+    end
     local route = selection_routes[command]
     if route ~= nil then
         if value >= PRESS_THRESHOLD then
@@ -356,7 +391,12 @@ function post_initialize()
 end
 
 function update()
-    local air_to_air = update_light_blackout()
+    local air_to_air, air_to_ground = update_light_blackout()
+    if not air_to_ground then
+        state.release_pending = false
+        state.release_remaining = 0.0
+        end_native_release()
+    end
     if state.delivered_main_bay ~= nil and state.delivered_gun_door ~= nil then
         local persisted_main = read_aircraft_argument(MAIN_BAY_ARGUMENT)
         local persisted_gun = read_aircraft_argument(GUN_DOOR_ARGUMENT)
@@ -395,8 +435,9 @@ function update()
     state.main_bay_hold = math.max(0.0,
         state.main_bay_hold - UPDATE_STEP)
 
-    local gun_route = state.selected_mode == MODE_GUN
-        or gun_effect or state.gun_effect_hold > 0.0
+    local release_route = state.release_pending or state.native_release_down
+    local gun_route = not release_route and ((not air_to_ground and state.selected_mode == MODE_GUN)
+        or gun_effect or state.gun_effect_hold > 0.0)
 
     -- Exclude friendly/neutral tracks before native automatic ranking.
     -- The gun route bypasses ranking. IR keeps native seeker acquisition.
@@ -422,8 +463,8 @@ function update()
             end
         end
     end
-    local main_route = not gun_route and (state.trigger_pending
-        or state.native_trigger_down or state.main_bay_hold > 0.0)
+    local main_route = release_route or (not gun_route and (state.trigger_pending
+        or state.native_trigger_down or state.main_bay_hold > 0.0))
     local main_target = main_route and 1.0 or 0.0
     local gun_target = gun_route and 1.0 or 0.0
 
@@ -440,6 +481,21 @@ function update()
     -- Keep the acquisition reference correction at its operational endpoint.
     -- The connector remains parented to the door; 1009 alone moves the store.
     write_argument(IR_CARRIER_ARGUMENT, 1.0)
+
+    if state.release_pending and state.main_bay >= 0.999 then
+        if forward_hornet(HORNET_WEAPON_RELEASE, 1.0, "weapon-release") then
+            state.release_pending = false
+            state.native_release_down = true
+            state.release_remaining = AG_RELEASE_SECONDS
+            note("door locked open before A/G release: argument=1009")
+        end
+    end
+    if state.release_remaining > 0.0 then
+        state.release_remaining = math.max(0.0, state.release_remaining - UPDATE_STEP)
+        if state.release_remaining == 0.0 then end_native_release() end
+    elseif state.native_release_down then
+        end_native_release()
+    end
 
     if state.trigger_pending then
         local ready = (gun_route and state.gun_door >= 0.999)

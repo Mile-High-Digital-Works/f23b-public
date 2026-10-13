@@ -324,6 +324,12 @@ local aircraft = {
             eject_dir = { 0.0, -1.0, 0.0 }
         }, {
             { CLSID = "<CLEAN>" },
+            { CLSID = "{F23B-AGM88G}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{F23B-AIM424-MALICE}",
               attach_point_position = { -0.105, 0.06, 0.0 },
               forbidden = {
@@ -340,6 +346,12 @@ local aircraft = {
             eject_dir = { 0.0, -1.0, 0.0 }
         }, {
             { CLSID = "<CLEAN>" },
+            { CLSID = "{F23B-AGM88G}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{F23B-AIM424-MALICE}",
               -- Uniform 75% visual scale clears three stores and their ejection paths.
               attach_point_position = { -0.105, 0.06, 0.0 },
@@ -362,6 +374,12 @@ local aircraft = {
             eject_dir = { 0.0, -1.0, 0.0 }
         }, {
             { CLSID = "<CLEAN>" },
+            { CLSID = "{F23B-AGM88G}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{F23B-AIM424-MALICE}",
               attach_point_position = { -0.105, 0.06, 0.0 },
               forbidden = {

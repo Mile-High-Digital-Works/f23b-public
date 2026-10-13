@@ -13,4 +13,7 @@ local profile = external_profile(
 local bridge_commands = dofile(
     folder .. "../../../Cockpit/ExteriorVisuals/BridgeCommands.lua")
 local bridge = dofile(folder .. "../bridge_profile.lua")
-return bridge(profile, devices, hotas_commands, bridge_commands)
+local saved = deviceName and loadfile(require("lfs").writedir()
+    .. "Config/Input/F-23B/joystick/" .. deviceName .. ".diff.lua")
+local diff = saved and saved()
+return bridge(profile, devices, hotas_commands, bridge_commands, diff and diff.keyDiffs)

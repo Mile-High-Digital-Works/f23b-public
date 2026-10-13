@@ -38,6 +38,7 @@ mount_vfs_liveries_path(current_mod_path .. "/Liveries")
 
 dofile(current_mod_path .. "/Weapons/F23B_AIM424_MALICE.lua")
 dofile(current_mod_path .. "/Weapons/F23B_AIM9X_BLOCKII.lua")
+dofile(current_mod_path .. "/Weapons/F23B_AGM88G.lua")
 dofile(current_mod_path .. "/F-23B.lua")
 
 plugin_done()

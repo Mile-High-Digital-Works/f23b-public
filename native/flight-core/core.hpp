@@ -49,11 +49,37 @@ struct Parameters {
     double roll_alpha_start_rad{.3490658503988659},high_alpha_roll_floor{1.};
     double positive_load_limit{},negative_load_limit{-1};
 };
+// PROJECT CHOICES: side regions inner/centre/outer = .5/.3/.2.
+// Cell IDs are from the installed ED _Common/Damage.lua, DCS 2.9.30.28738.
+struct Damage {
+    std::array<double,3> left{1,1,1},right{1,1,1};
+    std::array<double,4> fins{1,1,1,1}; // left top/centre, right top/centre
+    void set(int cell,double integrity) {
+        if(!std::isfinite(integrity))return;
+        integrity=std::clamp(integrity,0.,1.);
+        switch(cell) {
+        case 35:left[0]=integrity;break; case 29:left[1]=integrity;break; case 23:left[2]=integrity;break;
+        case 36:right[0]=integrity;break; case 30:right[1]=integrity;break; case 24:right[2]=integrity;break;
+        case 39:fins[0]=integrity;break; case 41:fins[1]=integrity;break;
+        case 40:fins[2]=integrity;break; case 42:fins[3]=integrity;break;
+        default:break; // Native engines keep all engine damage.
+        }
+    }
+    static double wing(const std::array<double,3>& a) {return .5*a[0]+.3*a[1]+.2*a[2];}
+    double fin() const {return .25*(fins[0]+fins[1]+fins[2]+fins[3]);}
+    bool changed() const {
+        for(double v:left)if(v!=1)return true;
+        for(double v:right)if(v!=1)return true;
+        for(double v:fins)if(v!=1)return true;
+        return false;
+    }
+};
 struct State {
     Vec3 velocity_body{},wind_body{},angular_rate{},inertia{};
     double density{},sound{},mass{},alpha{},beta{},pitch{},bank{},normal_g{};
     bool weight_on_wheels{};
     bool recovery_active{};
+    Damage damage{};
 };
 struct Input { double pitch{},roll{},pedal{},brake{},gear{},flap{}; };
 struct Output { Vec3 force{},moment{},wanted_acceleration{}; double lift{},drag{},load_command{},dynamic_pressure{}; bool valid{}; };
@@ -150,6 +176,16 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     up=up*(1/up_length);
     const Vec3 side=cross(along,up);
     o.lift=pressure*p.area_m2*cl; o.drag=pressure*p.area_m2*cd;
+    double wing_authority=1.,fin_authority=1.,damage_roll_moment=0.;
+    if(s.damage.changed()) {
+        const double left=Damage::wing(s.damage.left),right=Damage::wing(s.damage.right);
+        wing_authority=.5*(left+right);fin_authority=s.damage.fin();
+        // PROJECT CHOICES: effective lift arm 4 m (13.123 ft), damage Cd .12.
+        // X forward, Y up, Z right: left lift loss gives negative X moment.
+        damage_roll_moment=.5*o.lift*(left-right)*4.;
+        o.lift*=wing_authority;
+        o.drag+=pressure*p.area_m2*.12*(1-wing_authority);
+    }
     o.force=along*(-o.drag)+up*o.lift+side*(pressure*p.area_m2*p.cy_beta*s.beta);
     const double stick=std::clamp(u.pitch,-1.,1.);
     double command=stick>=0 ? 1+stick*(p.n_max-1) : 1+stick*(1-p.n_min);
@@ -171,7 +207,8 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     const double kias=speed*knots_per_m_s*std::sqrt(s.density/sea_level_density);
     const double high_alpha_scale=pilot_lateral_scale(p,limit,s.alpha,s.weight_on_wheels);
     const double roll_rate=std::clamp(u.roll,-1.,1.)*high_alpha_scale*sample(p.roll_limit,kias);
-    const double roll_acceleration=bounded((roll_rate-s.angular_rate.x)/p.tau_roll,p.control_power_per_pa.x*pressure);
+    double roll_acceleration=bounded((roll_rate-s.angular_rate.x)/p.tau_roll,p.control_power_per_pa.x*pressure);
+    if(s.damage.changed())roll_acceleration*=wing_authority;
     // Body axes are X forward, Y up, Z right. Rotation alone gives
     // beta_dot = r*cos(alpha) + p*sin(alpha). Include that roll coupling,
     // and the nonrotating air-velocity derivative from force and gravity.
@@ -184,9 +221,10 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     const double beta_rate=s.angular_rate.y*ca+s.angular_rate.x*sa+beta_external;
     const double alpha_rate=s.angular_rate.z-(sb/cb)*(s.angular_rate.x*ca-s.angular_rate.y*sa)
         +(air.y*acceleration.x-air.x*acceleration.y)/std::max(1e-6,air.x*air.x+air.y*air.y);
-    const double yaw_acceleration=(-p.k_beta*s.beta-p.k_r*beta_rate
+    double yaw_acceleration=(-p.k_beta*s.beta-p.k_r*beta_rate
         -roll_acceleration*sa-alpha_rate*(s.angular_rate.x*ca-s.angular_rate.y*sa))/safe_ca
         +std::clamp(u.pedal,-1.,1.)*high_alpha_scale*p.pedal_rate/p.tau_yaw;
+    if(s.damage.changed())yaw_acceleration*=fin_authority;
     // Released stick should damp alpha change, not oppose the pitch rate of
     // the flight path itself. Preserve the measured full-stick pull response.
     const double neutral=p.neutral_stick_width>0&&!s.weight_on_wheels
@@ -224,10 +262,11 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     }
     o.wanted_acceleration={
        roll_acceleration,
-       bounded(yaw_acceleration,p.control_power_per_pa.y*pressure*(1+p.yaw_alpha_power_gain*sa*sa)),
+       bounded(yaw_acceleration,p.control_power_per_pa.y*pressure*(1+p.yaw_alpha_power_gain*sa*sa)*fin_authority),
        bounded(pitch_acceleration,pitch_power)};
     const Vec3 momentum={s.inertia.x*s.angular_rate.x,s.inertia.y*s.angular_rate.y,s.inertia.z*s.angular_rate.z};
     o.moment=Vec3{s.inertia.x*o.wanted_acceleration.x,s.inertia.y*o.wanted_acceleration.y,s.inertia.z*o.wanted_acceleration.z}+cross(s.angular_rate,momentum);
+    if(s.damage.changed())o.moment.x+=damage_roll_moment;
     o.force={bounded(o.force.x,p.force_bound_n),bounded(o.force.y,p.force_bound_n),bounded(o.force.z,p.force_bound_n)};
     o.moment={bounded(o.moment.x,p.moment_bound_nm),bounded(o.moment.y,p.moment_bound_nm),bounded(o.moment.z,p.moment_bound_nm)};
     o.load_command=command;o.dynamic_pressure=pressure;

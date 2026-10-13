@@ -21,6 +21,7 @@ struct RuntimeState {
     double internal_fuel_kg{},keyboard_throttle_rate{};
 };
 RuntimeState runtime;
+bool unlimited_fuel{};
 double finite_or(double value,double fallback=0) {return std::isfinite(value)?value:fallback;}
 void reset_adapter(bool ground) {
     runtime=RuntimeState{};
@@ -29,6 +30,7 @@ void reset_adapter(bool ground) {
     runtime.suspension_compression.fill(ground?.1:0.);
     runtime.input.throttle_left=runtime.input.throttle_right=ground?0:.775;
     f23b::flight_core::sdk_pitch_rad=0;
+    f23b::flight_core::sdk_damage={};
 }
 template<class Write> void write_control_arguments(std::size_t count,Write write) {
     const auto& c=runtime.output.controls;
@@ -124,12 +126,13 @@ void own_ed_fm_suspension_feedback(int index,const ed_fm_suspension_info* info) 
 }
 void own_ed_fm_set_internal_fuel(double fuel) {runtime.internal_fuel_kg=std::max(0.,finite_or(fuel));}
 void own_ed_fm_refueling_add_fuel(double fuel) {runtime.internal_fuel_kg=std::max(0.,runtime.internal_fuel_kg+finite_or(fuel));}
+void own_ed_fm_unlimited_fuel(bool enabled) {unlimited_fuel=enabled;}
 double own_ed_fm_get_internal_fuel() {return runtime.internal_fuel_kg;}
 double own_ed_fm_get_shake_amplitude() {return runtime.output.shake_amplitude;}
 void own_ed_fm_cold_start() {reset_adapter(true);}
 void own_ed_fm_hot_start() {reset_adapter(true);}
 void own_ed_fm_hot_start_in_air() {reset_adapter(false);}
-void own_ed_fm_release() {runtime=RuntimeState{};}
+void own_ed_fm_release() {runtime=RuntimeState{};f23b::flight_core::sdk_damage={};unlimited_fuel=false;}
 void own_ed_fm_configure(const char*) {}
 // Type anchors only. The selector forwards these calls to native Hornet code.
 double own_ed_fm_get_param(unsigned) {return 0;}

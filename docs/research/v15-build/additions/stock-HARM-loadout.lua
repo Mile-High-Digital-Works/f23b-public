@@ -1,0 +1,34 @@
+return {
+["_file"]="Scripts/Database/db_weapons_data.lua",
+["CLSID"]="{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
+["Picture"]="agm88.png",
+["displayName"]="AGM-88C HARM - High Speed Anti-Radiation Missile",
+["Required"]={
+[1]="{8C3F26A2-FA0F-11d5-9190-00A0249B6F00}",
+},
+["Elements"]={
+[1]={
+["ShapeName"]="lau-118a",
+},
+[2]={
+["connector_name"]="Point01",
+["ShapeName"]="AGM-88",
+},
+},
+["Count"]=1,
+["Weight"]=406.4,
+["Cx_item"]=0.001,
+["Cx_pil"]=0.0011,
+["attribute"]={
+[1]=4,
+[2]=4,
+[3]=32,
+[4]=89,
+},
+["wsTypeOfWeapon"]={
+[1]=4,
+[2]=4,
+[3]=8,
+[4]=65,
+},
+}

@@ -195,7 +195,7 @@ local function fresh_adapter(initial_hud, action_return_value, initial_carrier)
         check(near(aircraft[IR_CARRIER], 0.0), "player device load must restore the original IR carrier pose before post_initialize")
     end
     check(near(activity, 0.01), "adapter update rate drifted")
-    check(#listened == 5, "adapter must own exactly five bridge commands")
+    check(#listened == 6, "adapter must own exactly six bridge commands")
     check(type(SetCommand) == "function", "adapter command handler missing")
     post_initialize()
     check(requested_device == 13, "adapter did not acquire Hornet HOTAS device 13")
@@ -606,3 +606,39 @@ end
 print("PASS: radar Lua failure preserves independent IR/gun, door, nozzle and light updates")
 package.loadlib = original_loadlib
 print("PASS: native exclusion scope; no automatic Undesignate; radar shot guard; independent WVR IR and gun")
+
+-- A/G release must not inherit the A/A radar guard or repeat while held.
+for _, held in ipairs({false, true}) do
+    fresh_adapter(missile_hud("120B", 3), false)
+    SetCommand(commands.SELECT_AMRAAM, 1)
+    native_mode = {[47]=0,[48]=1}
+    radar_target, radar_side = 720, 1
+    SetCommand(commands.WEAPON_RELEASE, 1)
+    if not held then SetCommand(commands.WEAPON_RELEASE, 0) end
+    advance(19)
+    check(forwarded_count(3003, 1) == 0, "A/G release escaped before bay open")
+    update()
+    check(forwarded_count(3003, 1) == 1 and near(forwarded[#forwarded].main_bay, 1),
+        "A/G release did not follow the published open bay")
+    advance(220)
+    check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
+        "A/G held release repeated or lacked a release edge")
+    check(near(value(MAIN_BAY), 0), "A/G bay did not close after the pulse")
+    check(forwarded_count(3002, 1) == 0 and ranking_scope == false,
+        "A/G request used the A/A trigger or radar guard")
+    SetCommand(commands.WEAPON_RELEASE, 0)
+end
+fresh_adapter()
+native_mode = {[47]=0,[48]=1}
+SetCommand(commands.WEAPON_RELEASE, 1)
+advance(10)
+native_mode = {[47]=0,[48]=0}
+advance(100)
+check(forwarded_count(3003, 1) == 0, "A/G pending release survived leaving A/G")
+fresh_adapter()
+native_mode = {[47]=0,[48]=0}
+SetCommand(commands.WEAPON_RELEASE, 1)
+SetCommand(commands.WEAPON_RELEASE, 0)
+check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
+    "release outside A/G was not forwarded unchanged")
+print("PASS: A/G tap/hold opens bay, releases once and closes; mode exit cancels; native binding preserved")

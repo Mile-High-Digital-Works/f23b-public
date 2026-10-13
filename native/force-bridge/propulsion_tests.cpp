@@ -6,6 +6,18 @@ using namespace f23b;
 void near(double actual, double expected) { if(!std::isfinite(actual) || std::abs(actual-expected)>1e-7) std::abort(); }
 int main() {
     const DryThrustSettings dry{true};
+    // Extra burn follows each engine's actual applied/native thrust ratio.
+    near(bridge::extra_fuel_flow(2,10000,20000,false,dry),2);
+    near(bridge::extra_fuel_flow(2,10000,15000,false,dry),1);
+    near(bridge::extra_fuel_flow(2,10000,5000,false,dry),0);
+    near(bridge::extra_fuel_flow(2,0,20000,false,dry),0);
+    near(bridge::extra_fuel_flow(2,10000,20000,true,dry),0);
+    near(bridge::extra_fuel_flow(2,10000,20000,false,DryThrustSettings{false}),0);
+    for(double bad:{-1.,std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::infinity()}) {
+        near(bridge::extra_fuel_flow(bad,10000,20000,false,dry),0);
+        near(bridge::extra_fuel_flow(2,bad,20000,false,dry),0);
+        near(bridge::extra_fuel_flow(2,10000,bad,false,dry),0);
+    }
     for(double mach:{0.,1.,1.3,1.6,2.,2.5})for(double rpm:{0.,.212,.5,.9,1.1}) {
         near(bridge::development_engine_gain(rpm,mach,false,DryThrustSettings{false}),bridge::native_engine_gain(rpm));
         near(bridge::development_engine_gain(rpm,mach,true,dry),bridge::native_engine_gain(rpm));

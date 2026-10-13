@@ -1,7 +1,7 @@
 -- SPDX-License-Identifier: MIT
 local runtime_root = os.getenv("F23B_RUNTIME_ROOT") or "Mods/aircraft"
 _ = function(value) return value end
--- Prove the profile shim changes only the five inputs that need door-first
+-- Prove the profile shim changes only the six inputs that need door-first
 -- sequencing while preserving the complete installed Hornet profile surface.
 local commands = dofile(
     (runtime_root .. "/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua"))
@@ -10,6 +10,7 @@ local bridge = dofile(
 
 local native = {
     STICK_TRIGGER_2ND_DETENT = 3002,
+    STICK_WEAPON_RELEASE = 3003,
     STICK_WEAPON_SELECT_FWD = 3009,
     STICK_WEAPON_SELECT_AFT = 3010,
     STICK_WEAPON_SELECT_IN = 3011,
@@ -17,24 +18,31 @@ local native = {
 }
 local expected = {
     [3002] = commands.TRIGGER_SECOND_DETENT,
+    [3003] = commands.WEAPON_RELEASE,
     [3009] = commands.SELECT_SPARROW,
     [3010] = commands.SELECT_GUN,
     [3011] = commands.SELECT_AMRAAM,
     [3012] = commands.SELECT_SIDEWINDER,
 }
-local native_order = { 3002, 3009, 3010, 3011, 3012 }
+local native_order = { 3002, 3009, 3010, 3011, 3012, 3003 }
 local profile = { keyCommands = {
     { down = 3002, up = 3002, cockpit_device_id = 13, name = "trigger" },
     { down = 3009, up = 3009, cockpit_device_id = 13, name = "sparrow" },
     { down = 3010, up = 3010, cockpit_device_id = 13, name = "gun" },
     { down = 3011, up = 3011, cockpit_device_id = 13, name = "amraam" },
     { down = 3012, up = 3012, cockpit_device_id = 13, name = "sidewinder" },
+    { down = 3003, up = 3003, cockpit_device_id = 13, value_down = 1, value_up = 0, combos = {{key="SPACE"}} },
     { down = 7777, up = 7778, cockpit_device_id = 99, name = "unrelated" },
 } }
 
-local result = bridge(profile, { HOTAS = 13 }, native, commands)
+local release_diff = { ["d3003pnilu3003cd13vd1vpnilvu0"] = {
+    removed = {{key="SPACE"}}, added = {{key="JOY_BTN2"}}
+} }
+local result = bridge(profile, { HOTAS = 13 }, native, commands, release_diff)
+assert(#profile.keyCommands[6].combos == 1 and profile.keyCommands[6].combos[1].key == "JOY_BTN2",
+    "existing native release assignment was lost or a new binding was added")
 assert(result == profile, "bridge replaced the installed profile table")
-for index = 1, 5 do
+for index = 1, 6 do
     local row = profile.keyCommands[index]
     assert(row.down == expected[native_order[index]],
         "required Hornet HOTAS row was not rewritten")
@@ -42,7 +50,7 @@ for index = 1, 5 do
     assert(row.cockpit_device_id == nil,
         "rewritten row still bypasses the exterior sequencer")
 end
-local unrelated = profile.keyCommands[6]
+local unrelated = profile.keyCommands[7]
 assert(unrelated.down == 7777 and unrelated.up == 7778 and
         unrelated.cockpit_device_id == 99,
     "bridge modified an unrelated installed Hornet input row")
@@ -67,7 +75,8 @@ local function exercise_wrapper(device_kind)
             { down = 3010, up = 3010, cockpit_device_id = 13 },
             { down = 3011, up = 3011, cockpit_device_id = 13 },
             { down = 3012, up = 3012, cockpit_device_id = 13 },
-            { down = 7777, up = 7778, cockpit_device_id = 99 },
+            { down = 3003, up = 3003, cockpit_device_id = 13, value_down = 1, value_up = 0, combos = {{key="SPACE"}} },
+    { down = 7777, up = 7778, cockpit_device_id = 99 },
         } }
     end
     dofile = function(path)
@@ -90,9 +99,9 @@ local function exercise_wrapper(device_kind)
         device_kind .. " wrapper requested the wrong installed profile")
     assert(requested_folder == hornet_folder,
         device_kind .. " wrapper did not supply the installed profile folder")
-    assert(#wrapped.keyCommands == 6 and wrapped.keyCommands[6].down == 7777,
+    assert(#wrapped.keyCommands == 7 and wrapped.keyCommands[7].down == 7777,
         device_kind .. " wrapper dropped an unrelated Hornet control")
-    for index = 1, 5 do
+    for index = 1, 6 do
         assert(wrapped.keyCommands[index].down == expected[native_order[index]],
             device_kind .. " wrapper did not sequence a required weapon row")
     end
@@ -100,5 +109,5 @@ end
 
 exercise_wrapper("keyboard")
 exercise_wrapper("joystick")
-print("PASS: input overlay rewrites only trigger and A/A weapon-select rows")
+print("PASS: input overlay rewrites only trigger, weapon-release and A/A weapon-select rows")
 print("PASS: keyboard and joystick wrappers preserve external Hornet profiles")

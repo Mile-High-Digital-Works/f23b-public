@@ -23,6 +23,9 @@ struct Quaternion {
     Vec3 turn(Vec3 a) const {auto b=(*this)*Quaternion{0,a.x,a.y,a.z}*inverse();return {b.x,b.y,b.z};}
 };
 static auto parameters=fitted_parameters();
+static Damage probe_damage{};
+API void set_damage(int cell,double integrity) {probe_damage.set(cell,integrity);}
+API void reset_damage() {probe_damage={};}
 API int configure_tuning_json(const char* text) {
     parameters=fitted_parameters();std::vector<std::string> log;
     return tuning::apply(text,parameters,log)?1:0;
@@ -43,6 +46,7 @@ API void recorded_states(const double* a,int count,double* out) {
         State s{{a[0],a[1],a[2]},{a[3],a[4],a[5]},
           {a[6],a[7],a[8]},{a[9],a[10],a[11]},a[12],a[13],a[14],a[15],a[16],a[17],a[18],a[19]};
         Input u{a[20],a[21],a[22],a[23],a[24],a[25]};
+        s.damage=probe_damage;
         auto o=evaluate(parameters,s,u);
         // Retained straight native-engine axes, from project propulsion.hpp.
         Vec3 thrust_moment{0,1.311020017*a[30]-a[29]*a[26],(a[28]+.320670754)*a[26]};
@@ -72,7 +76,7 @@ void card_step_impl(double* y,const double* e,const double* u,double dt,double* 
         auto fwd=rotation.turn({1,0,0}),up=rotation.turn({0,1,0}),right=rotation.turn({0,0,1});
         s.pitch=std::asin(std::clamp(fwd.y,-1.,1.));s.bank=std::atan2(-right.y,up.y);
         if(recovery){*recovery=recovery_switch(*recovery,parameters,s);s.recovery_active=*recovery;}
-        Input input{u[0],u[1],u[2],u[3],u[4],u[5]};s.normal_g=1;
+        Input input{u[0],u[1],u[2],u[3],u[4],u[5]};s.normal_g=1;s.damage=probe_damage;
         auto o=evaluate(parameters,s,input);s.normal_g=o.force.y/(s.mass*gravity);o=evaluate(parameters,s,input);
         Vec3 thrust_moment{0,1.311020017*e[12]-e[11]*e[3],(e[10]+.320670754)*e[3]};
         auto torque=o.moment+thrust_moment-cross(omega,{s.inertia.x*omega.x,s.inertia.y*omega.y,s.inertia.z*omega.z});
