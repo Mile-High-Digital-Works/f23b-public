@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "name": "F-23B-v1.5",
-  "description": "Private v1.5 candidate: project HARM and native A/G bay release, thrust-linked fuel burn, regional wing/fin damage, unchanged stable defaults and contact geometry.",
+  "description": "Private v1.5 candidate: original compact HARM model for three main-bay stations, native A/G bay release, thrust-linked fuel burn and regional damage; stable defaults and aircraft visuals retained.",
   "dcs_version": "2.9.30.28738",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
     "F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": "ef2195296924f9762d962a2b50ecb18eada7f6eefdf1af3d08533865c414847f",
-    "F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "a15e276cde97312556973ae3d069810224b21dce014b1fcb077a7aa89fdf9170",
-    "F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "ee2b9f04c50eae997873d0720e44680f5dc6c3f4cab5961a289bc883e371a2c2",
+    "F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "e9e61699701e5b4185fd6340c03ddf1387f80206314a658ccae54d08c427e513",
+    "F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "6b0b5bf2d0ea33678489716d06a4807c0b8915eec990be91668b600258967076",
     "F-23B-Player/Cockpit/ExteriorVisuals/device_init.lua": "ea83bca0fd4c71f30d31299df4fd5fdee005f6f01821225ec6c50d566046d28a",
     "F-23B-Player/Cockpit/ExteriorVisuals/mainpanel_init.lua": "97dfa1765db99940be84955b322d8fb286c04dfb316eb46d3a7debb81d674d18",
     "F-23B-Player/Cockpit/HornetHost/PrimarySensors.lua": "bede3c62eab4f4c5efe9f634d1bf47b7aa527e495732a221a30d95cf38321100",
@@ -19,7 +19,7 @@
     "F-23B-Player/Input/F-23B/keyboard/default.lua": "0c37994997d0c7bfbb3e6b4a84f0cf31be9aa0d7d381004943afcfc53e00c08f",
     "F-23B-Player/Input/F-23B/name.lua": "405c6cc3cf823c968aa675464c05326f96e5fb5ad0057ad54cf96c3429accfa3",
     "F-23B-Player/bin/F23B_ForceBridge.dll": "67b3bbc747fa44d8336d83e7ca87b30d1158ea0944c2895ac70c6226d3b20a96",
-    "F-23B-Player/bin/F23B_Radar.dll": "7cb318e9f0764be3213a593fc476a689013cb7879eea3c669a94ce6643ebb553",
+    "F-23B-Player/bin/F23B_Radar.dll": "62b62f2a2c4a4de1e3186eb37c04bba98953d11a897f704a06595de7ec6f0ef6",
     "F-23B-Player/entry.lua": "1854deb22d8df7476f7bef6867054943d5fd45fff0ff45248952ded2309c1851",
     "F-23B-Player/ground_config.lua": "79b1230ec988e1ad02424d22791b50c6a2b8a5d6d21c104d5894cc64cc48589e",
     "F-23B/Encyclopedia/Plane/F-23B.txt": "293d3f0fd8675209c1b0a296906c73cc0d5086237f30e809e21d1ed149b75237",
@@ -69,10 +69,11 @@
     "F-23B/Theme/icon_active.png": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01",
     "F-23B/Theme/icon_select.png": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01",
     "F-23B/UnitPayloads/F-23B.lua": "46b0fd00706469ad17d700d765aad1a728e7fcf0bafadf3a4a172d5106ae47e2",
-    "F-23B/Weapons/F23B_AGM88G.lua": "02c829d527081dea51b34201b0efc827b9e4ef1478bc16d6fa1bac93c05552fc",
+    "F-23B/Weapons/F23B_AGM88G.lua": "a3d6b9fb519e139e96200acd3fe2fef6fcc0489dd75bdf6c01d66b73678a01bc",
     "F-23B/Weapons/F23B_AIM424_MALICE.lua": "28016ff03e35f5f78fb9ed5ec6e054bf69f9192bb7d4710694091185fd3c5dc9",
     "F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "76e310c9f91ae8263d80ea9a341e183a2a161ff31a50eed9e23f038e33f891da",
-    "F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8"
+    "F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
+    "F-23B/Shapes/F23B_AGM88G.edm": "0ca4fec728c1f8f4ba6251894bcbbd6d5cb2cd698c43f047ef94f328000532f3"
   },
   "removed": {
     "F-23B-Player/Cockpit/HornetHost/PrimarySensors.lua": "Inactive cockpit wrapper. No registration loads it.",

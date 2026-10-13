@@ -13,6 +13,8 @@ local GUN_DOOR_ARGUMENT = 1010
 local F23B_LEFT_NOZZLE_ARGUMENT = 1011
 local F23B_RIGHT_NOZZLE_ARGUMENT = 1012
 local IR_CARRIER_ARGUMENT = 1013
+local HARM_CARRIER_ARGUMENTS = { [3] = 1018, [4] = 1019, [6] = 1020 }
+local HARM_CARRIER_RATE = 5.0 -- PROJECT CHOICE: 11-inch travel in 0.20 s.
 local LIGHT_BLACKOUT_ARGUMENT = 1021
 
 local HORNET_HOTAS_DEVICE = 13
@@ -81,6 +83,10 @@ local state = {
     native_release_down = false,
     release_remaining = 0.0,
     main_bay_hold = 0.0,
+    harm_station = nil,
+    harm_mask = 0,
+    harm_carrier = 0.0,
+    harm_carrier_owned = false,
     gun_effect_hold = 0.0,
     hud_sample_ticks = HUD_SAMPLE_INTERVAL_TICKS,
     hud_signature = nil,
@@ -184,9 +190,12 @@ local function indication_value(indication, element_name)
 end
 
 local function sample_hud()
+    state.harm_station = nil
     if type(list_indication) ~= "function" then return end
     local ok, indication = pcall(list_indication, HUD_INDICATION_ID)
     if not ok or type(indication) ~= "string" or indication == "" then return end
+    local harm_station = trim(indication_value(indication, "HARM_Station"))
+    state.harm_station = harm_station and tonumber(string.match(harm_station, "STA%s+(%d+)")) or nil
     local gun_label = trim(indication_value(indication, "GUN_AA_label"))
     local weapon_type = trim(indication_value(indication, "AA_Weapon_type"))
     local weapon_count = trim(indication_value(indication, "AA_Weapon_count"))
@@ -445,8 +454,23 @@ function update()
         or state.selected_weapon == "9X" or state.selected_weapon == "9M"
     local radar_weapon = air_to_air and state.selected_mode == MODE_MISSILE
         and not ir_weapon and not gun_route
-    local radar_target, target_side, cue_az, cue_el, cue_valid = update_radar_upgrade(
+    local radar_target, target_side, cue_az, cue_el, cue_valid, harm_mask = update_radar_upgrade(
         air_to_air and not gun_route, ir_weapon and air_to_air)
+    if state.release_pending then sample_hud() end
+    if state.release_pending and state.harm_carrier_owned
+        and (type(harm_mask) ~= "number" or not HARM_CARRIER_ARGUMENTS[state.harm_station]
+            or math.floor(harm_mask / (2 ^ state.harm_station)) % 2 ~= 1) then
+        state.release_pending = false
+        note("project HARM request cancelled: native selection changed before release")
+    end
+    -- The helper identifies the original payload types, before the Hornet alias.
+    -- A stock HARM or any A/A weapon must retain its existing release route.
+    if state.release_pending and not state.harm_carrier_owned
+        and type(harm_mask) == "number" and HARM_CARRIER_ARGUMENTS[state.harm_station]
+        and math.floor(harm_mask / (2 ^ state.harm_station)) % 2 == 1 then
+        state.harm_mask = harm_mask
+        state.harm_carrier_owned = true
+    end
     if ir_weapon and cue_valid and target_side == 2 then
         ir_seeker_azimuth:set(cue_az)
         ir_seeker_elevation:set(cue_el)
@@ -465,6 +489,7 @@ function update()
     end
     local main_route = release_route or (not gun_route and (state.trigger_pending
         or state.native_trigger_down or state.main_bay_hold > 0.0))
+        or (state.harm_carrier_owned and state.harm_carrier > 0.0)
     local main_target = main_route and 1.0 or 0.0
     local gun_target = gun_route and 1.0 or 0.0
 
@@ -482,7 +507,24 @@ function update()
     -- The connector remains parented to the door; 1009 alone moves the store.
     write_argument(IR_CARRIER_ARGUMENT, 1.0)
 
-    if state.release_pending and state.main_bay >= 0.999 then
+    if state.harm_carrier_owned then
+        local carrier_target = air_to_ground and state.main_bay >= 0.999
+            and (state.release_pending or state.native_release_down or state.main_bay_hold > 0.0)
+            and 1.0 or 0.0
+        state.harm_carrier = move_toward(state.harm_carrier, carrier_target, HARM_CARRIER_RATE)
+        for station, argument in pairs(HARM_CARRIER_ARGUMENTS) do
+            if math.floor(state.harm_mask / (2 ^ station)) % 2 == 1 then
+                write_argument(argument, state.harm_carrier)
+            end
+        end
+        if carrier_target == 0.0 and state.harm_carrier == 0.0 then
+            state.harm_carrier_owned = false
+            state.harm_mask = 0
+        end
+    end
+
+    if state.release_pending and state.main_bay >= 0.999
+        and (not state.harm_carrier_owned or state.harm_carrier >= 0.999) then
         if forward_hornet(HORNET_WEAPON_RELEASE, 1.0, "weapon-release") then
             state.release_pending = false
             state.native_release_down = true

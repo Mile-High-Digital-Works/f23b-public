@@ -22,7 +22,7 @@ Open it in a browser and select Print.
 | Ground | Use small steering inputs. Steering authority reduces with speed. Use rudder and differential braking at higher speeds. |
 
 An earlier MALICE build recorded a 336-mile A-50 kill with continuing support. Motor C has a 58.7-mile fixture hit; its long shot remains unverified. Range depends on launch height, speed, target motion and support.
-HARM retains its native cockpit label and stock appearance. TOO guidance and a hit are recorded from station 3; other HARM stations, PB/SP and the maximum envelope are unverified. The reduced simulated dimensions do not prove full rendered bay clearance.
+Project HARM retains the native cockpit label and uses its own compact model: 10.43 ft long with a 7.5-inch body. Three fit stations 3/4/6. The new carrier sequence lowers project HARMs before release; its DCS motion is unverified. TOO guidance and a hit are recorded from station 3; station 4/6 releases, PB/SP and the maximum envelope are unverified.
 The bay sequence also operates the gun door. Do not bypass it with donor trigger mappings.
 If **weapon and radar connection OFF** appears, get a compatible release before using custom weapons or SA 640.
 

@@ -4,7 +4,7 @@ v1.5. Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue t
 
 | Contributor | Contribution |
 | --- | --- |
-| F-23B project contributors | Original flight core and typed adapter; flight measurements credited to the project owner; original integration, bridge/helper work, propulsion/steering integration, build/install tools, missions, documentation and eligible original artwork. |
+| F-23B project contributors | Original flight core and typed adapter; flight measurements credited to the project owner; original integration, bridge/helper work, propulsion/steering integration, build/install tools, missions, documentation, original procedural MALICE and AGM-88G meshes, and eligible original artwork. |
 | SytaPastel | Purchased Northrop YF-23 Black Widow II exterior and paint foundation, CGTrader product 2046482; project-derived visual/contact mesh, liveries and selected menu aircraft renders. |
 | Eagle Dynamics SA and its licensors | The user's separately installed DCS World and activated F/A-18C Hornet, supplying cockpit, sensors, native engines, gear and installed resources. No proprietary game files are bundled. |
 | Python Software Foundation and holders named in its full notice | Bundled interpreter and components; LICENCE Annex D retains every recorded component notice. |

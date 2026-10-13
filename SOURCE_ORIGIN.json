@@ -32,12 +32,12 @@
     "bridge_sha256": "67b3bbc747fa44d8336d83e7ca87b30d1158ea0944c2895ac70c6226d3b20a96",
     "files": {
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
-      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "a15e276cde97312556973ae3d069810224b21dce014b1fcb077a7aa89fdf9170",
+      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "e9e61699701e5b4185fd6340c03ddf1387f80206314a658ccae54d08c427e513",
       "Mods/aircraft/F-23B-Player/Input/F-23B/bridge_profile.lua": "b6c4916ada4ffa64eece662b62a7a0f3ad543bf40973528309c59f47f7173f59",
       "Mods/aircraft/F-23B-Player/Input/F-23B/joystick/default.lua": "a7068a0ec39a725d01bee5452daaba963109965637848aee4dbf6baa4df547bf",
       "Mods/aircraft/F-23B-Player/Input/F-23B/keyboard/default.lua": "0c37994997d0c7bfbb3e6b4a84f0cf31be9aa0d7d381004943afcfc53e00c08f",
       "Mods/aircraft/F-23B/F-23B.lua": "8fc89bcc88805059533b7f57c806ff637c617e7f91026ce0e9aaede51b749643",
-      "Mods/aircraft/F-23B/Weapons/F23B_AGM88G.lua": "02c829d527081dea51b34201b0efc827b9e4ef1478bc16d6fa1bac93c05552fc",
+      "Mods/aircraft/F-23B/Weapons/F23B_AGM88G.lua": "a3d6b9fb519e139e96200acd3fe2fef6fcc0489dd75bdf6c01d66b73678a01bc",
       "Mods/aircraft/F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
       "native/flight-core/CMakeLists.txt": "a9ac372c1fcb8cccba0025a17c53806ce73493edb451e21735683a3d899e7a5a",
       "native/flight-core/bridge_context.hpp": "cfdce5b62de1918d39799956dd3d3ef993163550eb2451a7676927a7423033d5",
@@ -72,12 +72,17 @@
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
       "native/force-bridge/telemetry.hpp": "4d38374f601ae302bf9ba7b99c941ac0b999fe400f6cbeb85f4b258142ca7d8c",
-      "native/radar-helper/PayloadAlias.h": "104abbe54b9f6ab9d2a8f969fb5eb4825f342ac247e6ba0f2c2a3d8fdf653536",
-      "native/radar-helper/PayloadAlias_test.cpp": "3002be2b054455617da370174ae8a78bff905b3b14854db26127c2fcab4ecfc4",
-      "native/radar-helper/Radar.cpp": "cd89652acd50ce7bba33c324b873b91baf7df8e9ad930675bedc7e4471202ded",
-      "tests/lua/exterior_visual_adapter_spec.lua": "f4d82353730d3d6cc75b235dcd14c2e0e34ab717224a59db2aa2e2b13d6743f2",
-      "tests/lua/input_bridge_profile_spec.lua": "46c9f145451a59afea7fdcfeaab48434179ff19c0b7d73172b026fcb53061ca1"
+      "native/radar-helper/PayloadAlias.h": "9d1c67b9722c881cbbf3b2d47d0c2968866344954ca91b1df7e59f147111e64e",
+      "native/radar-helper/PayloadAlias_test.cpp": "4bc6c5687f85d6cf7268a82ba1ac29fc1ef814035941c43ec5d21fd77fef202f",
+      "native/radar-helper/Radar.cpp": "921b3f4cc7bc887ad15f5d51f8ce58dc20d0a164126588d2af639b631d1a72a2",
+      "tests/lua/exterior_visual_adapter_spec.lua": "993ca4ca0555e454cd1cd22e8de0db4c410c94ecbdc46691c5761ee150533f89",
+      "tests/lua/input_bridge_profile_spec.lua": "46c9f145451a59afea7fdcfeaab48434179ff19c0b7d73172b026fcb53061ca1",
+      "Mods/aircraft/F-23B/Shapes/F23B_AGM88G.json": "02b19cc3ef2f9345e4a7fee70f660ddb1575002c7b91f4a2b84610901f9853d0",
+      "tools/blender/build_agm88g_model.py": "314b7185c45cc1d1e6c26a00094c8ff4aebcac717b211414c32285bcce980851",
+      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md": "428bcace8a21931f57a72a32ea35b21b161ef5e2944c014201d18fdb3f61e83b",
+      "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/stock-size.json": "e82c7bcd00b6ff60bd5b253c0dd920fe54994a1d2c0a70c14cea309a7c1d69ad",
+      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "6b0b5bf2d0ea33678489716d06a4807c0b8915eec990be91668b600258967076"
     },
-    "helper_sha256": "7cb318e9f0764be3213a593fc476a689013cb7879eea3c669a94ce6643ebb553"
+    "helper_sha256": "62b62f2a2c4a4de1e3186eb37c04bba98953d11a897f704a06595de7ec6f0ef6"
   }
 }

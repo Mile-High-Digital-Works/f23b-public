@@ -1617,13 +1617,14 @@ local weapon = {
 }
 
 -- PROJECT FACTORS: smaller simulated body, stronger motor, longer envelope,
--- higher load limit. ED's unmodified stock HARM mesh remains the visual model.
+-- higher load limit. The project-original visual uses the same 75% body scale.
 local SIZE, MASS, MOTOR, RANGE, LOAD = 0.75, 0.75, 1.25, 1.4, 1.5
+local SHAPE = "F23B_AGM88G"
 weapon.category = CAT_MISSILES
 weapon.name = "F23B_AGM88G"
 weapon.user_name = _("AGM-88G AARGM-ER (F-23B project-defined)")
 weapon.display_name_short = "AGM-88G"
-weapon.model = "AGM-88"
+weapon.model = SHAPE
 weapon.scheme = "anti_rad_missile"
 weapon.class_name = "wAmmunitionAntiRad"
 weapon.wsTypeOfWeapon = {4, 4, 8, WSTYPE_PLACEHOLDER}
@@ -1648,7 +1649,14 @@ weapon.autopilot.Areq_limit = weapon.autopilot.Areq_limit * LOAD
 for _,key in ipairs({"RmaxData", "RmaxData2", "LoftData", "LoftData2"}) do
     for i,v in ipairs(weapon[key]) do weapon[key][i] = v * RANGE end
 end
-weapon.shape_table_data = {{name = weapon.name, file = "AGM-88", life = 1,
+-- Visual exhaust origins follow the smaller body; motor values stay unchanged.
+for _,key in ipairs({"X_back", "Y_back", "Z_back"}) do weapon[key] = weapon[key] * SIZE end
+for _,motor in ipairs({weapon.boost, weapon.march}) do
+    for _,position in ipairs(motor.nozzle_position) do
+        for i=1,3 do position[i] = position[i] * SIZE end
+    end
+end
+weapon.shape_table_data = {{name = weapon.name, file = SHAPE, life = 1,
     fire = {0, 1}, username = weapon.name, index = WSTYPE_PLACEHOLDER}}
 declare_weapon(weapon)
 -- Direct bay store: omit the stock loadout's external LAU-118 rail.
@@ -1657,6 +1665,6 @@ declare_loadout({
     displayName = weapon.user_name, Count = 1, Weight = weapon.mass,
     attribute = weapon.wsTypeOfWeapon, wsTypeOfWeapon = weapon.wsTypeOfWeapon,
     Cx_pil = 0.0011 * SIZE * SIZE,
-    Elements = {{ShapeName = "AGM-88"}},
+    Elements = {{ShapeName = SHAPE}},
 })
 return weapon

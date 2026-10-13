@@ -66,3 +66,10 @@ All flights lasted about 180 s, closed only their owned process and restored all
 NOT PROVEN: full rendered bay clearance/smaller mesh, launches from stations 4 and 6, PB/SP,
 maximum range or load envelope, exact 30-mile release, multiplayer and VR.
 See `docs/research/v15-build/additions/harm-result.json` for source hashes, runs and observations.
+
+## October 13 visual update
+
+The project-original model replaces the earlier stock appearance.
+Its [model origin](F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md) records size, authored geometry, exhaust scaling, and the licence.
+The model is 10.43 ft long with a 7.5-inch body. All three stations clear by at least two inches.
+The earlier smaller-mesh and bay-clearance gaps are closed. Missile performance values retain the October 12 factors.

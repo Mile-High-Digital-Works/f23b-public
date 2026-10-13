@@ -57,7 +57,7 @@ return function(ranking_scope, cue_ir)
     local ok, status, target, side, ranking, az, el, cue_valid, support, grants, granted, profile, diag,
         alias, malice_type, blockii_type, alias_diag, launch_zone_diag, energy_status, energy_message, energy_diag,
         sa_range_status, decoy_status, decoy_rejects, flight_decoy_status, flight_decoy_rejects,
-        missile_rejects, designation_rejects = pcall(
+        missile_rejects, designation_rejects, harm_bay_mask = pcall(
         native_update, ranking_scope == true, cue_ir == true)
     if not ok then
         connection_failed("Update failed: " .. tostring(status))
@@ -163,5 +163,5 @@ return function(ranking_scope, cue_ir)
         report("Native ranking exclusion failed its memory checks; launch guard remains active", true)
         ranking_failed = true
     end
-    return target, side, az, el, cue_valid == 1
+    return target, side, az, el, cue_valid == 1, harm_bay_mask or 0
 end

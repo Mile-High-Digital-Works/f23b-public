@@ -345,8 +345,9 @@ __attribute__((noinline)) static const void* alias_container_type(void* self, in
 }
 // Which project missiles the current payload carries. It mirrors the Hornet's own station loop
 // (FA18C RVA 0x31b600): stations 0 .. count-2, skipping an empty station.
-static void scan_payload(bool (&found)[3]) {
+static void scan_payload(bool (&found)[3], unsigned* harmBayMask = nullptr) {
     found[0] = found[1] = found[2] = false;
+    if (harmBayMask) *harmBayMask = 0;
     auto payload = currentPayload ? currentPayload() : nullptr;
     if (!payload || !stockStationType || !stockContainerType) return;
     auto stationCount = method<int(*)(void*)>(payload, f23radar::payloadStationCountSlot);
@@ -362,7 +363,10 @@ static void scan_payload(bool (&found)[3]) {
             classify(value);
             for (int i = 0; i < 3; ++i)
                 if (aliasPairs[i].project && f23radar::sameMissileFamily(value, aliasPairs[i]) && value.level4 == aliasPairs[i].project)
+                {
                     found[i] = true;
+                    if (harmBayMask) *harmBayMask |= f23radar::projectHarmBayBit(i + 1, station);
+                }
         }
     }
 }
@@ -972,7 +976,12 @@ static int update(lua_State* L) {
     pushNumber(L, static_cast<double>(flightDecoyRejects.load()));
     pushNumber(L, static_cast<double>(missileRejects.load()));
     pushNumber(L, static_cast<double>(designationRejects.load()));
-    return 27;
+    unsigned harmBayMask = 0;
+    if (supported && aliasStatus.load() == 1) {
+        bool found[3]; scan_payload(found, &harmBayMask);
+    }
+    pushNumber(L, harmBayMask);
+    return 28;
 }
 extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
     auto lua = GetModuleHandleW(L"lua.dll");

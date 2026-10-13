@@ -14,10 +14,12 @@ Eighteen regional contact shells replace the single airframe shell. Wheels and
 ground lines retain their verified geometry. Wing and fin damage now reduce the corresponding lift and control authority. A named left outer-wing hit reached the core and produced a rolling moment toward the damaged side. Other regions remain unflown.
 
 AGM-88G AARGM-ER is a fictional project HARM for main-bay stations 3, 4 and 6.
-It uses stock HARM appearance and seeker behavior with explicit project performance factors.
+It uses a project-original compact model, stock HARM seeker behavior and explicit project performance factors.
+The new visual is 10.43 ft long with a 7.5-inch body; three stores clear the main bay by at least two inches.
+Project-HARM carriers deploy before consent and retract before door closure. DCS deployment remains unverified.
 The existing A/G Weapon Release control opens the bay, sends one release and closes it.
 Stock and project HARM each recorded one TOO-guided emitter hit from station 3.
-Stations 4/6, PB/SP, maximum envelope and full rendered bay clearance remain unverified.
+Station 4/6 releases, PB/SP and the maximum envelope remain unverified.
 
 MALICE retains motor C and its 58.7-mile fixture result. Its long shot remains open.
 Block II does not lock other air-to-air missiles. With a designated hostile aircraft it locks only that aircraft.

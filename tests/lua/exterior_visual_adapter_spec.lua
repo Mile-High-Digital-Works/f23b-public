@@ -34,16 +34,20 @@ local radar_cue_requested
 local params
 local radar_failure
 local ranking_scope
+local project_harm_mask = 0
 local original_loadlib = package.loadlib
 package.loadlib = function()
     return function() return function(enabled, cue_ir)
         ranking_scope = enabled
         radar_cue_requested = cue_ir
         if radar_failure then error("radar callback failed") end
-        return 1, radar_target, radar_side, 0, 0.2, -0.1,
-            radar_side == 2 and cue_ir and 1 or 0
+        local result = {1, radar_target, radar_side, 0, 0.2, -0.1,
+            radar_side == 2 and cue_ir and 1 or 0}
+        result[28] = project_harm_mask
+        return unpack(result, 1, 28)
     end end
 end
+local mock_loadlib = package.loadlib
 
 local function check(condition, message)
     if not condition then error(message, 2) end
@@ -148,6 +152,7 @@ local allowed_writes = {
     [RIGHT_NOZZLE] = true,
     [IR_CARRIER] = true,
     [1021] = true,
+    [1018] = true, [1019] = true, [1020] = true,
 }
 
 local function check_writes(context)
@@ -164,6 +169,7 @@ local function fresh_adapter(initial_hud, action_return_value, initial_carrier)
     params = {WS_IR_MISSILE_LOCK={value=1}}
     radar_target, radar_side = 754, 2
     radar_failure = false
+    project_harm_mask = 0
     aircraft = { [89] = 0.0, [90] = 0.0, [1022] = 1.0, [IR_CARRIER] = initial_carrier or 0.0 }
     output = {}
     writes = {}
@@ -186,6 +192,7 @@ local function fresh_adapter(initial_hud, action_return_value, initial_carrier)
             command = command, value = command_value, animated = animated,
             main_bay = value(MAIN_BAY), gun_door = value(GUN_DOOR),
             ir_carrier = (1.0 - value(IR_CARRIER)),
+            harm3 = value(1018), harm4 = value(1019), harm6 = value(1020),
         }
         return clickable_return_value
     end
@@ -642,3 +649,59 @@ SetCommand(commands.WEAPON_RELEASE, 0)
 check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
     "release outside A/G was not forwarded unchanged")
 print("PASS: A/G tap/hold opens bay, releases once and closes; mode exit cancels; native binding preserved")
+
+-- The exact project payload identity enables the existing three trapezes.
+-- Publish their deployed poses before consent, and retract before door closure.
+package.loadlib = mock_loadlib
+for _, held in ipairs({false, true}) do
+    fresh_adapter(record("HARM_Station", "STA 3"), false)
+    native_mode = {[47]=0,[48]=1}
+    project_harm_mask = 8 + 16 + 64
+    SetCommand(commands.WEAPON_RELEASE, 1)
+    if not held then SetCommand(commands.WEAPON_RELEASE, 0) end
+    advance(19)
+    check(value(1018) == 0 and forwarded_count(3003, 1) == 0, "trapeze moved before doors opened")
+    advance(19)
+    check(value(1018) > 0 and value(1018) < 1 and forwarded_count(3003, 1) == 0,
+        "native release escaped before full trapeze travel")
+    update()
+    local call = forwarded[#forwarded]
+    check(call.command == 3003 and call.value == 1 and call.main_bay == 1
+        and near(call.harm3, 1) and near(call.harm4, 1) and near(call.harm6, 1),
+        "native HARM consent did not observe all published carrier endpoints")
+    local retracting = false
+    for tick=1,250 do
+        update()
+        local carrier = value(1018)
+        if carrier > 0 and carrier < 1 then
+            retracting = true
+            check(value(MAIN_BAY) == 1, "doors closed across a retracting HARM")
+        end
+    end
+    check(retracting and value(1018) == 0 and value(1019) == 0 and value(1020) == 0
+        and value(MAIN_BAY) == 0, "HARM did not retract and close")
+    check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
+        "trapeze route repeated a held release")
+end
+-- A stock HARM on the selected station must keep the prior native route,
+-- even when a project HARM occupies a different station.
+fresh_adapter(record("HARM_Station", "STA 3"))
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 16
+SetCommand(commands.WEAPON_RELEASE, 1); SetCommand(commands.WEAPON_RELEASE, 0)
+advance(20)
+check(forwarded_count(3003, 1) == 1 and value(1018) == 0 and value(1019) == 0,
+    "project carrier logic changed the selected stock HARM")
+fresh_adapter(record("HARM_Station", "STA 3"))
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 8 + 16 + 64
+SetCommand(commands.WEAPON_RELEASE, 1); advance(28)
+native_mode = {[47]=0,[48]=0}; advance(100)
+check(forwarded_count(3003, 1) == 0 and value(1018) == 0 and value(MAIN_BAY) == 0,
+    "mode exit left a pending HARM or an extended trapeze")
+print("PASS: project HARM identity; doors open, trapezes deploy, consent, retract, close; stock route preserved")
+fresh_adapter(record("HARM_Station", "STA 3"))
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 8
+SetCommand(commands.WEAPON_RELEASE, 1); advance(28)
+hud_text = record("HARM_Station", "STA 4"); advance(100)
+check(forwarded_count(3003, 1) == 0 and value(1018) == 0 and value(MAIN_BAY) == 0,
+    "pending project consent fired after selection changed to a stock HARM")
+package.loadlib = original_loadlib

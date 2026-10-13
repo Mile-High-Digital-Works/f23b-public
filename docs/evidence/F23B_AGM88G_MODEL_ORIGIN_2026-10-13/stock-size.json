@@ -1,0 +1,9 @@
+{
+  "path": "Bazar/World/Shapes/agm-88.edm",
+  "sha256": "85ceacb0875db6072b37581e9a351a051376f0385ffd3bd72c173fec3372242f",
+  "length_m": 4.23700475692749,
+  "diameter_m": 0.254,
+  "bytes_read_for_metadata": 728,
+  "geometry_decoded": false,
+  "diameter_source": "installed stock AGM_88 descriptor caliber 0.254"
+}
