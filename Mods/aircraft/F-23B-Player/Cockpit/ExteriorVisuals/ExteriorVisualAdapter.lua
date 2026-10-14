@@ -7,14 +7,18 @@
 local UPDATE_STEP = 0.01
 local HUD_SAMPLE_INTERVAL_TICKS = 5
 local HUD_INDICATION_ID = 1
+-- The HARM format shows the selected station ("STA n") on the display that carries it:
+-- left DDI, right DDI or AMPCD. The HUD does not carry this text (doors-1 flight, October 13).
+local HARM_STATION_INDICATION_IDS = { 2, 3, 4 }
 
 local MAIN_BAY_ARGUMENT = 1009
 local GUN_DOOR_ARGUMENT = 1010
 local F23B_LEFT_NOZZLE_ARGUMENT = 1011
 local F23B_RIGHT_NOZZLE_ARGUMENT = 1012
 local IR_CARRIER_ARGUMENT = 1013
-local HARM_CARRIER_ARGUMENTS = { [3] = 1018, [4] = 1019, [6] = 1020 }
-local HARM_CARRIER_RATE = 5.0 -- PROJECT CHOICE: 11-inch travel in 0.20 s.
+-- Roof trapezes by Hornet station: 3 port, 2 centre, 7 starboard.
+local HARM_CARRIER_ARGUMENTS = { [3] = 1018, [2] = 1019, [7] = 1020 }
+local HARM_CARRIER_RATE = 2.6 -- PROJECT CHOICE: the earlier linear speed; 20-to-23-inch travel in 0.38 s.
 local LIGHT_BLACKOUT_ARGUMENT = 1021
 
 local HORNET_HOTAS_DEVICE = 13
@@ -189,13 +193,34 @@ local function indication_value(indication, element_name)
     return nil
 end
 
-local function sample_hud()
+local function sample_harm_station()
     state.harm_station = nil
+    if type(list_indication) ~= "function" then return end
+    for _, id in ipairs(HARM_STATION_INDICATION_IDS) do
+        local ok, indication = pcall(list_indication, id)
+        local text = ok and trim(indication_value(indication, "HARM_Station")) or nil
+        local station = text and tonumber(string.match(text, "STA%s+(%d+)")) or nil
+        if station then
+            state.harm_station = station
+            return
+        end
+    end
+end
+
+-- The selected station decides the route when a display shows the HARM format.
+-- With no HARM format on a display, each loaded project HARM uses its trapeze.
+local function project_harm_selected(mask)
+    if type(mask) ~= "number" or mask <= 0 then return false end
+    local station = state.harm_station
+    if station == nil then return true end
+    return HARM_CARRIER_ARGUMENTS[station] ~= nil
+        and math.floor(mask / (2 ^ station)) % 2 == 1
+end
+
+local function sample_hud()
     if type(list_indication) ~= "function" then return end
     local ok, indication = pcall(list_indication, HUD_INDICATION_ID)
     if not ok or type(indication) ~= "string" or indication == "" then return end
-    local harm_station = trim(indication_value(indication, "HARM_Station"))
-    state.harm_station = harm_station and tonumber(string.match(harm_station, "STA%s+(%d+)")) or nil
     local gun_label = trim(indication_value(indication, "GUN_AA_label"))
     local weapon_type = trim(indication_value(indication, "AA_Weapon_type"))
     local weapon_count = trim(indication_value(indication, "AA_Weapon_count"))
@@ -456,20 +481,20 @@ function update()
         and not ir_weapon and not gun_route
     local radar_target, target_side, cue_az, cue_el, cue_valid, harm_mask = update_radar_upgrade(
         air_to_air and not gun_route, ir_weapon and air_to_air)
-    if state.release_pending then sample_hud() end
+    if state.release_pending then sample_harm_station() end
     if state.release_pending and state.harm_carrier_owned
-        and (type(harm_mask) ~= "number" or not HARM_CARRIER_ARGUMENTS[state.harm_station]
-            or math.floor(harm_mask / (2 ^ state.harm_station)) % 2 ~= 1) then
+        and not project_harm_selected(harm_mask) then
         state.release_pending = false
         note("project HARM request cancelled: native selection changed before release")
     end
     -- The helper identifies the original payload types, before the Hornet alias.
     -- A stock HARM or any A/A weapon must retain its existing release route.
     if state.release_pending and not state.harm_carrier_owned
-        and type(harm_mask) == "number" and HARM_CARRIER_ARGUMENTS[state.harm_station]
-        and math.floor(harm_mask / (2 ^ state.harm_station)) % 2 == 1 then
+        and project_harm_selected(harm_mask) then
         state.harm_mask = harm_mask
         state.harm_carrier_owned = true
+        note("project HARM trapeze route: station=" .. tostring(state.harm_station)
+            .. " stations_mask=" .. tostring(harm_mask))
     end
     if ir_weapon and cue_valid and target_side == 2 then
         ir_seeker_azimuth:set(cue_az)

@@ -11,7 +11,6 @@
     "Mods/aircraft/F-23B/Liveries/F-23B/USA/description.lua": "e9c7e74af5be498c8cee916e8efbddb28e21e526e6405a4fac8d0a746ee0c244",
     "Mods/aircraft/F-23B/Missions/QuickStart/quickstart.lua": "971b42e42925c29c4b7278fb85e643305880e2fe750ba6cbfe87d415a987f342",
     "Mods/aircraft/F-23B/Shapes/F-23B.lods": "08f98c287a79b19ce2eec9b2189320970d64e795af53b1cfab35f5a0c1e9173b",
-    "Mods/aircraft/F-23B/UnitPayloads/F-23B.lua": "46b0fd00706469ad17d700d765aad1a728e7fcf0bafadf3a4a172d5106ae47e2",
     "native/force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
     "native/force-bridge/generate_forwarding.py": "828893127125615d646506e115d51e7db66fd2e2369fa00fa7e11f6be06638e2",
     "native/force-bridge/ground_config.lua": "1536a0a942724278d3d63f53e428d56911f3e79d626a62371fa7bbd823fcfbf6",
@@ -32,11 +31,12 @@
     "bridge_sha256": "67b3bbc747fa44d8336d83e7ca87b30d1158ea0944c2895ac70c6226d3b20a96",
     "files": {
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
-      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "e9e61699701e5b4185fd6340c03ddf1387f80206314a658ccae54d08c427e513",
+      "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f28ded76d87cf9dbf88afa8a312aca8ff06e778651d6656fe1148a4d4a9ef266",
       "Mods/aircraft/F-23B-Player/Input/F-23B/bridge_profile.lua": "b6c4916ada4ffa64eece662b62a7a0f3ad543bf40973528309c59f47f7173f59",
       "Mods/aircraft/F-23B-Player/Input/F-23B/joystick/default.lua": "a7068a0ec39a725d01bee5452daaba963109965637848aee4dbf6baa4df547bf",
       "Mods/aircraft/F-23B-Player/Input/F-23B/keyboard/default.lua": "0c37994997d0c7bfbb3e6b4a84f0cf31be9aa0d7d381004943afcfc53e00c08f",
-      "Mods/aircraft/F-23B/F-23B.lua": "8fc89bcc88805059533b7f57c806ff637c617e7f91026ce0e9aaede51b749643",
+      "Mods/aircraft/F-23B/F-23B.lua": "4024ae0ed728c71a38f1183c0072d6b95b88a1fdcccdc95d3000c4962f2eef4c",
+      "Mods/aircraft/F-23B/UnitPayloads/F-23B.lua": "0dba96363b8accc320033b0bb475421d620d5cef83712ae941499e40aea1daae",
       "Mods/aircraft/F-23B/Weapons/F23B_AGM88G.lua": "a3d6b9fb519e139e96200acd3fe2fef6fcc0489dd75bdf6c01d66b73678a01bc",
       "Mods/aircraft/F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
       "native/flight-core/CMakeLists.txt": "a9ac372c1fcb8cccba0025a17c53806ce73493edb451e21735683a3d899e7a5a",
@@ -72,10 +72,10 @@
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
       "native/force-bridge/telemetry.hpp": "4d38374f601ae302bf9ba7b99c941ac0b999fe400f6cbeb85f4b258142ca7d8c",
-      "native/radar-helper/PayloadAlias.h": "9d1c67b9722c881cbbf3b2d47d0c2968866344954ca91b1df7e59f147111e64e",
-      "native/radar-helper/PayloadAlias_test.cpp": "4bc6c5687f85d6cf7268a82ba1ac29fc1ef814035941c43ec5d21fd77fef202f",
+      "native/radar-helper/PayloadAlias.h": "78bff1c90bc9b3671740209122a57cb63781d29e7063ac3007dc880959efce05",
+      "native/radar-helper/PayloadAlias_test.cpp": "2aa0197bee2eb8bd68da1dfab62883f74b88111d6cebabc94eaf38b59aaa24dd",
       "native/radar-helper/Radar.cpp": "921b3f4cc7bc887ad15f5d51f8ce58dc20d0a164126588d2af639b631d1a72a2",
-      "tests/lua/exterior_visual_adapter_spec.lua": "993ca4ca0555e454cd1cd22e8de0db4c410c94ecbdc46691c5761ee150533f89",
+      "tests/lua/exterior_visual_adapter_spec.lua": "b8f6dc3967ae5b79f26488eed372e10359278c70c10dd9274cf472445cbe4d3c",
       "tests/lua/input_bridge_profile_spec.lua": "46c9f145451a59afea7fdcfeaab48434179ff19c0b7d73172b026fcb53061ca1",
       "tools/blender/build_agm88g_model.py": "752b8b7f7947ebf68265a3873f1090c04787a8e45a0fba127cf956c3a7802b8b",
       "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md": "3f90ab7409f0a151abc6159771bd0ee2b115e95d738fb8101291b6c514f10708",
@@ -91,6 +91,6 @@
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_MALICE.json": "5805747332ff0c7d24c77c83d846ea6b89e5d3c4dc1e59600450267885668b1c",
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13.md": "681113778a69db826f02ac8ada9cb31efe10557a9644be3d12945e2b62c6c609"
     },
-    "helper_sha256": "62b62f2a2c4a4de1e3186eb37c04bba98953d11a897f704a06595de7ec6f0ef6"
+    "helper_sha256": "150396458eb314969f64153565ae941919703c5b8fe7661c6769d653c46e790b"
   }
 }

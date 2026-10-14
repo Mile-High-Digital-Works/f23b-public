@@ -13,13 +13,17 @@ Fuel consumption now follows applied thrust; the dry/afterburner check was withi
 Eighteen regional contact shells replace the single airframe shell. Wheels and
 ground lines retain their verified geometry. Wing and fin damage now reduce the corresponding lift and control authority. A named left outer-wing hit reached the core and produced a rolling moment toward the damaged side. Other regions remain unflown.
 
-AGM-88G AARGM-ER is a fictional project HARM for main-bay stations 3, 4 and 6.
+AGM-88G AARGM-ER is a fictional project HARM for the three roof trapezes: stations 2, 3 and 7.
 It uses a project-original compact model, stock HARM seeker behavior and explicit project performance factors.
-The new visual is 10.43 ft long with a 7.5-inch body; three stores clear the main bay by at least two inches.
-Project-HARM carriers deploy before consent and retract before door closure. DCS deployment remains unverified.
-The existing A/G Weapon Release control opens the bay, sends one release and closes it.
-Stock and project HARM each recorded one TOO-guided emitter hit from station 3.
-Station 4/6 releases, PB/SP and the maximum envelope remain unverified.
+The visual is 10.43 ft long with a 7.5-inch body.
+Each main bay door now carries one MALICE (stations 4 and 6) and one Block II rail (stations 1 and 9).
+The doors open 150 degrees. The door missiles swing clear of the bay before the trapezes lower the HARMs.
+The centre trapeze (station 2) also accepts one MALICE for the three-MALICE loadout.
+The new SEAD preset loads three HARMs, two MALICE and two Block II.
+The existing A/G Weapon Release control opens the bay, lowers the HARMs, sends one release and closes the bay.
+Two recorded flights fired three HARMs, three MALICE and two Block II from these stations. Each store left from its displayed position.
+The HARM and MALICE shots hit their targets. PB/SP modes and the maximum HARM envelope remain unverified.
+A mission that loaded MALICE on station 3 must move that MALICE to station 2.
 
 MALICE retains motor C and its 58.7-mile fixture result. Its long shot remains open.
 Block II does not lock other air-to-air missiles. With a designated hostile aircraft it locks only that aircraft.

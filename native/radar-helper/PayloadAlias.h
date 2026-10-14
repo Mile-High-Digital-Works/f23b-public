@@ -121,10 +121,11 @@ inline bool sameMissileFamily(const WsType& type, const AliasPair& pair) {
     return type.level1 == 4 && type.level2 == 4 && type.level3 == pair.family;
 }
 
-// Native payload indices are zero-based. Only the three project-HARM bay
-// stations may drive a carrier; stock weapons and the A/A families never do.
+// Native payload indices are zero-based. Only the three roof trapeze stations
+// (Hornet stations 2, 3 and 7) may drive a carrier, and only for the project
+// HARM; stock weapons and the A/A families never do.
 inline unsigned projectHarmBayBit(int kind, int nativeStation) {
-    if (kind != 3 || (nativeStation != 2 && nativeStation != 3 && nativeStation != 5)) return 0;
+    if (kind != 3 || (nativeStation != 1 && nativeStation != 2 && nativeStation != 6)) return 0;
     return 1u << (nativeStation + 1);
 }
 

@@ -287,26 +287,26 @@ local aircraft = {
     -- F-23 bay geometry is retained, while logical station numbers and store
     -- classes follow the Hornet SMS contract. No CJS or protected ED file is
     -- copied; these CLSIDs resolve from the installed DCS database.
-    -- Connector attach offsets are the accepted values proven on the archived
-    -- F-15C-hosted build: AIM-9 left { -0.02, -0.043, 0 }, AIM-9 right
-    -- { -0.02, -0.047, 0 }, AIM-120 stations { 0.15, -0.06, 0 }. No weapon
-    -- visibility arguments and neutral coffin roots. The Hornet-hosted EDM
-    -- exports native Pylon aliases at the exact accepted connector frames.
-    -- Its fuselage stations otherwise retain the Hornet cheek-launch vectors,
-    -- so all three internal AMRAAM stations explicitly eject straight down.
-    -- The accepted descriptor also proves the DCS launch methods: the two
-    -- AIM-9 stations are rails (0), while the three AIM-120 stations are
-    -- catapult/ejectors (1). Type 2 is a hatch launcher and made the current
-    -- Hornet derivative fire stores with the wrong mechanism.
+    -- October 13 bay (owner design): three roof trapezes carry the project HARM
+    -- on stations 2, 3 and 7. Each bay door carries one MALICE (stations 4, 6)
+    -- and one Block II rail (stations 1, 9). The doors open 150 degrees, so the
+    -- door stores swing clear of the trapeze path. The centre trapeze also takes
+    -- one MALICE for the three-MALICE loadout.
+    -- The Hornet addresses a station frame by its connector name, so each
+    -- station uses the connector with its own number.
+    -- A store's origin sits at the connector plus attach_point_position. DCS
+    -- consumes attach_point_position from the store record, not from the pylon
+    -- options table. The pylon coordinates are the release positions with the
+    -- doors open and the trapezes lowered.
+    -- The AIM-9 stations are rails (0). The other stations are ejectors (1)
+    -- with an aircraft-frame eject_dir straight down; the Hornet cheek-launch
+    -- vectors are not valid in this bay. Type 2 is a hatch launcher and fired
+    -- stores with the wrong mechanism.
     pylons_enumeration = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 },
     Pylons = {
-        -- Keep Hornet SMS station numbers, but retain the accepted F-15-hosted
-        -- native connector alias, per-store offset and launch method at each
-        -- physical bay location. DCS consumes attach_point_position from the
-        -- store record, not from the pylon options table.
-        pylon(1, 0, 3.16, -1.72, -0.88, {
-            -- Preserve the exposed zero-argument reference during native IR
-            -- initialization. The player adapter stows it after initialization.
+        -- Door rail, port. Preserve the exposed zero-argument reference during native IR
+        -- initialization. The player adapter stows it after initialization.
+        pylon(1, 0, 3.44, -1.43, -0.80, {
             connector = "Pylon1", use_full_connector_position = true
         }, {
             { CLSID = "<CLEAN>" },
@@ -314,11 +314,30 @@ local aircraft = {
               attach_point_position = { -0.02, -0.043, 0.0 },
               Cx_gain_empty = 0.0, Cx_gain_item = 0 }
         }),
-        pylon(2, 2, 0.0, 0.0, 0.0, {
-            connector = "disable", DisplayName = _("UNUSED")
+        -- Centre roof trapeze.
+        pylon(2, 1, 3.15, -1.23, 0.0, {
+            connector = "Pylon2", use_full_connector_position = true,
+            eject_dir = { 0.0, -1.0, 0.0 }
         }, {
-            { CLSID = "<CLEAN>" }
+            { CLSID = "<CLEAN>" },
+            { CLSID = "{F23B-AGM88G}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
+              attach_point_position = { 0.15, -0.06, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{F23B-AIM424-MALICE}",
+              attach_point_position = { 0.15, -0.095, 0.0 },
+              forbidden = {
+                  { station = 4, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
+                  { station = 6, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
+              },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+              attach_point_position = { 0.15, -0.085, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 }
         }),
+        -- Port roof trapeze.
         pylon(3, 1, 3.15, -1.16, -0.38, {
             connector = "Pylon3", use_full_connector_position = true,
             eject_dir = { 0.0, -1.0, 0.0 }
@@ -329,39 +348,23 @@ local aircraft = {
               Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
               attach_point_position = { 0.15, -0.06, 0.0 },
-              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
-            { CLSID = "{F23B-AIM424-MALICE}",
-              attach_point_position = { -0.105, 0.06, 0.0 },
-              forbidden = {
-                  { station = 4, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
-                  { station = 6, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
-              },
-              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
-            { CLSID = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
-              attach_point_position = { 0.15, -0.06, 0.0 },
               Cx_gain_empty = 0.0, Cx_gain_item = 0 }
         }),
-        pylon(4, 1, 3.15, -1.23, 0.0, {
+        -- Port door mount. The connector is at the MALICE centre and moves with the door.
+        pylon(4, 1, 2.72, -1.60, -0.97, {
             connector = "Pylon4", use_full_connector_position = true,
             eject_dir = { 0.0, -1.0, 0.0 }
         }, {
             { CLSID = "<CLEAN>" },
-            { CLSID = "{F23B-AGM88G}",
-              attach_point_position = { 0.15, -0.06, 0.0 },
-              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
-            { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
-              attach_point_position = { 0.15, -0.06, 0.0 },
-              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{F23B-AIM424-MALICE}",
-              -- Uniform 75% visual scale clears three stores and their ejection paths.
-              attach_point_position = { -0.105, 0.06, 0.0 },
+              attach_point_position = { 0.0, 0.0, 0.0 },
               forbidden = {
-                  { station = 3, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
+                  { station = 2, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
                   { station = 6, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
               },
               Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
-              attach_point_position = { 0.15, -0.06, 0.0 },
+              attach_point_position = { 0.58, -0.02, 0.0 },
               Cx_gain_empty = 0.0, Cx_gain_item = 0 }
         }),
         pylon(5, 2, 0.0, 0.0, 0.0, {
@@ -369,8 +372,26 @@ local aircraft = {
         }, {
             { CLSID = "<CLEAN>" }
         }),
-        pylon(6, 1, 3.15, -1.16, 0.38, {
+        -- Starboard door mount.
+        pylon(6, 1, 2.72, -1.60, 0.96, {
             connector = "Pylon6", use_full_connector_position = true,
+            eject_dir = { 0.0, -1.0, 0.0 }
+        }, {
+            { CLSID = "<CLEAN>" },
+            { CLSID = "{F23B-AIM424-MALICE}",
+              attach_point_position = { 0.0, 0.0, 0.0 },
+              forbidden = {
+                  { station = 2, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
+                  { station = 4, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
+              },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
+            { CLSID = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
+              attach_point_position = { 0.58, -0.02, 0.0 },
+              Cx_gain_empty = 0.0, Cx_gain_item = 0 }
+        }),
+        -- Starboard roof trapeze.
+        pylon(7, 1, 3.15, -1.16, 0.38, {
+            connector = "Pylon7", use_full_connector_position = true,
             eject_dir = { 0.0, -1.0, 0.0 }
         }, {
             { CLSID = "<CLEAN>" },
@@ -379,29 +400,15 @@ local aircraft = {
               Cx_gain_empty = 0.0, Cx_gain_item = 0 },
             { CLSID = "{B06DD79A-F21E-4EB9-BD9D-AB3844618C93}",
               attach_point_position = { 0.15, -0.06, 0.0 },
-              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
-            { CLSID = "{F23B-AIM424-MALICE}",
-              attach_point_position = { -0.105, 0.06, 0.0 },
-              forbidden = {
-                  { station = 3, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
-                  { station = 4, loadout = { "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}" } },
-              },
-              Cx_gain_empty = 0.0, Cx_gain_item = 0 },
-            { CLSID = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}",
-              attach_point_position = { 0.15, -0.06, 0.0 },
               Cx_gain_empty = 0.0, Cx_gain_item = 0 }
-        }),
-        pylon(7, 2, 0.0, 0.0, 0.0, {
-            connector = "disable", DisplayName = _("UNUSED")
-        }, {
-            { CLSID = "<CLEAN>" }
         }),
         pylon(8, 2, 0.0, 0.0, 0.0, {
             connector = "disable", DisplayName = _("UNUSED")
         }, {
             { CLSID = "<CLEAN>" }
         }),
-        pylon(9, 0, 3.16, -1.72, 0.88, {
+        -- Door rail, starboard.
+        pylon(9, 0, 3.44, -1.43, 0.78, {
             connector = "Pylon9", use_full_connector_position = true
         }, {
             { CLSID = "<CLEAN>" },

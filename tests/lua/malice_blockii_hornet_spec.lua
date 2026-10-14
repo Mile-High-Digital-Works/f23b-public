@@ -66,12 +66,13 @@ for n,p in ipairs(aircraft.Pylons) do
         allowed[n][choice.CLSID]=true
         assert(choice.CLSID~='{F23B-AIM260A}', 'obsolete B-slot payload must not silently fire MALICE')
         if choice.CLSID==malice then
-            assert((n==3 or n==4 or n==6) and p[2]==1 and p[6].eject_dir[2]==-1)
-            assert(choice.attach_point_position[1]==-.105 and choice.attach_point_position[2]==.06)
+            assert((n==2 or n==4 or n==6) and p[2]==1 and p[6].eject_dir[2]==-1)
+            if n==2 then assert(choice.attach_point_position[1]==.15 and choice.attach_point_position[2]==-.095)
+            else assert(choice.attach_point_position[1]==0 and choice.attach_point_position[2]==0) end
             assert(#choice.forbidden==2)
             local excluded={}
             for _,rule in ipairs(choice.forbidden) do
-                assert(rule.station~=n and (rule.station==3 or rule.station==4 or rule.station==6))
+                assert(rule.station~=n and (rule.station==2 or rule.station==4 or rule.station==6))
                 assert(not excluded[rule.station]); excluded[rule.station]=true
                 assert(#rule.loadout==1 and rule.loadout[1]==amraam, 'must allow neighboring MALICE')
             end
@@ -79,7 +80,11 @@ for n,p in ipairs(aircraft.Pylons) do
         if choice.CLSID==ir then assert((n==1 or n==9) and p[2]==0) end
     end
 end
-for _,n in ipairs({3,4,6}) do assert(allowed[n][amraam] and allowed[n][malice]) end
+for _,n in ipairs({2,4,6}) do assert(allowed[n][amraam] and allowed[n][malice]) end
+local harm='{F23B-AGM88G}'
+for _,n in ipairs({2,3,7}) do assert(allowed[n][harm]) end
+for _,n in ipairs({3,7}) do assert(not allowed[n][malice] and not allowed[n][amraam]) end
+for _,n in ipairs({4,6}) do assert(not allowed[n][harm]) end
 local function check(p)
     local counts={}; local stations={}
     for index,row in pairs(p.pylons) do
@@ -95,6 +100,8 @@ local presets=dofile(root..'/UnitPayloads/F-23B.lua').payloads
 assert(check(presets[1])[malice]==3 and check(presets[1])[ir]==2)
 assert(check(presets[2])[amraam]==3 and check(presets[2])[ir]==2)
 assert(check(presets[3])[ir]==2)
+local sead=check(presets[4])
+assert(sead[harm]==3 and sead[malice]==2 and sead[ir]==2)
 if arg[1] then
     dofile(arg[1]); local players=0
     for _,c in pairs(mission.coalition) do

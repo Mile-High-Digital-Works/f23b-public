@@ -84,13 +84,13 @@ int main() {
         check(loaderPathEquals(path, std::wcslen(path), expected, std::wcslen(expected)), "allocation-free loader path comparison");
     check(!loaderPathEquals(other, std::wcslen(other), expected, std::wcslen(expected)), "loader rejects another path");
 
-    check(projectHarmBayBit(3, 2) == 8 && projectHarmBayBit(3, 3) == 16
-        && projectHarmBayBit(3, 5) == 64, "project HARM maps to physical bay stations 3/4/6");
+    check(projectHarmBayBit(3, 1) == 4 && projectHarmBayBit(3, 2) == 8
+        && projectHarmBayBit(3, 6) == 128, "project HARM maps to roof trapeze stations 2/3/7");
     for (int station = 0; station < 9; ++station) {
         for (int kind = 0; kind < 3; ++kind)
             check(projectHarmBayBit(kind, station) == 0, "stock and A/A weapons cannot drive HARM carriers");
-        if (station != 2 && station != 3 && station != 5)
-            check(projectHarmBayBit(3, station) == 0, "a non-bay station cannot drive a HARM carrier");
+        if (station != 1 && station != 2 && station != 6)
+            check(projectHarmBayBit(3, station) == 0, "a station without a roof trapeze cannot drive a HARM carrier");
     }
     if (!failures) std::printf("PayloadAlias tests PASS\n");
     return failures ? 1 : 0;

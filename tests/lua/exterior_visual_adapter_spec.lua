@@ -122,7 +122,10 @@ function make_default_activity(seconds)
     activity = seconds
 end
 
-function list_indication()
+-- The real cockpit: display 1 is the HUD. The HARM format with its station text is on a DDI or the AMPCD.
+local display_text = {}
+function list_indication(id)
+    if id ~= nil and id ~= 1 then return display_text[id] or "" end
     return hud_text
 end
 
@@ -177,6 +180,7 @@ local function fresh_adapter(initial_hud, action_return_value, initial_carrier)
     forwarded = {}
     logs = {}
     hud_text = initial_hud or record("UNRELATED", "")
+    display_text = {}
     persist_writes = true
     activity = nil
     requested_device = nil
@@ -192,7 +196,7 @@ local function fresh_adapter(initial_hud, action_return_value, initial_carrier)
             command = command, value = command_value, animated = animated,
             main_bay = value(MAIN_BAY), gun_door = value(GUN_DOOR),
             ir_carrier = (1.0 - value(IR_CARRIER)),
-            harm3 = value(1018), harm4 = value(1019), harm6 = value(1020),
+            harm3 = value(1018), harm2 = value(1019), harm7 = value(1020),
         }
         return clickable_return_value
     end
@@ -650,13 +654,14 @@ check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
     "release outside A/G was not forwarded unchanged")
 print("PASS: A/G tap/hold opens bay, releases once and closes; mode exit cancels; native binding preserved")
 
--- The exact project payload identity enables the existing three trapezes.
+-- The exact project payload identity enables the three roof trapezes (stations 2, 3, 7).
 -- Publish their deployed poses before consent, and retract before door closure.
 package.loadlib = mock_loadlib
 for _, held in ipairs({false, true}) do
-    fresh_adapter(record("HARM_Station", "STA 3"), false)
+    fresh_adapter(nil, false)
+    display_text[held and 2 or 3] = record("HARM_Station", "STA 3")
     native_mode = {[47]=0,[48]=1}
-    project_harm_mask = 8 + 16 + 64
+    project_harm_mask = 4 + 8 + 128
     SetCommand(commands.WEAPON_RELEASE, 1)
     if not held then SetCommand(commands.WEAPON_RELEASE, 0) end
     advance(19)
@@ -664,10 +669,13 @@ for _, held in ipairs({false, true}) do
     advance(19)
     check(value(1018) > 0 and value(1018) < 1 and forwarded_count(3003, 1) == 0,
         "native release escaped before full trapeze travel")
-    update()
+    for tick=1,40 do
+        if forwarded_count(3003, 1) == 1 then break end
+        update()
+    end
     local call = forwarded[#forwarded]
     check(call.command == 3003 and call.value == 1 and call.main_bay == 1
-        and near(call.harm3, 1) and near(call.harm4, 1) and near(call.harm6, 1),
+        and near(call.harm3, 1) and near(call.harm2, 1) and near(call.harm7, 1),
         "native HARM consent did not observe all published carrier endpoints")
     local retracting = false
     for tick=1,250 do
@@ -685,23 +693,39 @@ for _, held in ipairs({false, true}) do
 end
 -- A stock HARM on the selected station must keep the prior native route,
 -- even when a project HARM occupies a different station.
-fresh_adapter(record("HARM_Station", "STA 3"))
-native_mode = {[47]=0,[48]=1}; project_harm_mask = 16
+fresh_adapter(); display_text[2] = record("HARM_Station", "STA 3")
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 4
 SetCommand(commands.WEAPON_RELEASE, 1); SetCommand(commands.WEAPON_RELEASE, 0)
 advance(20)
 check(forwarded_count(3003, 1) == 1 and value(1018) == 0 and value(1019) == 0,
     "project carrier logic changed the selected stock HARM")
-fresh_adapter(record("HARM_Station", "STA 3"))
-native_mode = {[47]=0,[48]=1}; project_harm_mask = 8 + 16 + 64
+fresh_adapter(); display_text[2] = record("HARM_Station", "STA 3")
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 4 + 8 + 128
 SetCommand(commands.WEAPON_RELEASE, 1); advance(28)
 native_mode = {[47]=0,[48]=0}; advance(100)
 check(forwarded_count(3003, 1) == 0 and value(1018) == 0 and value(MAIN_BAY) == 0,
     "mode exit left a pending HARM or an extended trapeze")
 print("PASS: project HARM identity; doors open, trapezes deploy, consent, retract, close; stock route preserved")
-fresh_adapter(record("HARM_Station", "STA 3"))
+fresh_adapter(); display_text[2] = record("HARM_Station", "STA 3")
 native_mode = {[47]=0,[48]=1}; project_harm_mask = 8
 SetCommand(commands.WEAPON_RELEASE, 1); advance(28)
-hud_text = record("HARM_Station", "STA 4"); advance(100)
+display_text[2] = record("HARM_Station", "STA 2"); advance(100)
 check(forwarded_count(3003, 1) == 0 and value(1018) == 0 and value(MAIN_BAY) == 0,
     "pending project consent fired after selection changed to a stock HARM")
+-- The doors-1 flight: station text on the HUD alone must not be read; the HUD never carries it.
+fresh_adapter(record("HARM_Station", "STA 7")); display_text[2] = record("HARM_Station", "STA 3")
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 8
+SetCommand(commands.WEAPON_RELEASE, 1); SetCommand(commands.WEAPON_RELEASE, 0); advance(45)
+check(value(1018) > 0, "the station text on the left DDI did not select the trapeze route")
+-- No display shows the HARM format: each loaded project HARM still uses its trapeze.
+fresh_adapter()
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 4 + 128
+SetCommand(commands.WEAPON_RELEASE, 1); SetCommand(commands.WEAPON_RELEASE, 0); advance(45)
+check(value(1019) > 0 and value(1020) > 0 and value(1018) == 0,
+    "project HARMs did not use their trapezes without a HARM format on a display")
+fresh_adapter()
+native_mode = {[47]=0,[48]=1}; project_harm_mask = 0
+SetCommand(commands.WEAPON_RELEASE, 1); SetCommand(commands.WEAPON_RELEASE, 0); advance(45)
+check(forwarded_count(3003, 1) == 1 and value(1018) == 0 and value(1019) == 0 and value(1020) == 0,
+    "a release without a project HARM moved a trapeze")
 package.loadlib = original_loadlib

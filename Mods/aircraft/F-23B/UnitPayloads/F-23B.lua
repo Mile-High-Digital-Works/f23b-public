@@ -1,8 +1,9 @@
 -- SPDX-License-Identifier: MIT
--- Hornet-recognized logical stations placed at the five F-23 bay connectors.
+-- Hornet-recognized logical stations: door rails 1/9, door mounts 4/6, roof trapezes 2/3/7.
 local AIM9X = "{F23B-AIM9X-BLOCKII}"
 local AIM120C = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}"
 local MALICE = "{F23B-AIM424-MALICE}"
+local HARM = "{F23B-AGM88G}"
 local tasks = { [1] = 11, [2] = 10, [3] = 18, [4] = 19 }
 
 local unitPayloads = {
@@ -12,7 +13,7 @@ local unitPayloads = {
             ["name"] = "Air Superiority (2x AIM-9X Block II + 3x AIM-424 MALICE)",
             ["pylons"] = {
                 [1] = { ["CLSID"] = AIM9X, ["num"] = 1 },
-                [2] = { ["CLSID"] = MALICE, ["num"] = 3 },
+                [2] = { ["CLSID"] = MALICE, ["num"] = 2 },
                 [3] = { ["CLSID"] = MALICE, ["num"] = 4 },
                 [4] = { ["CLSID"] = MALICE, ["num"] = 6 },
                 [5] = { ["CLSID"] = AIM9X, ["num"] = 9 }
@@ -23,7 +24,7 @@ local unitPayloads = {
             ["name"] = "Air Superiority (2x AIM-9X Block II + 3x AIM-120C)",
             ["pylons"] = {
                 [1] = { ["CLSID"] = AIM9X, ["num"] = 1 },
-                [2] = { ["CLSID"] = AIM120C, ["num"] = 3 },
+                [2] = { ["CLSID"] = AIM120C, ["num"] = 2 },
                 [3] = { ["CLSID"] = AIM120C, ["num"] = 4 },
                 [4] = { ["CLSID"] = AIM120C, ["num"] = 6 },
                 [5] = { ["CLSID"] = AIM9X, ["num"] = 9 }
@@ -35,6 +36,19 @@ local unitPayloads = {
             ["pylons"] = {
                 [1] = { ["CLSID"] = AIM9X, ["num"] = 1 },
                 [2] = { ["CLSID"] = AIM9X, ["num"] = 9 }
+            },
+            ["tasks"] = tasks
+        },
+        [4] = {
+            ["name"] = "SEAD (2x AIM-9X Block II + 2x AIM-424 MALICE + 3x AGM-88G)",
+            ["pylons"] = {
+                [1] = { ["CLSID"] = AIM9X, ["num"] = 1 },
+                [2] = { ["CLSID"] = HARM, ["num"] = 2 },
+                [3] = { ["CLSID"] = HARM, ["num"] = 3 },
+                [4] = { ["CLSID"] = MALICE, ["num"] = 4 },
+                [5] = { ["CLSID"] = MALICE, ["num"] = 6 },
+                [6] = { ["CLSID"] = HARM, ["num"] = 7 },
+                [7] = { ["CLSID"] = AIM9X, ["num"] = 9 }
             },
             ["tasks"] = tasks
         }
