@@ -14,7 +14,7 @@ Eighteen regional contact shells replace the single airframe shell. Wheels and
 ground lines retain their verified geometry. Wing and fin damage now reduce the corresponding lift and control authority. A named left outer-wing hit reached the core and produced a rolling moment toward the damaged side. Other regions remain unflown.
 
 AGM-88G AARGM-ER is a fictional project HARM for the three roof trapezes: stations 2, 3 and 7.
-It uses a project-original compact model, stock HARM seeker behavior and explicit project performance factors.
+It uses a project-original compact model, native HARM guidance and explicit project performance factors.
 The visual is 10.43 ft long with a 7.5-inch body.
 Each main bay door now carries one MALICE (stations 4 and 6) and one Block II rail (stations 1 and 9).
 The doors open 150 degrees. The door missiles swing clear of the bay before the trapezes lower the HARMs.
@@ -23,6 +23,7 @@ The new SEAD preset loads three HARMs, two MALICE and two Block II.
 The existing A/G Weapon Release control opens the bay, lowers the HARMs, sends one release and closes the bay.
 Two recorded flights fired three HARMs, three MALICE and two Block II from these stations. Each store left from its displayed position.
 The HARM and MALICE shots hit their targets. PB/SP modes and the maximum HARM envelope remain unverified.
+A level release at 35,000 ft and Mach 1.2 hit an emitter 67.93 miles away in 214.80 seconds. Peak speed was 3,327 knots. Speed fell below 600 knots after 51.87 miles flown. An 85-mile hit and faster turning remain unverified. TOO handoff was lost before the 45-degree turn-test release.
 A mission that loaded MALICE on station 3 must move that MALICE to station 2.
 
 MALICE retains motor C and its 58.7-mile fixture result. Its long shot remains open.

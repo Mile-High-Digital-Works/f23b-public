@@ -24,6 +24,9 @@ Open it in a browser and select Print.
 An earlier MALICE build recorded a 336-mile A-50 kill with continuing support. Motor C has a 58.7-mile fixture hit; its long shot remains unverified. Range depends on launch height, speed, target motion and support.
 MALICE, project HARM and Block II share a subdued charcoal-grey finish. Stock DCS missiles retain their normal colours. The new finish and original Block II visual await DCS confirmation.
 Project HARM retains the native cockpit label and uses its own compact model: 10.43 ft long with a 7.5-inch body. Three fit the roof trapezes, stations 2/3/7. The trapezes lower the project HARMs before release. Each bay door carries one MALICE (stations 4/6) and one Block II; a third MALICE fits station 2. The doors open 150 degrees, so the door missiles swing clear of the HARMs. TOO guidance and hits are recorded from all three HARM stations; PB/SP and the maximum envelope are unverified.
+
+A level release at 35,000 ft and Mach 1.2 hit an emitter 67.93 miles away in 214.80 seconds. Peak speed was 3,327 knots. Speed fell below 600 knots after 51.87 miles flown. An 85-mile hit and faster turning remain unverified. TOO handoff was lost before the 45-degree turn-test release.
+
 The bay sequence also operates the gun door. Do not bypass it with donor trigger mappings.
 If **weapon and radar connection OFF** appears, get a compatible release before using custom weapons or SA 640.
 

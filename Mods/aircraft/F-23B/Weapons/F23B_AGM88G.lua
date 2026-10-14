@@ -1,7 +1,7 @@
 -- SPDX-License-Identifier: MIT
 -- Project fictional HARM. Numeric baseline captured from installed DCS 2.9.30.28738
 -- during harm-1-2: AGM_88 rockets record 21 and effective server descriptor.
--- Every omitted multiplier is 1.0; seeker, emitter filters, warheads and fuze are stock.
+-- Every omitted multiplier is 1.0; emitter filters, warheads and fuze are stock.
 -- See docs/evidence/F23B_AGM88G_VALUE_ORIGIN_2026-10-12.md.
 local weapon = {
     ["Cx_pil"]=4,
@@ -1617,8 +1617,8 @@ local weapon = {
 }
 
 -- PROJECT FACTORS: smaller simulated body, stronger motor, longer envelope,
--- higher load limit. The project-original visual uses the same 75% body scale.
-local SIZE, MASS, MOTOR, RANGE, LOAD = 0.75, 0.75, 1.25, 1.4, 1.5
+-- higher load limit and lift slope. The project-original visual uses the same 75% body scale.
+local SIZE, MASS, MOTOR, RANGE, LOAD, TURN = 0.75, 0.75, 1.25, 1.4, 1.5, 1.64
 local SHAPE = "F23B_AGM88G"
 weapon.category = CAT_MISSILES
 weapon.name = "F23B_AGM88G"
@@ -1635,6 +1635,10 @@ weapon.fm.mass = weapon.fm.mass * MASS
 weapon.fm.caliber = weapon.fm.caliber * SIZE
 weapon.fm.L = weapon.fm.L * SIZE
 weapon.fm.S = weapon.fm.S * SIZE * SIZE
+-- PROJECT RULE: about 1.5 times stock lift per dry mass at the same Mach.
+for _,key in ipairs({"Cya", "Cza"}) do
+    for i,v in ipairs(weapon.fm[key]) do weapon.fm[key][i] = v * TURN end
+end
 for _,key in ipairs({"Ix", "Iy", "Iz"}) do weapon.fm[key] = weapon.fm[key] * MASS * SIZE * SIZE end
 weapon.boost.impulse = weapon.boost.impulse * MOTOR
 weapon.march.impulse = weapon.march.impulse * MOTOR
@@ -1642,6 +1646,12 @@ weapon.march.work_time = weapon.march.work_time * 1.2
 weapon.t_marsh = weapon.t_marsh * 1.2
 weapon.D_max = weapon.D_max * RANGE
 weapon.Range_max = weapon.Range_max * RANGE
+-- Seeker range and guidance-time limits follow the declared range factor.
+-- harm-range-1 attempt 1: no handoff; owner-authorized attempt-2 factor.
+weapon.seeker.sens_far_dist = weapon.seeker.sens_far_dist * 1.6
+weapon.seeker.op_time = weapon.seeker.op_time * RANGE
+weapon.autopilot.op_time = weapon.autopilot.op_time * RANGE
+weapon.seeker.pos_memory_time = weapon.seeker.pos_memory_time * RANGE
 weapon.v_mid = weapon.v_mid * MOTOR
 weapon.Mach_max = weapon.Mach_max * MOTOR
 weapon.Nr_max = weapon.Nr_max * LOAD

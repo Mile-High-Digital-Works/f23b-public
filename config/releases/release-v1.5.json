@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "F-23B-v1.5",
-  "description": "Private v1.5 candidate: three HARM roof trapezes, one MALICE on each main bay door, 150-degree door travel; project-original charcoal-grey missile visuals; weapon performance retained.",
+  "description": "Private v1.5 candidate: door-carried MALICE bay, compact project HARM with increased lift slope and seeker limits; recorded 3,327-knot peak and 67.93-mile emitter hit; 85-mile range and turning qualification not proven.",
   "dcs_version": "2.9.30.28738",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
@@ -69,7 +69,7 @@
     "F-23B/Theme/icon_active.png": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01",
     "F-23B/Theme/icon_select.png": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01",
     "F-23B/UnitPayloads/F-23B.lua": "0dba96363b8accc320033b0bb475421d620d5cef83712ae941499e40aea1daae",
-    "F-23B/Weapons/F23B_AGM88G.lua": "a3d6b9fb519e139e96200acd3fe2fef6fcc0489dd75bdf6c01d66b73678a01bc",
+    "F-23B/Weapons/F23B_AGM88G.lua": "f95a8b3b5c3e38b0bd01bb0b92927c56dc29c94e54a0b10cb4643ac6eec66e1a",
     "F-23B/Weapons/F23B_AIM424_MALICE.lua": "28016ff03e35f5f78fb9ed5ec6e054bf69f9192bb7d4710694091185fd3c5dc9",
     "F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "a6832ebc924ddf746fdd9c51552f3301a95fb7f9e17f237d6366bd15ffc64f57",
     "F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
