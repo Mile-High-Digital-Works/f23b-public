@@ -7,16 +7,13 @@
 local UPDATE_STEP = 0.01
 local HUD_SAMPLE_INTERVAL_TICKS = 5
 local HUD_INDICATION_ID = 1
--- The HARM format shows the selected station ("STA n") on the display that carries it:
--- left DDI, right DDI or AMPCD. The HUD does not carry this text (doors-1 flight, October 13).
-local HARM_STATION_INDICATION_IDS = { 2, 3, 4 }
 
 local MAIN_BAY_ARGUMENT = 1009
 local GUN_DOOR_ARGUMENT = 1010
 local F23B_LEFT_NOZZLE_ARGUMENT = 1011
 local F23B_RIGHT_NOZZLE_ARGUMENT = 1012
 local IR_CARRIER_ARGUMENT = 1013
--- Roof trapezes by Hornet station: 3 port, 2 centre, 7 starboard.
+-- Roof trapezes by Hornet station: 3 port, 2 centre, 7 starboard. All three move together.
 local HARM_CARRIER_ARGUMENTS = { [3] = 1018, [2] = 1019, [7] = 1020 }
 local HARM_CARRIER_RATE = 2.6 -- PROJECT CHOICE: the earlier linear speed; 20-to-23-inch travel in 0.38 s.
 local LIGHT_BLACKOUT_ARGUMENT = 1021
@@ -87,8 +84,8 @@ local state = {
     native_release_down = false,
     release_remaining = 0.0,
     main_bay_hold = 0.0,
-    harm_station = nil,
-    harm_mask = 0,
+    loaded_harm_mask = 0,
+    release_in_ag = false,
     harm_carrier = 0.0,
     harm_carrier_owned = false,
     gun_effect_hold = 0.0,
@@ -191,30 +188,6 @@ local function indication_value(indication, element_name)
         if key == element_name then return value end
     end
     return nil
-end
-
-local function sample_harm_station()
-    state.harm_station = nil
-    if type(list_indication) ~= "function" then return end
-    for _, id in ipairs(HARM_STATION_INDICATION_IDS) do
-        local ok, indication = pcall(list_indication, id)
-        local text = ok and trim(indication_value(indication, "HARM_Station")) or nil
-        local station = text and tonumber(string.match(text, "STA%s+(%d+)")) or nil
-        if station then
-            state.harm_station = station
-            return
-        end
-    end
-end
-
--- The selected station decides the route when a display shows the HARM format.
--- With no HARM format on a display, each loaded project HARM uses its trapeze.
-local function project_harm_selected(mask)
-    if type(mask) ~= "number" or mask <= 0 then return false end
-    local station = state.harm_station
-    if station == nil then return true end
-    return HARM_CARRIER_ARGUMENTS[station] ~= nil
-        and math.floor(mask / (2 ^ station)) % 2 == 1
 end
 
 local function sample_hud()
@@ -350,11 +323,15 @@ function SetCommand(command, value)
     if command == bridge_commands.WEAPON_RELEASE then
         local _, air_to_ground = update_light_blackout()
         local pressed = value >= PRESS_THRESHOLD
-        if air_to_ground then
+        -- A/G releases, and any release with a project HARM aboard (HARM Pullback works in every
+        -- master mode), open the bay first. Nothing is read from the cockpit displays.
+        if air_to_ground or state.loaded_harm_mask > 0 then
             if pressed and not state.release_input then
                 state.release_pending = true
+                state.release_in_ag = air_to_ground
                 state.visual_probe_pending = true
-                note("sequenced A/G weapon-release request")
+                note("sequenced weapon-release request: A/G=" .. tostring(air_to_ground)
+                    .. " project HARM stations=" .. tostring(state.loaded_harm_mask))
             end
         elseif not state.release_pending and not state.native_release_down then
             forward_hornet(HORNET_WEAPON_RELEASE, value, "weapon-release")
@@ -426,7 +403,8 @@ end
 
 function update()
     local air_to_air, air_to_ground = update_light_blackout()
-    if not air_to_ground then
+    -- A master-mode change cancels a pending release and ends a held one.
+    if (state.release_pending or state.native_release_down) and state.release_in_ag ~= air_to_ground then
         state.release_pending = false
         state.release_remaining = 0.0
         end_native_release()
@@ -481,20 +459,11 @@ function update()
         and not ir_weapon and not gun_route
     local radar_target, target_side, cue_az, cue_el, cue_valid, harm_mask = update_radar_upgrade(
         air_to_air and not gun_route, ir_weapon and air_to_air)
-    if state.release_pending then sample_harm_station() end
-    if state.release_pending and state.harm_carrier_owned
-        and not project_harm_selected(harm_mask) then
-        state.release_pending = false
-        note("project HARM request cancelled: native selection changed before release")
-    end
-    -- The helper identifies the original payload types, before the Hornet alias.
-    -- A stock HARM or any A/A weapon must retain its existing release route.
-    if state.release_pending and not state.harm_carrier_owned
-        and project_harm_selected(harm_mask) then
-        state.harm_mask = harm_mask
+    state.loaded_harm_mask = type(harm_mask) == "number" and harm_mask or 0
+    -- With a project HARM aboard, every sequenced release lowers the three trapezes first.
+    if state.release_pending and not state.harm_carrier_owned and state.loaded_harm_mask > 0 then
         state.harm_carrier_owned = true
-        note("project HARM trapeze route: station=" .. tostring(state.harm_station)
-            .. " stations_mask=" .. tostring(harm_mask))
+        note("project HARM trapeze route: stations_mask=" .. tostring(state.loaded_harm_mask))
     end
     if ir_weapon and cue_valid and target_side == 2 then
         ir_seeker_azimuth:set(cue_az)
@@ -533,18 +502,15 @@ function update()
     write_argument(IR_CARRIER_ARGUMENT, 1.0)
 
     if state.harm_carrier_owned then
-        local carrier_target = air_to_ground and state.main_bay >= 0.999
+        local carrier_target = state.main_bay >= 0.999
             and (state.release_pending or state.native_release_down or state.main_bay_hold > 0.0)
             and 1.0 or 0.0
         state.harm_carrier = move_toward(state.harm_carrier, carrier_target, HARM_CARRIER_RATE)
-        for station, argument in pairs(HARM_CARRIER_ARGUMENTS) do
-            if math.floor(state.harm_mask / (2 ^ station)) % 2 == 1 then
-                write_argument(argument, state.harm_carrier)
-            end
+        for _, argument in pairs(HARM_CARRIER_ARGUMENTS) do
+            write_argument(argument, state.harm_carrier)
         end
         if carrier_target == 0.0 and state.harm_carrier == 0.0 then
             state.harm_carrier_owned = false
-            state.harm_mask = 0
         end
     end
 
@@ -554,7 +520,7 @@ function update()
             state.release_pending = false
             state.native_release_down = true
             state.release_remaining = AG_RELEASE_SECONDS
-            note("door locked open before A/G release: argument=1009")
+            note("door locked open before release: argument=1009")
         end
     end
     if state.release_remaining > 0.0 then

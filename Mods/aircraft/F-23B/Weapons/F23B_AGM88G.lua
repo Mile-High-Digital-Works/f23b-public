@@ -1616,7 +1616,7 @@ local weapon = {
     },
 }
 
--- PROJECT FACTORS: smaller simulated body, stronger motor, longer envelope,
+-- PROJECT FACTORS: smaller simulated body, stronger motor, longer guidance time,
 -- higher load limit and lift slope. The project-original visual uses the same 75% body scale.
 local SIZE, MASS, MOTOR, RANGE, LOAD, TURN = 0.75, 0.75, 1.25, 1.4, 1.5, 1.64
 local SHAPE = "F23B_AGM88G"
@@ -1644,11 +1644,9 @@ weapon.boost.impulse = weapon.boost.impulse * MOTOR
 weapon.march.impulse = weapon.march.impulse * MOTOR
 weapon.march.work_time = weapon.march.work_time * 1.2
 weapon.t_marsh = weapon.t_marsh * 1.2
-weapon.D_max = weapon.D_max * RANGE
-weapon.Range_max = weapon.Range_max * RANGE
--- Seeker range and guidance-time limits follow the declared range factor.
--- harm-range-1 attempt 1: no handoff; owner-authorized attempt-2 factor.
-weapon.seeker.sens_far_dist = weapon.seeker.sens_far_dist * 1.6
+-- PROJECT RULE (October 14): declared range, launch-zone tables and seeker distance stay stock, so AI,
+-- cockpit cues and the TOO page behave as with the Hornet's own HARM. The guidance time covers the
+-- recorded 215-second, 68-mile TOO flight.
 weapon.seeker.op_time = weapon.seeker.op_time * RANGE
 weapon.autopilot.op_time = weapon.autopilot.op_time * RANGE
 weapon.seeker.pos_memory_time = weapon.seeker.pos_memory_time * RANGE
@@ -1656,9 +1654,6 @@ weapon.v_mid = weapon.v_mid * MOTOR
 weapon.Mach_max = weapon.Mach_max * MOTOR
 weapon.Nr_max = weapon.Nr_max * LOAD
 weapon.autopilot.Areq_limit = weapon.autopilot.Areq_limit * LOAD
-for _,key in ipairs({"RmaxData", "RmaxData2", "LoftData", "LoftData2"}) do
-    for i,v in ipairs(weapon[key]) do weapon[key][i] = v * RANGE end
-end
 -- Visual exhaust origins follow the smaller body; motor values stay unchanged.
 for _,key in ipairs({"X_back", "Y_back", "Z_back"}) do weapon[key] = weapon[key] * SIZE end
 for _,motor in ipairs({weapon.boost, weapon.march}) do

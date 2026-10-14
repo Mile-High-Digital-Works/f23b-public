@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "name": "F-23B-v1.5",
-  "description": "Private v1.5 candidate: door-carried MALICE bay, compact project HARM with increased lift slope and seeker limits; recorded 3,327-knot peak and 67.93-mile emitter hit; 85-mile range and turning qualification not proven.",
+  "description": "Private v1.5 candidate: door-carried MALICE bay; compact project HARM with stock declared range and TOO detection; trapeze release in every view and master mode; recorded TOO hits at 23 and 68 miles.",
   "dcs_version": "2.9.30.28738",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
     "F-23B-Player/Cockpit/ExteriorVisuals/BuildInfo.lua": "ef2195296924f9762d962a2b50ecb18eada7f6eefdf1af3d08533865c414847f",
-    "F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f28ded76d87cf9dbf88afa8a312aca8ff06e778651d6656fe1148a4d4a9ef266",
+    "F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f0bd3bddd3f95accb9659662c4a47280e054ad69ad6f3a72fa484e282e6445ec",
     "F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "6b0b5bf2d0ea33678489716d06a4807c0b8915eec990be91668b600258967076",
     "F-23B-Player/Cockpit/ExteriorVisuals/device_init.lua": "ea83bca0fd4c71f30d31299df4fd5fdee005f6f01821225ec6c50d566046d28a",
     "F-23B-Player/Cockpit/ExteriorVisuals/mainpanel_init.lua": "97dfa1765db99940be84955b322d8fb286c04dfb316eb46d3a7debb81d674d18",
@@ -69,7 +69,7 @@
     "F-23B/Theme/icon_active.png": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01",
     "F-23B/Theme/icon_select.png": "3f996b733b358a19ac67b83f5e36b60820100ccb55109179dab075928e8b3f01",
     "F-23B/UnitPayloads/F-23B.lua": "0dba96363b8accc320033b0bb475421d620d5cef83712ae941499e40aea1daae",
-    "F-23B/Weapons/F23B_AGM88G.lua": "f95a8b3b5c3e38b0bd01bb0b92927c56dc29c94e54a0b10cb4643ac6eec66e1a",
+    "F-23B/Weapons/F23B_AGM88G.lua": "fad0e9273e6a7d8b64797abb0c8d4b109cd2c4c12ee9c251cab6792b8889c04c",
     "F-23B/Weapons/F23B_AIM424_MALICE.lua": "28016ff03e35f5f78fb9ed5ec6e054bf69f9192bb7d4710694091185fd3c5dc9",
     "F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "a6832ebc924ddf746fdd9c51552f3301a95fb7f9e17f237d6366bd15ffc64f57",
     "F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",

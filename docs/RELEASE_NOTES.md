@@ -20,9 +20,11 @@ Each main bay door now carries one MALICE (stations 4 and 6) and one Block II ra
 The doors open 150 degrees. The door missiles swing clear of the bay before the trapezes lower the HARMs.
 The centre trapeze (station 2) also accepts one MALICE for the three-MALICE loadout.
 The new SEAD preset loads three HARMs, two MALICE and two Block II.
-The existing A/G Weapon Release control opens the bay, lowers the HARMs, sends one release and closes the bay.
+With a project HARM aboard, any Weapon Release press opens the bay, lowers the three trapezes, sends one release and closes the bay.
+This works in the cockpit and outside views and in every master mode, including HARM Pullback.
 Two recorded flights fired three HARMs, three MALICE and two Block II from these stations. Each store left from its displayed position.
-The HARM and MALICE shots hit their targets. PB/SP modes and the maximum HARM envelope remain unverified.
+The HARM and MALICE shots hit their targets. Recorded TOO hits: 23 miles from 15,000 ft and 68 miles from 35,000 ft at Mach 1.2.
+The HARM's declared range and TOO detection distance are the stock HARM values. PB and SP modes remain unverified.
 A level release at 35,000 ft and Mach 1.2 hit an emitter 67.93 miles away in 214.80 seconds. Peak speed was 3,327 knots. Speed fell below 600 knots after 51.87 miles flown. An 85-mile hit and faster turning remain unverified. TOO handoff was lost before the 45-degree turn-test release.
 A mission that loaded MALICE on station 3 must move that MALICE to station 2.
 
