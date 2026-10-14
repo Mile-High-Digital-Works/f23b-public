@@ -422,9 +422,10 @@ local aircraft = {
             { CLSID = "<CLEAN>" }
         })
     },
+    -- SEAD is for the HARM bay. A mission load resets a group task not in this list to CAP.
     Tasks = {
         aircraft_task(CAP), aircraft_task(Escort), aircraft_task(FighterSweep),
-        aircraft_task(Intercept)
+        aircraft_task(Intercept), aircraft_task(SEAD)
     },
     DefaultTask = aircraft_task(CAP),
 

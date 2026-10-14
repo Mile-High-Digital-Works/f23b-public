@@ -5,6 +5,8 @@ local AIM120C = "{40EF17B7-F508-45de-8566-6FFECC0C1AB8}"
 local MALICE = "{F23B-AIM424-MALICE}"
 local HARM = "{F23B-AGM88G}"
 local tasks = { [1] = 11, [2] = 10, [3] = 18, [4] = 19 }
+-- The SEAD preset also lists task 29 (SEAD), so the mission editor offers it for SEAD groups.
+local sead_tasks = { [1] = 29, [2] = 11, [3] = 10, [4] = 18, [5] = 19 }
 
 local unitPayloads = {
     ["name"] = "F-23B",
@@ -50,7 +52,7 @@ local unitPayloads = {
                 [6] = { ["CLSID"] = HARM, ["num"] = 7 },
                 [7] = { ["CLSID"] = AIM9X, ["num"] = 9 }
             },
-            ["tasks"] = tasks
+            ["tasks"] = sead_tasks
         }
     },
     ["unitType"] = "F-23B"

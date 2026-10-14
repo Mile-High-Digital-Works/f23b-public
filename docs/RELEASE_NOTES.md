@@ -20,6 +20,8 @@ Each main bay door now carries one MALICE (stations 4 and 6) and one Block II ra
 The doors open 150 degrees. The door missiles swing clear of the bay before the trapezes lower the HARMs.
 The centre trapeze (station 2) also accepts one MALICE for the three-MALICE loadout.
 The new SEAD preset loads three HARMs, two MALICE and two Block II.
+The aircraft now accepts the SEAD task. Before, a mission load changed an F-23B SEAD group to CAP.
+The mission editor offers the SEAD preset for SEAD groups. AI HARM attacks in flight remain unverified.
 With a project HARM aboard, any Weapon Release press opens the bay, lowers the three trapezes, sends one release and closes the bay.
 This works in the cockpit and outside views and in every master mode, including HARM Pullback.
 Two recorded flights fired three HARMs, three MALICE and two Block II from these stations. Each store left from its displayed position.
