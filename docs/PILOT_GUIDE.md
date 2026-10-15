@@ -16,7 +16,7 @@ Open it in a browser and select Print.
 | MALICE | Designate a valid radar or supported network target. Maintain target updates through midcourse. The second pulse starts at seeker search, except within about 10 seconds of the target. |
 | Block II | Enable IR cooling and obtain a seeker lock before firing. With a designated hostile aircraft, the seeker locks only that aircraft; undesignate to let it choose. It does not lock other air-to-air missiles. Native helmet indications are available; a helmet-cued shot and post-launch datalink are not proven. |
 | HARM | Load AGM-88G AARGM-ER (F-23B project-defined) on station 2, 3 or 7, or select the SEAD preset. MASTER ARM: ARM; A/G; STORES; HARM; TOO. Assign the HARM DDI with sensor-control left/right, select the emitter, then Cage/Uncage for H-OFF. Use your existing Weapon Release button; a brief press opens the bay, lowers the trapezes, releases once and closes it. Each HARM needs its own Cage/Uncage handoff. |
-| Fuel | Higher applied thrust now consumes extra fuel. Plan for faster burn at high power. Unlimited-fuel missions retain unlimited fuel. |
+| Fuel | Higher applied thrust consumes extra fuel. The internal 10,800 lb lasts as if the jet carried 18,000 lb. Afterburner still burns about 1,200 lb per minute. Unlimited-fuel missions retain unlimited fuel. |
 | Damage | Wing damage reduces lift and roll authority, adds drag and rolls toward the damaged side. Fin damage reduces yaw authority. A missing whole wing cannot be held level. |
 | SA scale | Open SA on a DDI. Press SCL to cycle through the available scales, including 640 NM (about 737 miles). |
 | Ground | Use small steering inputs. Steering authority reduces with speed. Use rudder and differential braking at higher speeds. |

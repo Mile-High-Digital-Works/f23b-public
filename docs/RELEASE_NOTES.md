@@ -10,6 +10,8 @@ hard pulls and low-speed recovery. All fourteen offline corners pass.
 Dry power targets Mach 2.0 at 35,000 ft; afterburner targets remain unchanged.
 The Hornet retains its cockpit, radar, datalink, engines, tanks and gear.
 Fuel consumption now follows applied thrust; the dry/afterburner check was within 0.4% of target. Unlimited fuel is respected.
+A project fuel economy of 0.6 makes the 10,800 lb internal fuel last as if the jet carried 18,000 lb.
+Burn never falls below the Hornet engines' own burn. This factor is calculated from recorded flights, not flown.
 Eighteen regional contact shells replace the single airframe shell. Wheels and
 ground lines retain their verified geometry. Wing and fin damage now reduce the corresponding lift and control authority. A named left outer-wing hit reached the core and produced a rolling moment toward the damaged side. Other regions remain unflown.
 

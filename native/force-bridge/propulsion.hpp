@@ -8,12 +8,15 @@
 namespace f23b::bridge {
 // Owner-requested moderate speed tune; project simulation settings.
 inline constexpr double native_thrust_scale = 2.0; // previously 1.75 (+14.29%)
-// Owner rule: supplement native burn only when the applied thrust exceeds it.
+// PROJECT CHOICE (owner request, October 15): the native Hornet tanks hold 4,900 kg (10,800 lb).
+// Burn scales as if the larger F-23B airframe held 18,000 lb: 10,800 / 18,000 = 0.6.
+inline constexpr double fuel_economy = 0.6;
+// Owner rule: burn follows applied thrust, times fuel_economy. Never below the native burn.
 inline double extra_fuel_flow(double native_flow,double native_thrust,double applied_thrust,
     bool unlimited,const DryThrustSettings& settings) {
     if(unlimited||!settings.enabled||!std::isfinite(native_flow)||!std::isfinite(native_thrust)
        ||!std::isfinite(applied_thrust)||native_flow<=0||native_thrust<=0||applied_thrust<=native_thrust)return 0.;
-    const double extra=native_flow*(applied_thrust/native_thrust-1.);
+    const double extra=native_flow*(applied_thrust/native_thrust*fuel_economy-1.);
     return std::isfinite(extra)?std::max(0.,extra):0.;
 }
 // Native SDK fan-speed fraction, not cockpit core RPM or a sampled HOTAS axis.

@@ -28,7 +28,7 @@
     "native/radar-helper/SupportHook_test.cpp": "11b84e2612404744fae73e7aafe7e14ab70aa9bd66a80fb01d6c9de06d4fd643"
   },
   "v1_5": {
-    "bridge_sha256": "67b3bbc747fa44d8336d83e7ca87b30d1158ea0944c2895ac70c6226d3b20a96",
+    "bridge_sha256": "111cf9b429d7c3e58c72e3d376bfca0341a24eed22c54af60341028c1f935d21",
     "files": {
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f0bd3bddd3f95accb9659662c4a47280e054ad69ad6f3a72fa484e282e6445ec",
@@ -66,8 +66,8 @@
       "native/force-bridge/ground_yaw_tests.cpp": "af61d695cd2f844fb8c9af29b2064aafa3305a95e08279b8e5146e74a271c952",
       "native/force-bridge/native_exports.txt": "005800e3510b11a764e9bf62a1b5ed7091da7165fd9b144816ea04b4aae4d181",
       "native/force-bridge/native_loader.cpp": "b280c21433d10a4fa6361804120b11819daa100ad6d46451b72eca6fbdc26e80",
-      "native/force-bridge/propulsion.hpp": "de6423dc9f86602919e43b38073f07b3ecc63b1d6170ad0470b2ce89a8b0e80d",
-      "native/force-bridge/propulsion_tests.cpp": "47cf6d5e103ba4ca460313c56ad63a2d2302d511d78ec51c2a74ac405238b2c3",
+      "native/force-bridge/propulsion.hpp": "ecc3fc01addf5d303363433f6094bffc46ee230ba2aba6cb789186e9a9f6a8f5",
+      "native/force-bridge/propulsion_tests.cpp": "ce2619677a878f1c8de9b16f8f0618217927b3d4f2ef177508d9dda78ae77fd6",
       "native/force-bridge/sdk_adapter.hpp": "b97523481804c56568c2868cc8f56e19f632c6c2b54d20951707e9ceae1ad97e",
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",

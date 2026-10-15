@@ -6,9 +6,10 @@ using namespace f23b;
 void near(double actual, double expected) { if(!std::isfinite(actual) || std::abs(actual-expected)>1e-7) std::abort(); }
 int main() {
     const DryThrustSettings dry{true};
-    // Extra burn follows each engine's actual applied/native thrust ratio.
-    near(bridge::extra_fuel_flow(2,10000,20000,false,dry),2);
-    near(bridge::extra_fuel_flow(2,10000,15000,false,dry),1);
+    // Extra burn follows each engine's applied/native thrust ratio times fuel_economy (0.6).
+    near(bridge::extra_fuel_flow(2,10000,20000,false,dry),0.4); // total 2.4 = 0.6 x 2 x 2
+    near(bridge::extra_fuel_flow(2,10000,18000,false,dry),0.16);
+    near(bridge::extra_fuel_flow(2,10000,15000,false,dry),0); // 0.6 x 1.5 < 1: native burn only
     near(bridge::extra_fuel_flow(2,10000,5000,false,dry),0);
     near(bridge::extra_fuel_flow(2,0,20000,false,dry),0);
     near(bridge::extra_fuel_flow(2,10000,20000,true,dry),0);
