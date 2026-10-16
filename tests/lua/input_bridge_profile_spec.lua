@@ -55,6 +55,93 @@ assert(unrelated.down == 7777 and unrelated.up == 7778 and
         unrelated.cockpit_device_id == 99,
     "bridge modified an unrelated installed Hornet input row")
 
+-- A release binding saved under the native Hornet hash must survive a DCS save of the
+-- controls. DCS saves only differences from this profile, keyed by the rewritten hash
+-- (Scripts/Input/Data.lua saveDeviceProfile), so the binding is moved once into the
+-- owner's file. The profile itself must not carry it, or DCS saves nothing for it.
+local OLD, NEW = "d3003pnilu3003cd13vd1vpnilvu0", "d13006pnilu13006cdnilvd1vpnilvu0"
+local function fresh_profile()
+    return { keyCommands = {
+        { down = 3002, up = 3002, cockpit_device_id = 13 },
+        { down = 3009, up = 3009, cockpit_device_id = 13 },
+        { down = 3010, up = 3010, cockpit_device_id = 13 },
+        { down = 3011, up = 3011, cockpit_device_id = 13 },
+        { down = 3012, up = 3012, cockpit_device_id = 13 },
+        { down = 3003, up = 3003, cockpit_device_id = 13, value_down = 1, value_up = 0,
+          name = "Weapon Release Button", combos = {{key="SPACE"}} },
+    } }
+end
+local function load_diff(path)
+    local f = assert(loadfile(path)); setfenv(f, {}); return f()
+end
+local function read_bytes(path)
+    local f = io.open(path, "rb"); if not f then return nil end
+    local s = f:read("*a"); f:close(); return s
+end
+local tmp = (os.getenv("TEMP") or os.getenv("TMPDIR") or "/tmp") .. "/f23b-input-spec-"
+    .. tostring(os.time()) .. "-" .. tostring(math.random(1, 1e6))
+local diff_path = tmp .. ".diff.lua"
+local original_text = [[
+local diff = {
+	["axisDiffs"] = {
+		["a2003cdnil"] = {
+			["added"] = { [1] = { ["key"] = "JOY_SLIDER1", ["filter"] = { ["curvature"] = { [1] = 0.123456789012345 }, ["deadzone"] = 0.05 } } },
+			["name"] = "Rudder",
+		},
+	},
+	["keyDiffs"] = {
+		["]] .. OLD .. [["] = {
+			["added"] = { [1] = { ["key"] = "JOY_BTN2" } },
+			["removed"] = { [1] = { ["key"] = "SPACE" } },
+			["name"] = "Weapon Release Button",
+		},
+		["d74pnilu75cdnilvdnilvpnilvunil"] = {
+			["added"] = { [1] = { ["key"] = "JOY_BTN2" } },
+			["name"] = "Wheel Brake - ON/OFF",
+		},
+		["d13002pnilu13002cdnilvd1vpnilvu0"] = {
+			["added"] = { [1] = { ["key"] = "JOY_BTN_POV1_U", ["reformers"] = { [1] = "JOY_BTN10" } } },
+			["name"] = "Select Sidewinder",
+		},
+	},
+}
+return diff
+]]
+local f = assert(io.open(diff_path, "wb")); f:write(original_text); f:close()
+local saved = load_diff(diff_path)
+local migrated = bridge(fresh_profile(), { HOTAS = 13 }, native, commands, saved.keyDiffs,
+    { path = diff_path, diff = saved })
+local release = migrated.keyCommands[6]
+assert(#release.combos == 1 and release.combos[1].key == "SPACE",
+    "the saved release binding was placed in the profile; a DCS save of the controls would drop it")
+local after = load_diff(diff_path)
+local moved = after.keyDiffs[NEW]
+assert(moved and moved.added[1].key == "JOY_BTN2" and moved.removed[1].key == "SPACE",
+    "the saved release binding was not moved to the F-23B command")
+assert(after.keyDiffs[OLD] and after.keyDiffs["d74pnilu75cdnilvdnilvpnilvunil"].added[1].key == "JOY_BTN2",
+    "the migration removed an existing saved binding")
+assert(after.keyDiffs["d13002pnilu13002cdnilvd1vpnilvu0"].added[1].reformers[1] == "JOY_BTN10",
+    "the migration changed a saved modifier")
+assert(after.axisDiffs["a2003cdnil"].added[1].filter.curvature[1] == 0.123456789012345
+    and after.axisDiffs["a2003cdnil"].added[1].filter.deadzone == 0.05,
+    "the migration changed a saved axis setting")
+assert(read_bytes(diff_path .. ".f23b-before-input-migration") == original_text,
+    "the original control file was not backed up")
+-- The next load finds the moved entry: nothing is written and the profile stays clean.
+local migrated_text = read_bytes(diff_path)
+local again = load_diff(diff_path)
+local second = bridge(fresh_profile(), { HOTAS = 13 }, native, commands, again.keyDiffs,
+    { path = diff_path, diff = again })
+assert(read_bytes(diff_path) == migrated_text, "a second load rewrote the control file")
+assert(#second.keyCommands[6].combos == 1 and second.keyCommands[6].combos[1].key == "SPACE",
+    "a second load placed the saved binding in the profile")
+os.remove(diff_path); os.remove(diff_path .. ".f23b-before-input-migration")
+-- A file that cannot be written keeps the binding for this session, without an error.
+local blocked = bridge(fresh_profile(), { HOTAS = 13 }, native, commands, release_diff,
+    { path = tmp .. "-missing-folder/none.diff.lua", diff = { keyDiffs = release_diff } })
+assert(#blocked.keyCommands[6].combos == 1 and blocked.keyCommands[6].combos[1].key == "JOY_BTN2",
+    "an unwritable control file lost the saved release binding for this session")
+
 -- Reproduce the DCS Input/Data.lua sandbox contract. external_profile's
 -- second argument is what gives the installed profile its own valid `folder`;
 -- a nested dofile cannot inherit an assignment from the caller's sandbox.
@@ -110,4 +197,5 @@ end
 exercise_wrapper("keyboard")
 exercise_wrapper("joystick")
 print("PASS: input overlay rewrites only trigger, weapon-release and A/A weapon-select rows")
+print("PASS: a release binding saved under the Hornet command moves once to the F-23B command, with a backup")
 print("PASS: keyboard and joystick wrappers preserve external Hornet profiles")
