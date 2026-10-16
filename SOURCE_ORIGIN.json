@@ -28,7 +28,7 @@
     "native/radar-helper/SupportHook_test.cpp": "11b84e2612404744fae73e7aafe7e14ab70aa9bd66a80fb01d6c9de06d4fd643"
   },
   "v1_5": {
-    "bridge_sha256": "ccaf4482c53a002daedfd1be2949585e7c564e7a9a9a1c1ab0839e9f3444e95a",
+    "bridge_sha256": "6705716576d9a7ce2e4c810be0fb9785050232bffdafefc67ddcd43228957f9e",
     "files": {
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "f0bd3bddd3f95accb9659662c4a47280e054ad69ad6f3a72fa484e282e6445ec",
@@ -49,7 +49,7 @@
       "native/flight-core/core.hpp": "fed8820b8f30c3d136d691db3046289d6cd2d401be1dbedc5a8096b4d7d875f7",
       "native/flight-core/core_test.cpp": "24ba72455713a5ea4662dcd6852233ace36118603d1f72ab5ecbc61b00c012d0",
       "native/flight-core/development_options.hpp": "a3d746a345c033d84bd6b5d30eded44ae3c72edc33ce07c1e904a463428b3da5",
-      "native/flight-core/fitted_parameters.hpp": "5c278c691ad071322c1c32a59087b9e9e1c9469ea87539a9597296382f64de30",
+      "native/flight-core/fitted_parameters.hpp": "d3c22d9c7721c333a1a1b6e571403cab8d685d72445b153f270fa253e765c0d9",
       "native/flight-core/offline_api.cpp": "e5369abddf3f387fadcb70521810098c94702952f7265ae370f46a3c48ad715a",
       "native/flight-core/recorded_trim.hpp": "5b63a73037d64ac305e1937198b973ffb380a42b64ab3621dbdb1509c357eb69",
       "native/flight-core/replay.cpp": "0eb3bfeff6de940433c89c43f6e8b2d7497a8bb182f3741648ef50e3e0762743",
