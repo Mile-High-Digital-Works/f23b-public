@@ -48,6 +48,15 @@ struct Parameters {
     // without it, so full roll authority stays until a DCS corner shows a need.
     double roll_alpha_start_rad{.3490658503988659},high_alpha_roll_floor{1.};
     double positive_load_limit{},negative_load_limit{-1};
+    // October 15, owner: "bouncy" when centring the stick after manoeuvring. With the stick
+    // centred, pitch damping rises so the short-period damping ratio is at least this value.
+    // Zero keeps the fixed damping.
+    double released_damping_ratio{};
+    // October 15, owner: "doesn't accelerate as fast as it used to". Zero-lift drag scale by Mach
+    // at two air densities, fitted to the old build's recorded level accelerations at 15,000 ft
+    // and 35,000 ft; linear in density between them and held outside. Zero densities switch it off.
+    Table<21> cd0_scale_dense{},cd0_scale_thin{};
+    double cd0_scale_dense_sigma{},cd0_scale_thin_sigma{};
 };
 // PROJECT CHOICES: side regions inner/centre/outer = .5/.3/.2.
 // Cell IDs are from the installed ED _Common/Damage.lua, DCS 2.9.30.28738.
@@ -99,14 +108,25 @@ inline bool valid_parameters(const Parameters& p) {
                       p.yaw_alpha_power_gain,p.alpha_guard_gain,p.alpha_guard_power_gain,p.neutral_stick_width,
                       p.lift_break_fraction,p.post_stall_decrease_per_rad,p.alpha_feedback_s_inv,
                       p.force_bound_n,p.moment_bound_nm,p.recovery_kias,p.recovery_pitch_rad,p.recovery_path_rad,
-                      p.roll_alpha_start_rad,p.high_alpha_roll_floor,p.positive_load_limit,p.negative_load_limit}) if(!std::isfinite(value)) return false;
+                      p.roll_alpha_start_rad,p.high_alpha_roll_floor,p.positive_load_limit,p.negative_load_limit,
+                      p.released_damping_ratio,p.cd0_scale_dense_sigma,p.cd0_scale_thin_sigma}) if(!std::isfinite(value)) return false;
     if(p.high_alpha_roll_floor<0||p.high_alpha_roll_floor>1) return false;
+    if(p.released_damping_ratio<0||p.released_damping_ratio>1) return false;
+    if(p.cd0_scale_dense_sigma>0&&!(p.cd0_scale_dense_sigma>p.cd0_scale_thin_sigma&&p.cd0_scale_thin_sigma>0
+        &&valid_table(p.cd0_scale_dense)&&valid_table(p.cd0_scale_thin))) return false;
     return p.area_m2>0&&p.force_bound_n>0&&p.moment_bound_nm>0&&p.tau_roll>0&&p.tau_yaw>0
         &&p.lift_break_fraction>0&&p.lift_break_fraction<1&&p.control_power_per_pa.x>=0
         &&p.control_power_per_pa.y>=0&&p.control_power_per_pa.z>=0&&p.high_alpha_drag>=0
         &&p.yaw_alpha_power_gain>=0&&p.alpha_guard_gain>=0&&p.alpha_guard_power_gain>=0&&p.neutral_stick_width>=0;
 }
 inline double bounded(double v,double limit) { return std::clamp(v,-limit,limit); }
+// One when the altitude drag correction is off; otherwise the density-blended table scale.
+inline double cd0_scale(const Parameters& p,double mach,double density) {
+    if(!(p.cd0_scale_dense_sigma>0))return 1.;
+    const double sigma=density/sea_level_density;
+    const double w=std::clamp((p.cd0_scale_dense_sigma-sigma)/(p.cd0_scale_dense_sigma-p.cd0_scale_thin_sigma),0.,1.);
+    return (1-w)*sample(p.cd0_scale_dense,mach)+w*sample(p.cd0_scale_thin,mach);
+}
 inline double flight_path_angle(const State& s) {
     const auto v=s.velocity_body-s.wind_body;const double speed=std::sqrt(dot(v,v));
     if(speed<1e-6)return 0;
@@ -164,7 +184,7 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     if(!(pressure>0)||speed<1e-6) { o.valid=true;return o; }
     const double mach=speed/s.sound;
     const double cl=lift_coefficient(p,mach,s.alpha,u.flap);
-    const double cd=std::max(0.,sample(p.cd0,mach)+sample(p.induced_k,mach)*cl*cl
+    const double cd=std::max(0.,sample(p.cd0,mach)*cd0_scale(p,mach,s.density)+sample(p.induced_k,mach)*cl*cl
                              +high_alpha_drag_coefficient(p,mach,s.alpha)
                              +p.dcd_brake*std::clamp(u.brake,0.,1.)
                              +p.dcd_gear*std::clamp(u.gear,0.,1.)
@@ -236,8 +256,18 @@ inline Output evaluate(const Parameters& p,const State& s,const Input& u) {
     const double wp=s.weight_on_wheels?3.0538127212911865:p.wp;
     const double kn=s.weight_on_wheels?1.6359128355278652:p.kn;
     const double damping=s.weight_on_wheels?15.21395727316683:p.pitch_damping;
+    // Linear short period of this law: alpha' = q - Za*alpha, with load Ln*alpha. Its frequency
+    // squared is Za*wp + Za*damping*(1-neutral) + (kn+trim_gain)*Ln, and twice the damping ratio
+    // times the frequency is Za + wp + damping. Add the damping that reaches the target ratio.
+    double damping_total=damping;
+    if(p.released_damping_ratio>0&&neutral>0) {
+        const double load_per_rad=pressure*p.area_m2*sample(p.cla,mach)/(s.mass*gravity);
+        const double z_alpha=gravity*load_per_rad/speed;
+        const double omega=std::sqrt(std::max(0.,z_alpha*wp+z_alpha*damping*(1-neutral)+(kn+trim_gain)*load_per_rad));
+        damping_total+=neutral*std::max(0.,2*p.released_damping_ratio*omega-z_alpha-wp-damping);
+    }
     double pitch_acceleration=wp*(pitch_rate-s.angular_rate.z)+(kn+trim_gain)*(command-s.normal_g)
-        -damping*(s.angular_rate.z-neutral*path_rate);
+        -damping_total*(s.angular_rate.z-neutral*path_rate);
     double pitch_power=p.control_power_per_pa.z*pressure;
     if(p.alpha_guard_gain>0&&!s.weight_on_wheels) {
         // Active protection: anticipate the boundary using alpha rate, then

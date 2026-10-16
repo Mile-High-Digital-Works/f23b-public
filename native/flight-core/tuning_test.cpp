@@ -51,5 +51,15 @@ int main() {
     check(std::abs(pilot_lateral_scale(reduced,limit,.5*(limit+reduced.roll_alpha_start_rad),false)-(.5))<1e-12,"scale falls linearly from 20 degrees to the limit");
     check(pilot_lateral_scale(reduced,limit,limit,false)==.25&&pilot_lateral_scale(reduced,limit,1.5,false)==.25,"scale holds the floor at and above the limit");
     check(pilot_lateral_scale(reduced,limit,limit,true)==1,"no reduction on the ground");
-    std::cout<<"TUNING PASS: absent byte identity, clamps, unknown keys, JSON validation, finite guards\n";
+    // Stage 25 keys: the released-stick damping ratio is clamped to 0..1, and altitude_drag_correction 0
+    // gives the drag of the core before Stage 25 at every altitude.
+    auto stage25=defaults;log.clear();
+    check(tuning::apply(R"({"released_damping_ratio":3,"altitude_drag_correction":0})",stage25,log),"Stage 25 keys");
+    check(stage25.released_damping_ratio==1&&stage25.cd0_scale_dense_sigma==0&&stage25.cd0_scale_thin_sigma==0,"Stage 25 keys clamp and switch off");
+    State thin;thin.velocity_body={442.5,0,0};thin.inertia={31087,240989,168771};thin.density=.38;thin.sound=295;
+    thin.mass=19000;thin.alpha=.03;thin.normal_g=1;
+    check(evaluate(stage25,thin,{}).drag>evaluate(defaults,thin,{}).drag,"switched-off correction restores the higher Mach 1.5 drag at 35,000 ft");
+    thin.density=1.2;thin.velocity_body={170,0,0};thin.sound=340;
+    check(evaluate(stage25,thin,{}).drag==evaluate(defaults,thin,{}).drag,"no change at Mach 0.5 near sea level");
+    std::cout<<"TUNING PASS: absent byte identity, clamps, unknown keys, JSON validation, finite guards, Stage 25 keys\n";
 }

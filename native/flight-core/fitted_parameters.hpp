@@ -51,5 +51,15 @@ inline f23b::flight_core::Parameters fitted_parameters() {
     p.recovery_path_rad=-.08726646259971647;
     p.high_alpha_roll_floor=.25;
     p.positive_load_limit=8.;p.negative_load_limit=-1.;
+    // October 15 owner feedback (Stage 25). PROJECT CHOICE: released-stick damping ratio 0.85 (offline pull-and-centre check).
+    p.released_damping_ratio=.85;
+    // Zero-lift drag scale fitted to the old build's recorded level accelerations (energy method):
+    // run-env-15k dry and afterburner (density ratio 0.6292), run-env-35k-dry and -ab (0.3099).
+    // Mach without recorded data keeps scale 1, and subsonic 35,000 ft uses the 15,000 ft values.
+    p.cd0_scale_dense={{.5,.6,.7,.8,.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.,2.1,2.2,2.3,2.4,2.5},
+        {1.,.925,.943,.963,.991,1.016,.996,1.001,1.011,1.035,1.023,1.004,.999,1.,1.,1.,1.,1.,1.,1.,1.}};
+    p.cd0_scale_thin={{.5,.6,.7,.8,.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.,2.1,2.2,2.3,2.4,2.5},
+        {1.,.925,.943,.963,.965,.903,.791,.740,.717,.705,.683,.674,.753,.901,1.069,1.056,.997,.997,1.074,1.050,1.010}};
+    p.cd0_scale_dense_sigma=.6292;p.cd0_scale_thin_sigma=.3099;
     return p;
 }

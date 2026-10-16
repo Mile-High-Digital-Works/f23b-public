@@ -135,7 +135,7 @@ for i, stock in ipairs(stock_engine) do
     local row = engine_table[i]
     local b = math.max(0, math.min(1, (stock[1] - 1.3) / 0.7))
     local s = b*b*(3 - 2*b)
-    local dry_gain = 2 + (1.4735572004347315 - 2) * s^3
+    local dry_gain = 2 + (1.5506798378948843 - 2) * s^3
     check(row[1] == stock[1], "AI Mach node differs from stock row " .. i)
     check(near(row[2], stock[2] * dry_gain), "AI dry multiplier differs at row " .. i)
     check(row[3] == stock[3] * 2, "AI afterburner multiplier differs at row " .. i)

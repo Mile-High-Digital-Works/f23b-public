@@ -8,6 +8,9 @@ This build is prepared for the final owner flight. It has not been published.
 The default core provides carefree protection, a calmer roll response, smoother
 hard pulls and low-speed recovery. All fourteen offline corners pass.
 Dry power targets Mach 2.0 at 35,000 ft; afterburner targets remain unchanged.
+With the stick centred, extra pitch damping stops the bounce after a quick pull or release.
+High-altitude drag now matches the earlier build's recorded flights, so supersonic acceleration at 35,000 ft is back.
+Top speeds stay Mach 2.0 dry and Mach 2.47 afterburner. Both changes are checked offline, not flown.
 The Hornet retains its cockpit, radar, datalink, engines, tanks and gear.
 Fuel consumption now follows applied thrust; the dry/afterburner check was within 0.4% of target. Unlimited fuel is respected.
 A project fuel economy of 0.6 makes the 10,800 lb internal fuel last as if the jet carried 18,000 lb.

@@ -121,6 +121,7 @@ inline const Rule rules[]={
     {"dcd_brake",.05,.12,&Parameters::dcd_brake},
     {"recovery_kias",200,280,&Parameters::recovery_kias},
     {"high_alpha_roll_floor",0,1,&Parameters::high_alpha_roll_floor},
+    {"released_damping_ratio",0,1,&Parameters::released_damping_ratio},
 };
 inline double clamp_value(const Entry& e,double low,double high,std::vector<std::string>& log) {
     const double result=std::clamp(e.value.scalar,low,high);
@@ -159,6 +160,12 @@ inline bool apply(const std::string& text,Parameters& parameters,std::vector<std
             if(e.key=="roll_alpha_start_deg")next.roll_alpha_start_rad=clamp_value(e,10,40,log)*3.141592653589793/180;
             else if(e.key=="recovery_pitch_deg")next.recovery_pitch_rad=clamp_value(e,30,60,log)*3.141592653589793/180;
             else next.recovery_path_rad=clamp_value(e,-10,-2,log)*3.141592653589793/180;
+            continue;
+        }
+        if(e.key=="altitude_drag_correction") {
+            // 0 switches the October 15 altitude drag correction off; 1 keeps the selected preset's tables.
+            if(e.value.kind!=Value::number||!std::isfinite(e.value.scalar)){log.push_back("ignored nonfinite or nonnumeric value: "+e.key);continue;}
+            if(clamp_value(e,0,1,log)<.5)next.cd0_scale_dense_sigma=next.cd0_scale_thin_sigma=0;
             continue;
         }
         if(e.key=="dry_gain_start_mach"||e.key=="dry_gain_end_mach"||e.key=="dry_gain_end") {
