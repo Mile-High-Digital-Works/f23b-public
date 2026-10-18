@@ -20,7 +20,8 @@ namespace f23radar {
 // isSignalOutsideOfMLC scales in-band clutter by doppler_bandwidth (+0x100) / band width.
 // MALICE's declared 16 NM active search and 40 km sensor range never reached these unnamed or
 // radar-base fields through Lua; the profile applies them in memory, MALICE only.
-// Updates still flow only while the launcher supports a real track.
+// Updates flow while the launcher supports the target. Since Stage 26 (October 18, 2026) a supported
+// MALICE also keeps support after its trackfile is erased, until its seeker search starts (SupportHook.h).
 // Update window: 600 s since October 12, 2026 (was 60 s). After a gap longer than the window the INS
 // never takes a message again. With 60 s a track that the Hornet lost and found again could not
 // resume guidance on a long shot. 600 s equals the INS operating time, so the gap cannot expire first.
@@ -33,6 +34,7 @@ constexpr double stockHandoff = 16000.0, maliceHandoff = 16.0 * 1852.0;         
 constexpr double stockLockRange5 = 18000.0, maliceLockRange5 = 40000.0;
 constexpr double stockDopplerBandwidth = 16.0, maliceDopplerBandwidth = 4.0;
 constexpr uintptr_t guidanceDescriptorVtable = 0x3ba288;   // WeaponBlocks wGP_AMRAAM_Descriptor
+constexpr uintptr_t wcseDescriptorVtable = 0x3bca88;       // WeaponBlocks wWCSE_AMRAAM_Descriptor (RTTI)
 
 template<class T> T profileField(const void* p, size_t offset) {
     T value; std::memcpy(&value, static_cast<const char*>(p)+offset, sizeof(value)); return value;
@@ -95,10 +97,10 @@ void* findAmmunition(const void* lookupFunction, uint16_t level4, Access access)
     return nullptr;
 }
 
-// The guidance block has no scheme name; find its descriptor by vtable. Ambiguity returns nullptr.
+// Blocks without a scheme name: find the descriptor by its vtable. Ambiguity returns nullptr.
 template<class Access>
-void* guidanceBlock(void* ammunitionDescriptor, size_t schemeOffset, uintptr_t weaponBlocksBase, Access access) {
-    if (!ammunitionDescriptor || !weaponBlocksBase
+void* descriptorByVtable(void* ammunitionDescriptor, size_t schemeOffset, uintptr_t vtable, Access access) {
+    if (!ammunitionDescriptor || !vtable
         || !access(static_cast<char*>(ammunitionDescriptor)+schemeOffset, 16, false)) return nullptr;
     const auto first = profileField<uintptr_t>(ammunitionDescriptor, schemeOffset);
     const auto last = profileField<uintptr_t>(ammunitionDescriptor, schemeOffset+8);
@@ -107,13 +109,17 @@ void* guidanceBlock(void* ammunitionDescriptor, size_t schemeOffset, uintptr_t w
     void* found = nullptr;
     for (auto p = first; p < last; p += 8) {
         auto descriptor = profileField<void*>(reinterpret_cast<void*>(p), 0);
-        if (descriptor && access(descriptor, 0x68, false)
-            && profileField<uintptr_t>(descriptor, 0) == weaponBlocksBase + guidanceDescriptorVtable) {
+        if (descriptor && access(descriptor, 0x68, false) && profileField<uintptr_t>(descriptor, 0) == vtable) {
             if (found) return nullptr;
             found = descriptor;
         }
     }
     return found;
+}
+template<class Access>
+void* guidanceBlock(void* ammunitionDescriptor, size_t schemeOffset, uintptr_t weaponBlocksBase, Access access) {
+    return weaponBlocksBase ? descriptorByVtable(ammunitionDescriptor, schemeOffset,
+        weaponBlocksBase + guidanceDescriptorVtable, access) : nullptr;
 }
 
 struct ProfilePatch { double* where; double stock; double value; };

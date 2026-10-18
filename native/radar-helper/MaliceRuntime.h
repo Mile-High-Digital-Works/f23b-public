@@ -4,14 +4,18 @@
 #include "MaliceLoftHook.h"
 #include <unordered_map>
 #include <deque>
+#include <iterator>
 
 // Included after Radar.cpp's checked memory and symbol helpers.
 namespace malice_energy {
 using Simulate = double(*)(void*, double);
 using Switch = void(*)(void*, int);
-static f23radar::SlotHook guidanceHook, engineHook;
+static f23radar::SlotHook guidanceHook, engineHook, wcseHook;
 static f23radar::MaliceLoftHook loftHook;
-static Simulate nativeGuidance{}, nativeEngine{}, nativeLoft{};
+static Simulate nativeGuidance{}, nativeEngine{}, nativeLoft{}, nativeWcse{};
+// Support hold (Stage 26): 0 off, 1 active, -47 no MALICE datalink identity, -48 unknown bytes, -49 install failed.
+// A hold failure never changes the energy profile.
+static int holdStatus = 0;
 static Switch nativeSwitch{};
 static f23radar::EnergyIdentity identities[2];
 static int identityCount = 0, status = 0;
@@ -24,6 +28,7 @@ static bool restored = true;
 static SRWLOCK lock = SRWLOCK_INIT;
 struct Guard { Guard() { AcquireSRWLockExclusive(&lock); } ~Guard() { ReleaseSRWLockExclusive(&lock); } };
 static std::unordered_map<void*, f23radar::EnergyState> states;
+static std::unordered_map<void*, f23radar::SupportHoldRecord> holdRecords;   // Key: live datalink block.
 static std::deque<std::string> messages;
 
 static bool hashBytes(const void* bytes, size_t size, const char* expected) {
@@ -144,6 +149,14 @@ static const f23radar::EnergyIdentity* identify(void* block, bool engine) {
         if (desc == (engine ? identities[i].march : identities[i].guidance)) return &identities[i];
     return nullptr;
 }
+// Call with the lock held. Only a MALICE datalink descriptor matches; every other missile passes through.
+static bool identifyWcse(void* block) {
+    if (!active || holdStatus != 1 || !accessible(block, 0x298)) return false;
+    auto desc = field<void*>(block, 8);
+    for (int i = 0; i < identityCount; ++i)
+        if (identities[i].wcse && desc == identities[i].wcse) return true;
+    return false;
+}
 // Called under the mutex, from the actual native weapon callbacks.
 static void observePhysicsThread() {
     const auto thread = GetCurrentThreadId();
@@ -262,16 +275,65 @@ static double engine(void* block, double time) {
     return result;
 }
 
+// Datalink update of every wWCSE_AMRAAM missile. For a MALICE it ties the launcher's support answer
+// (supported_tracking, called inside the native update) to this missile. No lock is held during the
+// native call, because the support answer runs on the same thread.
+static double wcse(void* block, double time) {
+    f23radar::MaliceSupportQuery query;
+    bool malice = false;
+    {
+        Guard guard;
+        if (modelTime && identifyWcse(block)) {
+            malice = true;
+            auto& record = holdRecords[block];
+            record.refresh(field<unsigned>(block, 0x290), field<unsigned>(block, 0x294), modelTime());
+            query.supported = record.supported;
+            auto it = states.find(field<void*>(block, 0x10));
+            query.seekerStarted = it != states.end() && it->second.seekerAge >= 0;
+        }
+    }
+    if (malice) maliceSupportQuery = &query;
+    const double result = nativeWcse(block, time);
+    maliceSupportQuery = nullptr;
+    if (malice && query.asked) {
+        Guard guard;
+        const double now = modelTime();
+        auto it = holdRecords.find(block);
+        if (it != holdRecords.end()) {
+            auto& record = it->second;
+            const int change = record.apply(query, now);
+            if (change) {
+                char line[256];
+                const auto id = static_cast<unsigned long long>(reinterpret_cast<uintptr_t>(field<void*>(block, 0x10)));
+                if (change == 1)
+                    std::snprintf(line, sizeof(line), "MALICE support hold: missile_id=%llx target=%u model_time=%.3f",
+                        id, record.target, now);
+                else
+                    std::snprintf(line, sizeof(line), "MALICE support hold end: missile_id=%llx target=%u model_time=%.3f held_s=%.1f reason=%s",
+                        id, record.target, now, now-record.holdStart,
+                        query.granted ? "track" : query.seekerStarted ? "seeker" : "refused");
+                messages.emplace_back(line);
+            }
+        }
+        // Records of ended missiles: the engine stops simulating their blocks.
+        if (holdRecords.size() > 64)
+            for (auto i = holdRecords.begin(); i != holdRecords.end();)
+                i = now - i->second.lastSeen > 30 ? holdRecords.erase(i) : std::next(i);
+    }
+    return result;
+}
+
 static void stop() {
     { Guard guard; active = false; }
     // Restore hooks outside the mutex: a suspended simulation thread may be waiting for that mutex.
     bool ok = !guidanceHook.installed() || guidanceHook.restore();
     ok = (!engineHook.installed() || engineHook.restore()) && ok;
+    ok = (!wcseHook.installed() || wcseHook.restore()) && ok;
     ok = loftHook.restore() && ok;
     for (int i = 0; i < timerCount; ++i) ok = timers[i].restore() && ok;
     Guard guard;
     restored = ok; status = ok ? 0 : -46;
-    if (ok) { identityCount = 0; timerCount = 0; states.clear(); }
+    if (ok) { identityCount = 0; timerCount = 0; states.clear(); holdRecords.clear(); holdStatus = 0; }
     else messages.emplace_back("ERROR MALICE energy: cleanup check failed");
 }
 static int start(void* malice, void* stock) {
@@ -319,18 +381,33 @@ static int start(void* malice, void* stock) {
     nativeLoft = reinterpret_cast<Simulate>(loftHook.trampoline());
     if (!guidanceHook.install() || !engineHook.install() || !loftHook.install()) { stop(); return status = -38; }
     for (int i = 0; i < timerCount; ++i) if (!timers[i].apply()) { stop(); return status = -39; }
+    // Support hold: optional. A failure here refuses every hold and keeps the energy profile active.
+    const unsigned char wcseEntry[] = {0x48,0x8b,0xc4,0x48,0x89,0x58,0x18,0x48,0x89,0x70,0x20,0x55};
+    bool datalinkKnown = false;
+    for (int i = 0; i < planned; ++i) datalinkKnown = datalinkKnown || identities[i].wcse;
+    nativeWcse = reinterpret_cast<Simulate>(weaponBase+f23radar::wcseSimulate);
+    holdStatus = !datalinkKnown ? -47
+        : !check(f23radar::wcseSimulate, wcseEntry, sizeof(wcseEntry))
+          || !wcseHook.prepare(reinterpret_cast<uintptr_t*>(weaponBase+f23radar::wcseVtable+0x18),
+              weaponBase+f23radar::wcseSimulate, reinterpret_cast<void*>(&wcse)) ? -48
+        : !wcseHook.install() ? -49 : 1;
     Guard guard;
-    identityCount = planned; states.clear(); actions = {}; stockPasses = 0;
+    identityCount = planned; states.clear(); holdRecords.clear(); actions = {}; stockPasses = 0;
     physicsThread = 0; timerRestoreThread = 0; threadMismatches = 0;
     active = true; restored = false; status = 1;
+    if (holdStatus != 1) {
+        char line[128];
+        std::snprintf(line, sizeof(line), "ERROR MALICE support hold unavailable (code %d); energy profile unchanged", holdStatus);
+        messages.emplace_back(line);
+    }
     return status;
 }
 static std::string diagnostics() {
-    Guard guard; char line[512];
-    std::snprintf(line, sizeof(line), "status=%d active=%d pulse_actions=%llu stock_actions=%llu stock_passes=%llu guidance_hook=%d engine_hook=%d restored=%d timer_apply_thread=%lu timer_restore_thread=%lu physics_thread=%lu thread_mismatches=%llu",
+    Guard guard; char line[640];
+    std::snprintf(line, sizeof(line), "status=%d active=%d pulse_actions=%llu stock_actions=%llu stock_passes=%llu guidance_hook=%d engine_hook=%d restored=%d timer_apply_thread=%lu timer_restore_thread=%lu physics_thread=%lu thread_mismatches=%llu hold_status=%d datalink_hook=%d holds=%llu",
         status, active, actions.malice, actions.stock, stockPasses, guidanceHook.installed(), engineHook.installed(), restored,
         static_cast<unsigned long>(timerApplyThread), static_cast<unsigned long>(timerRestoreThread),
-        static_cast<unsigned long>(physicsThread), threadMismatches);
+        static_cast<unsigned long>(physicsThread), threadMismatches, holdStatus, wcseHook.installed(), supportHolds.load());
     return line;
 }
 static bool nextMessage(std::string& message) {

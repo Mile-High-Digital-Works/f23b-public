@@ -23,9 +23,7 @@
     "native/radar-helper/PayloadAccessHook_test.cpp": "d6b32e86998b04bad9a9cd87edc7917779fb356720e481ed6ea3e6e2b0d5807d",
     "native/radar-helper/RankingHook.h": "86ea7474004580543a4bf33e36c165ec7bc98d0a7beb4fd6510ddf49ef94a219",
     "native/radar-helper/SaRangeHook.h": "ee31eef97df3fcb8c160f4b9c054fab8c7d8047bda981bcf692cd4ed27a717b4",
-    "native/radar-helper/SaRangeHook_test.cpp": "759596c5d6678310e57881bb65c4c55b87fe7834bdfde3aed9602d4cacfcea1f",
-    "native/radar-helper/SupportDiag_test.cpp": "a118f67ccd267ecdcf7c7ca3000c911eb968a33c533bd3ebd47e15f73a553ba1",
-    "native/radar-helper/SupportHook_test.cpp": "11b84e2612404744fae73e7aafe7e14ab70aa9bd66a80fb01d6c9de06d4fd643"
+    "native/radar-helper/SaRangeHook_test.cpp": "759596c5d6678310e57881bb65c4c55b87fe7834bdfde3aed9602d4cacfcea1f"
   },
   "v1_5": {
     "bridge_sha256": "6705716576d9a7ce2e4c810be0fb9785050232bffdafefc67ddcd43228957f9e",
@@ -74,7 +72,7 @@
       "native/force-bridge/telemetry.hpp": "4d38374f601ae302bf9ba7b99c941ac0b999fe400f6cbeb85f4b258142ca7d8c",
       "native/radar-helper/PayloadAlias.h": "78bff1c90bc9b3671740209122a57cb63781d29e7063ac3007dc880959efce05",
       "native/radar-helper/PayloadAlias_test.cpp": "2aa0197bee2eb8bd68da1dfab62883f74b88111d6cebabc94eaf38b59aaa24dd",
-      "native/radar-helper/Radar.cpp": "921b3f4cc7bc887ad15f5d51f8ce58dc20d0a164126588d2af639b631d1a72a2",
+      "native/radar-helper/Radar.cpp": "fbf48b1fcc6753ac0ca878473069340a1d7da90dfa63f4b996b8ab9c8bf4c934",
       "tests/lua/exterior_visual_adapter_spec.lua": "9e8d60adcdb33a26885430a1b2f9d74069f3671ec20dc81b85e093c7ce26fb3e",
       "tests/lua/input_bridge_profile_spec.lua": "1b1b87c6a0a992b234b3302e3580e33821f436dbc88d5c2f93df796c23f8acaa",
       "tools/blender/build_agm88g_model.py": "752b8b7f7947ebf68265a3873f1090c04787a8e45a0fba127cf956c3a7802b8b",
@@ -89,8 +87,16 @@
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_AGM88G.json": "15d205585c79d251ce7e76f40574af58a9e715319e98fff21aed1581104d3742",
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_AIM9X_BLOCKII.json": "6569fcc6abde5ac807b80815ccc74382357b00ede807880b63e0801225319f0e",
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_MALICE.json": "5805747332ff0c7d24c77c83d846ea6b89e5d3c4dc1e59600450267885668b1c",
-      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13.md": "681113778a69db826f02ac8ada9cb31efe10557a9644be3d12945e2b62c6c609"
+      "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13.md": "681113778a69db826f02ac8ada9cb31efe10557a9644be3d12945e2b62c6c609",
+      "native/radar-helper/SupportHook.h": "b311e6b51d6fd021653be4578c0b2c1a2b0b84618d2f3ce7ee0d01bf7d62b3f4",
+      "native/radar-helper/SupportHook_test.cpp": "ae42489a65d600beeded6f9ef2f7ffd92182616b62011004e3df4d5ca6872354",
+      "native/radar-helper/SupportDiag.h": "87f2d105edd6d547d0f7bf1287957aff877d565cd3cdcbcd38a3c49231fc7b64",
+      "native/radar-helper/SupportDiag_test.cpp": "f55637a34b8a4a7a90b4963fcaddae0410c1726ef51bcad47e460c816a8f7a79",
+      "native/radar-helper/MaliceEnergy.h": "a636af7010a7b1f94887f1482c228a2363ede66164df7e572b6881d4b91a5b07",
+      "native/radar-helper/MaliceEnergy_test.cpp": "51413a2692927ac2f7694d5be72cd124689958c91c106c74a92275b226a738cb",
+      "native/radar-helper/MaliceRuntime.h": "7952dcbf6ca664997b87abf51a0b5161c44e869128816eeb066cb51fcc0d2e28",
+      "native/radar-helper/MissileProfile.h": "37b8d2fb9b5235a85825c14e44d4bae3e2640b139c15a5d4edb8cc3dbe9d2b83"
     },
-    "helper_sha256": "150396458eb314969f64153565ae941919703c5b8fe7661c6769d653c46e790b"
+    "helper_sha256": "7c3e5e7f77f65466bf046826277cc456bd4b16c76857177cd9fd4942f4cb9c51"
   }
 }

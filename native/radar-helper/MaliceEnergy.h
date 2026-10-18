@@ -8,10 +8,14 @@ namespace f23radar {
 constexpr uintptr_t guidanceVtable = 0x3ba238, engineVtable = 0x3ac840;
 constexpr uintptr_t guidanceSimulate = 0x2cd270, engineSimulate = 0x18afc0;
 constexpr uintptr_t engineSwitch = 0x18b070, loftEntry = 0x2c7090;
+// wWCSE_AMRAAM vtable (export ??_7wWCSE_AMRAAM@@6B@) and simulate (export ?simulate@wWCSE_AMRAAM@@UEAANN@Z).
+constexpr uintptr_t wcseVtable = 0x3bca38, wcseSimulate = 0x307a60;
 constexpr double delayedMarch = 1e9;
 constexpr const char* controllerRunHash = "f4f764748943e476d4e9f0ddce22c2ed59b0ef4e796b4dda6bec11fe2ae74355";
 
-struct EnergyIdentity { void* scheme{}; void* guidance{}; void* boost{}; void* march{}; void* controller{}; };
+// wcse is the MALICE datalink descriptor for the support hold. It is null when it is missing or shared
+// with the stock AIM-120C; the hold is then off and the energy profile is unchanged.
+struct EnergyIdentity { void* scheme{}; void* guidance{}; void* boost{}; void* march{}; void* controller{}; void* wcse{}; };
 
 // The existing missile profile proves ammunition identity. This also rejects shared motors and controllers.
 template<class Access>
@@ -31,13 +35,15 @@ int planEnergy(void* malice, void* stock, uintptr_t wb, uintptr_t bs,
             || profileField<double>(boost, 0x60) != 386.97363760 || profileField<double>(boost, 0x80) != 15.6
             || profileField<double>(march, 0x60) != 77.39472752 || profileField<double>(march, 0x80) != 17.55)
             return -32;
+        auto wcse = descriptorByVtable(malice, offset, wb+wcseDescriptorVtable, access);
         for (size_t other : {size_t(0xd8), size_t(0xcc8)}) {
             if (guidanceBlock(stock, other, wb, access) == gp
                 || schemeBlock(stock, other, "boost", access) == boost
                 || schemeBlock(stock, other, "march", access) == march
                 || schemeBlock(stock, other, "controller", access) == controller) return -33;
+            if (wcse && descriptorByVtable(stock, other, wb+wcseDescriptorVtable, access) == wcse) wcse = nullptr;
         }
-        out[count++] = {static_cast<char*>(malice)+offset, gp, boost, march, controller};
+        out[count++] = {static_cast<char*>(malice)+offset, gp, boost, march, controller, wcse};
     }
     return count ? 1 : -31;
 }

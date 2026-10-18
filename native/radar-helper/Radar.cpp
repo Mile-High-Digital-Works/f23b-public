@@ -246,27 +246,42 @@ static int primary_target(lua_State* L) {
     pushNumber(L, valid ? 1 : 0);
     return 5;
 }
+// Set only while a MALICE datalink block asks its launcher (MaliceRuntime.h, Stage 26).
+static thread_local f23radar::MaliceSupportQuery* maliceSupportQuery = nullptr;
+static std::atomic<unsigned long long> supportHolds{0};
 // Native answer first. The extension applies only to the F-23B radar, only behind the
 // native power/operate/inhibit gates, and only while the target is an MSI trackfile.
+// The MALICE hold (SupportHook.h) answers for a supported MALICE after its trackfile is erased,
+// behind the same gates, until its seeker search starts.
 // Diagnostics record each F-23B decision read-only; they do not change the answer.
 static bool supported_tracking(void* responder, unsigned target, unsigned type) {
     const bool native = nativeTrackingFunction(responder, target, type);
     if (!target) return native;
     auto radar = supportRadar.load();
     if (!radar || responder != static_cast<char*>(radar) + f23radar::responderOffset) return native;
+    auto query = maliceSupportQuery;
+    if (query) query->asked = true;
     auto mc = supportMc.load();
     const char* record = f23radar::msiRecord(mc, radar, target, accessible);
     auto note = [&](int decision) {
         if (modelTime) supportDiag.note(target, decision, f23radar::trackSnapshot(record), modelTime());
     };
-    if (native) { note(f23radar::NativeSupport); return true; }
+    if (native) { note(f23radar::NativeSupport); if (query) query->granted = true; return true; }
     if (!f23radar::nativeGatesOpen(responder, accessible)) { note(f23radar::GatesClosed); return false; }
     if (!record) {
-        note(f23radar::linkedToRadar(mc, radar, accessible) ? f23radar::NoTrackfile : f23radar::NotLinked);
+        const bool linked = f23radar::linkedToRadar(mc, radar, accessible);
+        if (query && f23radar::maliceHoldAllowed(*query, linked)) {
+            query->held = true;
+            supportHolds.fetch_add(1);
+            note(f23radar::HoldSupport);
+            return true;
+        }
+        note(linked ? f23radar::NoTrackfile : f23radar::NotLinked);
         return false;
     }
     supportGrants.fetch_add(1);
     supportLast.store(target);
+    if (query) query->granted = true;
     note(f23radar::ExtensionSupport);
     return true;
 }

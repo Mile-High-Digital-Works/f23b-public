@@ -66,6 +66,47 @@ bool msiTrackfile(void* mc, void* radar, unsigned target, Access access) {
     return false;
 }
 
+// Project decision (October 18, 2026, Stage 26): the MALICE support hold.
+// A MALICE datalink block (WeaponBlocks wWCSE_AMRAAM::simulate 0x307a60) asks LinkToTarget at 0x3081e0
+// with its target ID (+0x290) and the missile type. On "yes" it sends the target object's own position
+// and velocity (0x30821a..0x30826d); the trackfile only decides the answer. Native MSI erases an
+// offboard track after 14 s without reports, and the INS then moves the target at constant velocity.
+// The seeker search accepts a return only within 600 m of the INS range (isTargetVisible 0x2f02e7).
+// On October 17 a Tu-95 sped up after its track was erased, and the seeker never saw it.
+// A MALICE that this radar supported keeps support after its trackfile is erased, until its own
+// seeker search starts. The native power, operate and inhibit gates still end it.
+struct MaliceSupportQuery {
+    bool supported = false, seekerStarted = false;      // Inputs: this missile's history.
+    bool asked = false, granted = false, held = false;  // Outputs of one datalink update.
+};
+inline bool maliceHoldAllowed(const MaliceSupportQuery& query, bool linked) {
+    return linked && query.supported && !query.seekerStarted;
+}
+
+// One record per live MALICE datalink block. A block that the engine reuses for a new missile starts
+// without support history: a gap over 2 s, or another target or launcher, resets the record.
+struct SupportHoldRecord {
+    static constexpr double staleGap = 2.0;
+    unsigned target = 0, launcher = 0;
+    double lastSeen = -1, holdStart = -1;
+    bool supported = false, holding = false;
+    void refresh(unsigned targetId, unsigned launcherId, double now) {
+        if (lastSeen < 0 || now < lastSeen || now-lastSeen > staleGap || targetId != target || launcherId != launcher) {
+            *this = SupportHoldRecord{};
+            target = targetId; launcher = launcherId;
+        }
+        lastSeen = now;
+    }
+    // Applies one datalink update. Returns 1 when a hold starts, 2 when it ends, otherwise 0.
+    int apply(const MaliceSupportQuery& query, double now) {
+        if (!query.asked) return 0;
+        if (query.granted) supported = true;
+        if (query.held && !holding) { holding = true; holdStart = now; return 1; }
+        if (!query.held && holding) { holding = false; return 2; }
+        return 0;
+    }
+};
+
 // Replace one aligned vtable pointer. No instruction bytes change; the swap is one atomic store.
 class SlotHook {
     uintptr_t* slot = nullptr;

@@ -48,6 +48,8 @@ int main() {
     CHECK(table.nextLine(602.1, line, sizeof(line)));                      // periodic
     table.note(16798720u, f23radar::NoTrackfile, f23radar::TrackSnapshot{}, 602.3);
     CHECK(table.nextLine(602.3, line, sizeof(line)) && std::string(line).find("decision=no-trackfile trackfile=0") != std::string::npos);
+    table.note(16798720u, f23radar::HoldSupport, f23radar::TrackSnapshot{}, 602.5);
+    CHECK(table.nextLine(602.5, line, sizeof(line)) && std::string(line).find("decision=hold trackfile=0") != std::string::npos);
     CHECK(!table.nextLine(610.0, line, sizeof(line)));                    // unused for more than 5 s
     // Nine targets: the table keeps eight and ignores the rest without error.
     for (unsigned i = 1; i <= 9; ++i) table.note(i, f23radar::NativeSupport, snap, 700.0);

@@ -135,6 +135,21 @@ int main() {
     CHECK(planEnergy(ammo.data(), stock.data(), wb, bs, ids, count, access) == -32);
     put(march.data(), 0x80, 17.55);
     CHECK(planEnergy(ammo.data(), stock.data(), wb, bs, ids, count, access) == 1);
+    CHECK(ids[0].wcse == nullptr);                       // No datalink descriptor: hold off, energy unchanged.
+
+    // Support hold identity (Stage 26): the MALICE datalink descriptor, never one shared with the stock AIM-120C.
+    auto wcseDesc = descriptor("", wb+wcseDescriptorVtable), stockWcse = descriptor("", wb+wcseDescriptorVtable);
+    void* withWcse[] = {gp.data(), boost.data(), march.data(), controller.data(), wcseDesc.data()};
+    std::array<char, 0xd00> ammo2{}, stock2{};
+    put(ammo2.data(), 0xd8, withWcse); put(ammo2.data(), 0xe0, withWcse+5);
+    CHECK(planEnergy(ammo2.data(), stock2.data(), wb, bs, ids, count, access) == 1 && ids[0].wcse == wcseDesc.data());
+    void* stockShared[] = {wcseDesc.data()};
+    put(stock2.data(), 0xcc8, stockShared); put(stock2.data(), 0xcd0, stockShared+1);
+    CHECK(planEnergy(ammo2.data(), stock2.data(), wb, bs, ids, count, access) == 1 && ids[0].wcse == nullptr);
+    void* stockOwn[] = {stockWcse.data()};
+    put(stock2.data(), 0xcc8, stockOwn); put(stock2.data(), 0xcd0, stockOwn+1);
+    CHECK(planEnergy(ammo2.data(), stock2.data(), wb, bs, ids, count, access) == 1 && ids[0].wcse == wcseDesc.data());
+    CHECK(planEnergy(ammo.data(), stock.data(), wb, bs, ids, count, access) == 1);
 
     std::array<char, 0x98> system{};
     std::array<char, 0x400> gpLive{}, boostLive{}, marchLive{}, stockLive{};

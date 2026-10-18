@@ -10,7 +10,8 @@ namespace f23radar {
 // MSI trackfile fields (captured image, see the SURV continuity evidence):
 //   +0xe8/+0xf0/+0xf8 source report times (model time), +0x101 current contribution present,
 //   +0x198 source eligibility mask, +0x19d memory state. Native aging clears a source after 14 s.
-enum SupportDecision : int { NativeSupport = 1, ExtensionSupport = 2, GatesClosed = 3, NoTrackfile = 4, NotLinked = 5 };
+enum SupportDecision : int { NativeSupport = 1, ExtensionSupport = 2, GatesClosed = 3, NoTrackfile = 4, NotLinked = 5,
+                             HoldSupport = 6 };
 
 struct TrackSnapshot {
     bool found = false;
@@ -62,8 +63,8 @@ public:
         for (auto& e : entries) {
             if (!e.target || now - e.seen > quiet) continue;
             if (e.decision == e.logged && e.logAt >= 0 && now - e.logAt < period) continue;
-            static const char* names[] = {"?", "native", "extension", "gates-closed", "no-trackfile", "not-linked"};
-            const char* name = e.decision >= 1 && e.decision <= 5 ? names[e.decision] : names[0];
+            static const char* names[] = {"?", "native", "extension", "gates-closed", "no-trackfile", "not-linked", "hold"};
+            const char* name = e.decision >= 1 && e.decision <= 6 ? names[e.decision] : names[0];
             auto age = [&](int i) { return e.snap.report[i] > 0 ? now - e.snap.report[i] : -1.0; };
             std::snprintf(out, n, "target=%u decision=%s trackfile=%d fresh=%d memory=%d mask=0x%x age_e8=%.1f age_f0=%.1f age_f8=%.1f",
                 e.target, name, e.snap.found ? 1 : 0, e.snap.fresh, e.snap.memory, e.snap.mask, age(0), age(1), age(2));
