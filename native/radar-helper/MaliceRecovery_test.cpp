@@ -49,6 +49,22 @@ int main(int argc, char** argv) {
     // Brief memory in the successful bomber shot must retain terminal guidance.
     CHECK(!useMaliceRecovery(true, 2, false, 3, 0, 0.195));
 
+    // A failed missile must not disable another missile or alter a startup failure.
+    int startupStatus = 1;
+    RecoveryRecord first, second;
+    first.observe(10, false); second.observe(12, false);
+    CHECK(first.enabled(startupStatus) && second.enabled(startupStatus));
+    unsigned skipped = 0;
+    if (first.fail()) ++skipped;
+    CHECK(first.failed && !first.enabled(startupStatus) && startupStatus == 1);
+    if (first.fail()) ++skipped;
+    CHECK(skipped == 1); // one error and one counted missile, not one per frame
+    first.observe(11, true); CHECK(first.failed); // reacquisition does not clear a failed flight
+    CHECK(useMaliceRecovery(second.enabled(startupStatus), 2, false, 0, 0, 1.365));
+    first.observe(.1, false);
+    CHECK(!first.failed && !first.running && first.enabled(startupStatus)); // reused system
+    CHECK(!first.enabled(-53) && !second.enabled(-54) && !second.enabled(-55));
+
     std::array<unsigned char, 0x4f8> gp{};
     std::array<unsigned char, 32> system{}, desc{};
     double output[4]{}; liveGP = gp.data();

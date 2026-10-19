@@ -10,6 +10,26 @@ constexpr uintptr_t radarSensorVtable = 0x3bbb40, strapdownVtable = 0x3b90c8;
 // Owner's Stage 27 policy: two 2-second reports plus margin. No native descriptor changes.
 constexpr double recoveryFreshSeconds = 4.5;
 
+// One live simulation-system record. A runtime contract failure is local to this missile.
+// Startup status is deliberately not writable through this interface.
+struct RecoveryRecord {
+    double age = -1, lossStart = -1;
+    bool running = false, failed = false;
+    void observe(double missileAge, bool signal) {
+        if (missileAge < age) *this = {};
+        age = missileAge;
+        if (signal) lossStart = -1;
+        else if (lossStart < 0) lossStart = age;
+    }
+    bool enabled(int startupStatus) const { return startupStatus == 1 && !failed; }
+    // True once per missile: the caller emits one error and increments the skip counter.
+    bool fail() {
+        if (failed) return false;
+        failed = true;
+        return true;
+    }
+};
+
 inline bool rejectMaliceChaff(bool maliceSensor, unsigned category, unsigned level4) {
     return maliceSensor && category == 0x100 && level4 == 13;
 }
