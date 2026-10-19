@@ -8,18 +8,18 @@
 #include <initializer_list>
 
 namespace f23radar {
-// WeaponBlocks calcLoftOmega, RVA 0x2c7090. Fixed, reviewed prologue: no decoder and no support for other native builds.
+// Fixed, reviewed position-independent prologues only: no decoder or support for unknown builds.
 // Suspended threads must be outside the overwritten instruction boundaries.
-class MaliceLoftHook {
+class AlignedEntryHook {
     unsigned char* entry = nullptr;
     unsigned char* relay = nullptr;
     alignas(8) long long replacement = 0;
-    static constexpr unsigned char prologue[13] =
-        {0x40,0x53,0x48,0x83,0xec,0x60,0x80,0xb9,0x61,0x01,0x00,0x00,0x00};
+    std::array<unsigned char, 16> prologue{};
+    size_t length = 0;
     bool exchange(bool install) {
         if (!entry) return true;
-        if (std::memcmp(entry+8, prologue+8, 5)) return false;
-        long long stock; std::memcpy(&stock, prologue, 8);
+        if (std::memcmp(entry+8, prologue.data()+8, length-8)) return false;
+        long long stock; std::memcpy(&stock, prologue.data(), 8);
         const auto expected = install ? stock : replacement;
         const auto desired = install ? replacement : stock;
         if (std::memcmp(entry, &desired, 8) == 0) return true;
@@ -47,7 +47,7 @@ class MaliceLoftHook {
             CONTEXT context{}; context.ContextFlags = CONTEXT_CONTROL;
             if (!GetThreadContext(handles[i], &context)
                 || (context.Rip >= reinterpret_cast<uintptr_t>(entry)
-                    && context.Rip < reinterpret_cast<uintptr_t>(entry)+13)) { ok = false; break; }
+                    && context.Rip < reinterpret_cast<uintptr_t>(entry)+length)) { ok = false; break; }
         }
         DWORD protect = 0, unused = 0;
         if (ok) {
@@ -55,7 +55,7 @@ class MaliceLoftHook {
             if (ok) {
                 ok = InterlockedCompareExchange64(reinterpret_cast<volatile LONG64*>(entry), desired, expected) == expected;
                 const bool restored = VirtualProtect(entry, 8, protect, &unused) != FALSE;
-                const bool flushed = FlushInstructionCache(GetCurrentProcess(), entry, 13) != FALSE;
+                const bool flushed = FlushInstructionCache(GetCurrentProcess(), entry, length) != FALSE;
                 ok = ok && restored && flushed;
             }
         }
@@ -65,10 +65,12 @@ class MaliceLoftHook {
     }
 public:
     void* trampoline() const { return relay ? relay+32 : nullptr; }
-    bool prepare(uintptr_t module, void* replacementFunction) {
-        auto target = reinterpret_cast<unsigned char*>(module+0x2c7090);
-        if (entry) return entry == target;
-        if ((reinterpret_cast<uintptr_t>(target)&7) || std::memcmp(target, prologue, 13)) return false;
+    bool prepare(uintptr_t address, void* replacementFunction, const unsigned char* bytes, size_t size) {
+        auto target = reinterpret_cast<unsigned char*>(address);
+        if (size < 8 || size > prologue.size() || !target || !bytes || !replacementFunction) return false;
+        if (entry) return entry == target && size == length && !std::memcmp(bytes, prologue.data(), size);
+        if ((address&7) || std::memcmp(target, bytes, size)) return false;
+        std::memcpy(prologue.data(), bytes, size); length = size;
         SYSTEM_INFO info{}; GetSystemInfo(&info);
         const auto granularity = static_cast<uintptr_t>(info.dwAllocationGranularity);
         const auto aligned = reinterpret_cast<uintptr_t>(target)&~(granularity-1);
@@ -89,8 +91,8 @@ public:
             std::memcpy(where, jump, 6); std::memcpy(where+6, &destination, 8);
         };
         absoluteJump(relay, replacementFunction);
-        std::memcpy(relay+32, prologue, 13);
-        absoluteJump(relay+45, target+13);
+        std::memcpy(relay+32, prologue.data(), length);
+        absoluteJump(relay+32+length, target+length);
         unsigned char patch[8] = {0xe9,0,0,0,0,0x90,0x90,0x90};
         const auto relative = static_cast<int32_t>(reinterpret_cast<intptr_t>(relay)
             - reinterpret_cast<intptr_t>(target)-5);
@@ -105,6 +107,16 @@ public:
     }
     bool install() { return entry && exchange(true); }
     bool restore() { return exchange(false); }
+    bool installed() const { return entry && !std::memcmp(entry, &replacement, 8); }
     // Relay stays allocated until process exit: a native call can still be returning.
+};
+
+class MaliceLoftHook : public AlignedEntryHook {
+public:
+    bool prepare(uintptr_t module, void* replacementFunction) {
+        static constexpr unsigned char bytes[] =
+            {0x40,0x53,0x48,0x83,0xec,0x60,0x80,0xb9,0x61,0x01,0x00,0x00,0x00};
+        return AlignedEntryHook::prepare(module+0x2c7090, replacementFunction, bytes, sizeof(bytes));
+    }
 };
 }

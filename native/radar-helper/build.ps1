@@ -21,6 +21,10 @@ if ($LASTEXITCODE) { throw 'Missile profile tests failed' }
 if ($LASTEXITCODE) { throw 'MALICE energy test build failed' }
 & "$OutputDirectory/MaliceEnergy_test.exe"
 if ($LASTEXITCODE) { throw 'MALICE energy tests failed' }
+& g++ -std=c++17 -O2 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ "$PSScriptRoot/MaliceRecovery_test.cpp" -o "$OutputDirectory/MaliceRecovery_test.exe"
+if ($LASTEXITCODE) { throw 'MALICE recovery test build failed' }
+& "$OutputDirectory/MaliceRecovery_test.exe"
+if ($LASTEXITCODE) { throw 'MALICE recovery tests failed' }
 & g++ -std=c++17 -O2 -Wall -Wextra -Werror -static-libgcc -static-libstdc++ "$PSScriptRoot/SupportDiag_test.cpp" -o "$OutputDirectory/SupportDiag_test.exe"
 if ($LASTEXITCODE) { throw 'Support diagnostics test build failed' }
 & "$OutputDirectory/SupportDiag_test.exe"

@@ -17,7 +17,6 @@
     "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
     "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
     "native/radar-helper/LaunchZone_test.cpp": "9f0d2d35e49d8f2871a4f0e66e7bee1ddc49b36dc6efffbbac4af5f44ec2b96e",
-    "native/radar-helper/MaliceLoftHook.h": "966f9ab173efb602b861375140a906f53e21e9c80ac0a9a1296c6ffa74d2f919",
     "native/radar-helper/NativeTarget.h": "2695f3dc9de1fa13f45c8b425cb3d9024da052e98554c6779994d00db27c6982",
     "native/radar-helper/PayloadAccessHook.h": "a92f4cf9757b198e1670f04084f1042a8095e9d7db254a766462983440ae15d4",
     "native/radar-helper/PayloadAccessHook_test.cpp": "d6b32e86998b04bad9a9cd87edc7917779fb356720e481ed6ea3e6e2b0d5807d",
@@ -88,14 +87,21 @@
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_AIM9X_BLOCKII.json": "6569fcc6abde5ac807b80815ccc74382357b00ede807880b63e0801225319f0e",
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13/F23B_MALICE.json": "5805747332ff0c7d24c77c83d846ea6b89e5d3c4dc1e59600450267885668b1c",
       "docs/evidence/F23B_MISSILE_VISUALS_2026-10-13.md": "681113778a69db826f02ac8ada9cb31efe10557a9644be3d12945e2b62c6c609",
-      "native/radar-helper/SupportHook.h": "b311e6b51d6fd021653be4578c0b2c1a2b0b84618d2f3ce7ee0d01bf7d62b3f4",
-      "native/radar-helper/SupportHook_test.cpp": "ae42489a65d600beeded6f9ef2f7ffd92182616b62011004e3df4d5ca6872354",
+      "native/radar-helper/SupportHook.h": "647d5453f88daa62529d49e249106efb538e91ea207f6255cc025a42e4e28927",
+      "native/radar-helper/SupportHook_test.cpp": "e8ad6e7ade10b737c75cca126b576bc2fad1f51f1408f1918a05fb9279811ed7",
       "native/radar-helper/SupportDiag.h": "87f2d105edd6d547d0f7bf1287957aff877d565cd3cdcbcd38a3c49231fc7b64",
       "native/radar-helper/SupportDiag_test.cpp": "f55637a34b8a4a7a90b4963fcaddae0410c1726ef51bcad47e460c816a8f7a79",
       "native/radar-helper/MaliceEnergy.h": "a636af7010a7b1f94887f1482c228a2363ede66164df7e572b6881d4b91a5b07",
       "native/radar-helper/MaliceEnergy_test.cpp": "51413a2692927ac2f7694d5be72cd124689958c91c106c74a92275b226a738cb",
-      "native/radar-helper/MaliceRuntime.h": "7952dcbf6ca664997b87abf51a0b5161c44e869128816eeb066cb51fcc0d2e28",
-      "native/radar-helper/MissileProfile.h": "37b8d2fb9b5235a85825c14e44d4bae3e2640b139c15a5d4edb8cc3dbe9d2b83"
+      "native/radar-helper/MaliceRuntime.h": "33e0cd1244823ad4fc1a23dde7e750cbdc94678dfb1f170688b875d5837662c5",
+      "native/radar-helper/MissileProfile.h": "8524639661a1c9f3bfda0873185163d2408e94e6c5b150d04eda27401aabf889",
+      "native/radar-helper/MaliceLoftHook.h": "d6be8e61e0a2ef874ae0e5cff5f1e724baa07c8bbd76e8520e7f771b0a4ed182",
+      "native/radar-helper/MaliceRecovery.h": "c70abd6f4dd3479c9f64a6b68936c64e74707a548f409f74ab99e670bce65690",
+      "native/radar-helper/MaliceRecovery_test.cpp": "8f7ce31656d21437088400857b4b25be2fe92c90337dedaca35c59cd7e87705f",
+      "native/radar-helper/build.ps1": "4f9ff54b05848fd53a3c86351480298fb954d1f4ebc45fa2b75218c9701f17fe",
+      "README.md": "1ffd73d7bfff2653977c976cdb436a32ee7ad4e6bc8940f14a892ecc3e32e856",
+      "docs/PILOT_GUIDE.md": "ca6fc6b3042d852c79c953db5985ace04077105b8cfc6b3b5eec8d366f93d4eb",
+      "docs/RELEASE_NOTES.md": "b20eefa287296c7685304d2036e8b07cfa305c441d26020829b9dfcf206e8d4b"
     },
     "helper_sha256": "7c3e5e7f77f65466bf046826277cc456bd4b16c76857177cd9fd4942f4cb9c51"
   }

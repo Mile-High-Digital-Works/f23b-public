@@ -85,6 +85,8 @@ Use [a compatible release](https://github.com/Mile-High-Digital-Works/f23b-publi
 The 336-mile kill is one supported flight, not a guaranteed launch range. Exact 350-mile shots remain unverified.
 MALICE's coasting-apex estimate is not a hard altitude cap. With Block II selected, the helmet display shows `9X`, its count and the aiming cross. A helmet-cued shot has not been flown. Block II post-launch datalink is not implemented.
 AI uses the extended MALICE energy profile when the player also flies an F-23B.
+MALICE rejects chaff and can recover from lost tracking using fresh target updates. Keep the radar operating to maintain support through impact.
+These functions require the weapon helper on the missile's controlling simulation. AI and dedicated-server missiles without that helper are not covered.
 For v1.5, AI F-23Bs can launch MALICE with their main bay doors closed. The AI Block II bay sequence remains unverified.
 MALICE is this project's DCS game version of the [publicly reported Navy AIM-424 name](https://aviationweek.com/defense/missile-defense-weapons/us-navy-testing-new-long-range-air-air-missile); its numerical definitions are game values.
 See [known limitations](KNOWN_ISSUES.md).

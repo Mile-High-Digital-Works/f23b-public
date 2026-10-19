@@ -88,15 +88,14 @@ int main() {
     nativeTarget = 7; CHECK(reinterpret_cast<f23radar::TrackingFunction>(page[1])(nullptr, 7, 0));
     VirtualFree(page, 0, MEM_RELEASE);
 
-    // MALICE support hold (Stage 26): only a missile that had support, only before its seeker search,
+    // MALICE support hold (Stage 27): only a missile that had support, through terminal flight,
     // only while the mission computer is linked to this radar.
     f23radar::MaliceSupportQuery query;
     CHECK(!f23radar::maliceHoldAllowed(query, true));                              // never supported
     query.supported = true;
     CHECK(f23radar::maliceHoldAllowed(query, true));
     CHECK(!f23radar::maliceHoldAllowed(query, false));                             // radar link lost
-    query.seekerStarted = true;
-    CHECK(!f23radar::maliceHoldAllowed(query, true));                              // seeker search started
+    CHECK(f23radar::maliceHoldAllowed(query, true));                              // no seeker cutoff
 
     // October 17 Tu-95 shot: native support until 426.40 s, trackfile erased at 426.47 s.
     f23radar::SupportHoldRecord record;
@@ -110,9 +109,10 @@ int main() {
     for (double t = 388.0; t <= 426.5; t += 0.5) record.refresh(16787712u, 16939264u, t);   // live frames
     CHECK(record.supported && record.apply(update, 426.5) == 1 && record.holding && record.holdStart == 426.5);
     CHECK(record.apply(update, 427.0) == 0);                                       // hold continues
-    update = {}; update.asked = true; update.supported = true; update.seekerStarted = true;
     for (double t = 427.0; t <= 482.2; t += 0.5) record.refresh(16787712u, 16939264u, t);
-    CHECK(record.apply(update, 482.2) == 2 && !record.holding);                    // seeker search: hold ends
+    CHECK(record.apply(update, 482.2) == 0 && record.holding);                    // seeker search: hold continues
+    update = {}; update.asked = true; update.supported = true;
+    CHECK(record.apply(update, 482.21) == 2 && !record.holding);                   // gate/link refusal ends hold
     // The hook refreshes the record on every frame of a live missile. A reused block for a new missile
     // (a gap over 2 s, or another target or launcher) starts without history.
     record.refresh(16787712u, 16939264u, 482.25); CHECK(record.supported);

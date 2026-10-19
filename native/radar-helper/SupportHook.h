@@ -66,21 +66,21 @@ bool msiTrackfile(void* mc, void* radar, unsigned target, Access access) {
     return false;
 }
 
-// Project decision (October 18, 2026, Stage 26): the MALICE support hold.
+// Project decision (October 18, 2026, Stage 27): MALICE support through terminal flight.
 // A MALICE datalink block (WeaponBlocks wWCSE_AMRAAM::simulate 0x307a60) asks LinkToTarget at 0x3081e0
 // with its target ID (+0x290) and the missile type. On "yes" it sends the target object's own position
 // and velocity (0x30821a..0x30826d); the trackfile only decides the answer. Native MSI erases an
 // offboard track after 14 s without reports, and the INS then moves the target at constant velocity.
 // The seeker search accepts a return only within 600 m of the INS range (isTargetVisible 0x2f02e7).
 // On October 17 a Tu-95 sped up after its track was erased, and the seeker never saw it.
-// A MALICE that this radar supported keeps support after its trackfile is erased, until its own
-// seeker search starts. The native power, operate and inhibit gates still end it.
+// A MALICE that this radar supported keeps support after its trackfile is erased, until impact.
+// The native power, operate and inhibit gates still end it.
 struct MaliceSupportQuery {
-    bool supported = false, seekerStarted = false;      // Inputs: this missile's history.
+    bool supported = false;                            // Input: this missile's history.
     bool asked = false, granted = false, held = false;  // Outputs of one datalink update.
 };
 inline bool maliceHoldAllowed(const MaliceSupportQuery& query, bool linked) {
-    return linked && query.supported && !query.seekerStarted;
+    return linked && query.supported;
 }
 
 // One record per live MALICE datalink block. A block that the engine reuses for a new missile starts

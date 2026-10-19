@@ -2,6 +2,7 @@
 #pragma once
 #include "MaliceEnergy.h"
 #include "MaliceLoftHook.h"
+#include "MaliceRecovery.h"
 #include <unordered_map>
 #include <deque>
 #include <iterator>
@@ -30,6 +31,27 @@ struct Guard { Guard() { AcquireSRWLockExclusive(&lock); } ~Guard() { ReleaseSRW
 static std::unordered_map<void*, f23radar::EnergyState> states;
 static std::unordered_map<void*, f23radar::SupportHoldRecord> holdRecords;   // Key: live datalink block.
 static std::deque<std::string> messages;
+static f23radar::SlotHook chaffHook;
+static f23radar::AlignedEntryHook terminalHook;
+using Candidate = int(*)(void*, void*);
+static Candidate nativeCandidate{};
+static f23radar::GuidanceStep nativeTerminal{}, nativeInertial{}, nativeSeekerControl{};
+static const void* (*chaffObjectType)(const void*){};
+static f23radar::RecoveryIdentity recoveryIdentities[2];
+// Independent status: -50/-53 identity, -51/-54 bytes or runtime contract, -52/-55 install.
+static int chaffStatus = 0, recoveryStatus = 0;
+static unsigned long long chaffRejected = 0, recoveryFrames = 0;
+struct RecoveryRecord { double age = -1, lossStart = -1; bool running = false; };
+static std::unordered_map<void*, RecoveryRecord> recoveryRecords;
+static RecoveryRecord& recoveryRecord(void* block) {
+    auto& record = recoveryRecords[field<void*>(block, 0x10)];
+    const double age = field<double>(block, 0x170);
+    if (age < record.age) record = {};
+    record.age = age;
+    if (field<unsigned char>(block, 0x167)) record.lossStart = -1;
+    else if (record.lossStart < 0) record.lossStart = age;
+    return record;
+}
 
 static bool hashBytes(const void* bytes, size_t size, const char* expected) {
     BCRYPT_ALG_HANDLE algorithm{}; BCRYPT_HASH_HANDLE hash{}; unsigned char digest[32]{};
@@ -225,6 +247,7 @@ static double guidance(void* block, double time) {
             auto& value = stateFor(block, time);
             value.observe(before, field<int>(block, 0x158), time);
             value.track(time, field<double>(block, 0x180));
+            if (recoveryStatus == 1) recoveryRecord(block);
         }
     }
     return result;
@@ -288,8 +311,6 @@ static double wcse(void* block, double time) {
             auto& record = holdRecords[block];
             record.refresh(field<unsigned>(block, 0x290), field<unsigned>(block, 0x294), modelTime());
             query.supported = record.supported;
-            auto it = states.find(field<void*>(block, 0x10));
-            query.seekerStarted = it != states.end() && it->second.seekerAge >= 0;
         }
     }
     if (malice) maliceSupportQuery = &query;
@@ -311,7 +332,7 @@ static double wcse(void* block, double time) {
                 else
                     std::snprintf(line, sizeof(line), "MALICE support hold end: missile_id=%llx target=%u model_time=%.3f held_s=%.1f reason=%s",
                         id, record.target, now, now-record.holdStart,
-                        query.granted ? "track" : query.seekerStarted ? "seeker" : "refused");
+                        query.granted ? "track" : "refused");
                 messages.emplace_back(line);
             }
         }
@@ -323,17 +344,148 @@ static double wcse(void* block, double time) {
     return result;
 }
 
+// The vtable points to the unadjusted handler. Its +8 field is the actual radar sensor.
+static int candidate(void* handler, void* object) {
+    bool isMalice = false;
+    {
+        Guard guard;
+        if (active && chaffStatus == 1 && accessible(handler, 16)) {
+            auto sensor = field<void*>(handler, 8);
+            if (accessible(sensor, 16)) {
+                auto descriptor = field<void*>(sensor, 8);
+                for (int i = 0; i < identityCount; ++i)
+                    if (descriptor && descriptor == recoveryIdentities[i].sensor) isMalice = true;
+            }
+        }
+    }
+    if (isMalice) {
+        auto getObject = method<void*(*)(void*)>(object, 0x30);
+        auto scene = getObject ? getObject(object) : nullptr;
+        auto getMoving = method<void*(*)(void*)>(scene, 0x38);
+        auto moving = getMoving ? getMoving(scene) : nullptr;
+        auto getCategory = method<unsigned(*)(void*)>(moving, 0x190);
+        const auto category = getCategory ? getCategory(moving) : 0;
+        const auto type = category == 0x100 && chaffObjectType ? chaffObjectType(moving) : nullptr;
+        if (accessible(type, sizeof(f23radar::WsType))
+            && f23radar::rejectMaliceChaff(isMalice, category, field<uint16_t>(type, 4))) {
+            Guard guard; ++chaffRejected;
+            return 0;  // Continue enumeration without scoring or consuming a candidate slot.
+        }
+    }
+    return nativeCandidate(handler, object);
+}
+
+static void terminal(void* block, double step) {
+    bool useFallback = false, isMalice = false;
+    double insAge = -1;
+    {
+        Guard guard;
+        if (recoveryStatus == 1) if (auto id = identify(block, false)) {
+            isMalice = true;
+            const auto& sensors = recoveryIdentities[id-identities];
+            auto sensor = f23radar::sibling(block, *id, sensors.sensor, weaponBase+f23radar::radarSensorVtable, accessible);
+            auto ins = f23radar::sibling(block, *id, sensors.ins, weaponBase+f23radar::strapdownVtable, accessible);
+            if (!sensor || !ins || !accessible(sensor, 0x348) || !accessible(ins, 0x110)
+                || !accessible(block, 0x4f8, true)) {
+                recoveryStatus = -54;
+                messages.emplace_back("ERROR MALICE recovery: sibling/state identity failed; native guidance retained");
+            } else {
+                insAge = field<double>(ins, 0x108);
+                useFallback = f23radar::useMaliceRecovery(true, field<int>(block, 0x158),
+                    field<unsigned char>(block, 0x167) != 0, field<int>(sensor, 0x344),
+                    field<unsigned>(sensor, 0x2bc), insAge);
+            }
+        }
+    }
+    if (useFallback && !f23radar::writeInertialReferences(block, step, nativeSeekerControl, accessible)) {
+        Guard guard; recoveryStatus = -54; useFallback = false;
+        messages.emplace_back("ERROR MALICE recovery: reference writer contract failed; native guidance retained");
+    }
+    if (isMalice) {
+        Guard guard;
+        auto& record = recoveryRecord(block);
+        if (useFallback != record.running) {
+            char line[256];
+            const auto id = static_cast<unsigned long long>(reinterpret_cast<uintptr_t>(field<void*>(block, 0x10)));
+            if (useFallback)
+                std::snprintf(line, sizeof(line), "MALICE lost-lock fallback: missile_id=%llx model_time=%.3f loss_s=%.3f ins_age_s=%.3f",
+                    id, modelTime ? modelTime() : record.age, record.lossStart < 0 ? 0 : record.age-record.lossStart, insAge);
+            else
+                std::snprintf(line, sizeof(line), "MALICE lost-lock fallback end: missile_id=%llx model_time=%.3f reason=%s ins_age_s=%.3f",
+                    id, modelTime ? modelTime() : record.age,
+                    field<unsigned char>(block, 0x167) ? "signal" : insAge >= f23radar::recoveryFreshSeconds ? "stale" : "mode", insAge);
+            messages.emplace_back(line); record.running = useFallback;
+        }
+        if (useFallback) ++recoveryFrames;
+    }
+    // No mutex around native calls: inertial guidance calls the existing loft hook.
+    if (useFallback) {
+        nativeInertial(block, step);
+        const unsigned char initialized = 0;
+        std::memcpy(static_cast<char*>(block)+0x164, &initialized, 1);
+    } else nativeTerminal(block, step);
+}
+
+static void startRecovery(void* malice, void* stock, int planned) {
+    bool knownSensors = planned > 0, knownIns = planned > 0;
+    for (int i = 0; i < planned; ++i) {
+        recoveryIdentities[i] = f23radar::planRecovery(malice, stock, identities[i], accessible);
+        knownSensors = knownSensors && recoveryIdentities[i].sensor;
+        knownIns = knownIns && recoveryIdentities[i].ins;
+    }
+    const auto check = [&](uintptr_t rva, const unsigned char* bytes, size_t n) {
+        const auto address = reinterpret_cast<void*>(weaponBase+rva);
+        return accessible(address, n) && !std::memcmp(address, bytes, n);
+    };
+    const unsigned char thunk[] = {0x48,0x83,0xc1,0x08,0xe9,0x17,0xf9,0xff,0xff};
+    const unsigned char callback[] = {0x48,0x8b,0xc4,0x48,0x89,0x58,0x18,0x48,0x89,0x68,0x20,0x56,0x57,0x41,0x56};
+    chaffObjectType = symbol<decltype(chaffObjectType)>(GetModuleHandleW(L"WorldGeneral.dll"), "?Type@MovingObject@@QEBAAEBVwsType@@XZ");
+    nativeCandidate = reinterpret_cast<Candidate>(weaponBase+f23radar::chaffCallbackThunk);
+    chaffStatus = !knownSensors ? -50
+        : !chaffObjectType || !check(f23radar::chaffCallbackThunk, thunk, sizeof(thunk))
+          || !check(0x2ede00, callback, sizeof(callback))
+          || !accessible(reinterpret_cast<void*>(weaponBase+0x3965e8), 8)
+          || field<uintptr_t>(reinterpret_cast<void*>(weaponBase), 0x3965e8) != reinterpret_cast<uintptr_t>(chaffObjectType)
+          || !chaffHook.prepare(reinterpret_cast<uintptr_t*>(weaponBase+f23radar::chaffCallbackSlot),
+              weaponBase+f23radar::chaffCallbackThunk, reinterpret_cast<void*>(&candidate)) ? -51
+        : !chaffHook.install() ? -52 : 1;
+    const unsigned char terminalEntry[] = {0x48,0x8b,0xc4,0x48,0x89,0x58,0x18,0x55};
+    const unsigned char inertialEntry[] = {0x48,0x8b,0xc4,0x48,0x89,0x58,0x10,0x57,0x48,0x81,0xec,0xb0,0,0,0};
+    const unsigned char controlEntry[] = {0x48,0x8b,0xc4,0x48,0x89,0x58,0x10,0x48,0x89,0x70,0x18,0x57};
+    nativeInertial = reinterpret_cast<f23radar::GuidanceStep>(weaponBase+f23radar::inertialGuidance);
+    nativeSeekerControl = reinterpret_cast<f23radar::GuidanceStep>(weaponBase+f23radar::seekerControl);
+    recoveryStatus = !knownSensors || !knownIns ? -53
+        : !check(f23radar::terminalGuidance, terminalEntry, sizeof(terminalEntry))
+          || !check(f23radar::inertialGuidance, inertialEntry, sizeof(inertialEntry))
+          || !check(f23radar::seekerControl, controlEntry, sizeof(controlEntry))
+          || !terminalHook.prepare(weaponBase+f23radar::terminalGuidance, reinterpret_cast<void*>(&terminal),
+              terminalEntry, sizeof(terminalEntry)) ? -54 : 1;
+    nativeTerminal = reinterpret_cast<f23radar::GuidanceStep>(terminalHook.trampoline());
+    if (recoveryStatus == 1 && !terminalHook.install()) recoveryStatus = -55;
+    for (const auto item : {std::pair<const char*, int>{"chaff filter", chaffStatus}, {"recovery", recoveryStatus}})
+        if (item.second != 1) {
+            char line[128];
+            std::snprintf(line, sizeof(line), "ERROR MALICE %s unavailable (code %d); other features retained", item.first, item.second);
+            messages.emplace_back(line);
+        }
+}
+
 static void stop() {
     { Guard guard; active = false; }
     // Restore hooks outside the mutex: a suspended simulation thread may be waiting for that mutex.
     bool ok = !guidanceHook.installed() || guidanceHook.restore();
     ok = (!engineHook.installed() || engineHook.restore()) && ok;
     ok = (!wcseHook.installed() || wcseHook.restore()) && ok;
+    ok = (!chaffHook.installed() || chaffHook.restore()) && ok;
+    ok = terminalHook.restore() && ok;
     ok = loftHook.restore() && ok;
     for (int i = 0; i < timerCount; ++i) ok = timers[i].restore() && ok;
     Guard guard;
     restored = ok; status = ok ? 0 : -46;
-    if (ok) { identityCount = 0; timerCount = 0; states.clear(); holdRecords.clear(); holdStatus = 0; }
+    if (ok) {
+        identityCount = 0; timerCount = 0; states.clear(); holdRecords.clear(); recoveryRecords.clear();
+        holdStatus = 0; chaffStatus = 0; recoveryStatus = 0;
+    }
     else messages.emplace_back("ERROR MALICE energy: cleanup check failed");
 }
 static int start(void* malice, void* stock) {
@@ -391,8 +543,10 @@ static int start(void* malice, void* stock) {
           || !wcseHook.prepare(reinterpret_cast<uintptr_t*>(weaponBase+f23radar::wcseVtable+0x18),
               weaponBase+f23radar::wcseSimulate, reinterpret_cast<void*>(&wcse)) ? -48
         : !wcseHook.install() ? -49 : 1;
+    startRecovery(malice, stock, planned);
     Guard guard;
     identityCount = planned; states.clear(); holdRecords.clear(); actions = {}; stockPasses = 0;
+    recoveryRecords.clear(); chaffRejected = 0; recoveryFrames = 0;
     physicsThread = 0; timerRestoreThread = 0; threadMismatches = 0;
     active = true; restored = false; status = 1;
     if (holdStatus != 1) {
@@ -403,11 +557,12 @@ static int start(void* malice, void* stock) {
     return status;
 }
 static std::string diagnostics() {
-    Guard guard; char line[640];
-    std::snprintf(line, sizeof(line), "status=%d active=%d pulse_actions=%llu stock_actions=%llu stock_passes=%llu guidance_hook=%d engine_hook=%d restored=%d timer_apply_thread=%lu timer_restore_thread=%lu physics_thread=%lu thread_mismatches=%llu hold_status=%d datalink_hook=%d holds=%llu",
+    Guard guard; char line[800];
+    std::snprintf(line, sizeof(line), "status=%d active=%d pulse_actions=%llu stock_actions=%llu stock_passes=%llu guidance_hook=%d engine_hook=%d restored=%d timer_apply_thread=%lu timer_restore_thread=%lu physics_thread=%lu thread_mismatches=%llu hold_status=%d datalink_hook=%d holds=%llu chaff_status=%d chaff_hook=%d chaff_rejected=%llu recovery_status=%d recovery_hook=%d fallback_frames=%llu",
         status, active, actions.malice, actions.stock, stockPasses, guidanceHook.installed(), engineHook.installed(), restored,
         static_cast<unsigned long>(timerApplyThread), static_cast<unsigned long>(timerRestoreThread),
-        static_cast<unsigned long>(physicsThread), threadMismatches, holdStatus, wcseHook.installed(), supportHolds.load());
+        static_cast<unsigned long>(physicsThread), threadMismatches, holdStatus, wcseHook.installed(), supportHolds.load(),
+        chaffStatus, chaffHook.installed(), chaffRejected, recoveryStatus, terminalHook.installed(), recoveryFrames);
     return line;
 }
 static bool nextMessage(std::string& message) {
