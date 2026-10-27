@@ -1,11 +1,14 @@
-# F-23B v1.4
+# F-23B v1.5
 
-[Current release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest)
+[Download v1.5](https://github.com/Mile-High-Digital-Works/f23b-public/releases/tag/v1.5).
 
-Choose **F-23B-v1.4.zip** for copy and paste, or **F-23B-v1.4-Setup.exe** to install the same files automatically.
-Both include both aircraft modules, ten liveries and documentation. Current installs change no DCS game files.
-Requires Windows and an installed, activated F/A-18C Hornet. The connection supports DCS **2.9.30.28738**.
-Single-player; VR and multiplayer not yet tested.
+Choose **F-23B-v1.5.zip** for manual installation or **F-23B-v1.5-Setup.exe** for automatic installation.
+Both install identical aircraft, weapons, ten liveries and documentation.
 
-[Install and remove](../INSTALL.md) · [Pilot guide](PILOT_GUIDE.md) · [Known limits](../KNOWN_ISSUES.md) ·
+Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
+The weapon and radar connection supports **DCS 2.9.30.28738**.
+**Multiplayer is untested. VR is untested.**
+
+[Install and remove](../INSTALL.md) · [Pilot guide](PILOT_GUIDE.md) ·
+[Release notes](RELEASE_NOTES.md) · [Known limits](../KNOWN_ISSUES.md) ·
 [Feedback](https://github.com/Mile-High-Digital-Works/f23b-public/discussions)

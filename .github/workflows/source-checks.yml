@@ -27,7 +27,7 @@ jobs:
         run: python -B -m unittest discover -s tests/tools -v
       - name: Install graphics renderer
         run: python -m pip install -r requirements-release.txt numpy
-      - name: Check generated graphics
+      - name: Check selected menu manifest
         run: python -B tests/check_branding.py
       - name: Configure flight tests without DCS
         run: cmake -S native/flight-core -B build/flight -DFIT_PARAMETERS_DIR="$PWD/native/flight-core"

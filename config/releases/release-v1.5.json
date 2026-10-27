@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "F-23B-v1.5",
-  "description": "Private v1.5 candidate: door-carried MALICE bay; compact project HARM with stock declared range and TOO detection; trapeze release in every view and master mode; recorded TOO hits at 23 and 68 miles.",
+  "description": "F-23B Black Widow II v1.5: updated flight core, revised internal bays, project HARM, MALICE support and Block II flare rejection.",
   "dcs_version": "2.9.30.28738",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
@@ -107,14 +107,15 @@
     "F-23B/Entry/VisualConfig.lua"
   ],
   "validation_limits": [
-    "Final owner flight and multiplayer observation precede publication.",
-    "The default passes all fourteen six-axis offline corners; this is not a new DCS observation.",
-    "Recorded-thrust equilibrium: dry Mach 2.0 and afterburner Mach 2.47 at 35,000 ft; native ignition timing is unmeasured.",
-    "MALICE motor C retains the 58.7-mile fixture result; the owner long shot remains open.",
-    "Block II remains installed; owner flight, beam and look-down observations remain open.",
-    "AI MALICE may launch with closed main bay doors; AI Block II bay behavior is unverified.",
-    "Regional contact geometry passes offline checks; remaining native hit routing and terminal crash behavior are unproven.",
-    "Multiplayer and VR remain unverified. No public push has occurred."
+    "Multiplayer is untested. VR is untested.",
+    "The weapon and radar connection supports DCS 2.9.30.28738.",
+    "Full missile engagement ranges are not established.",
+    "MALICE recovery after sustained tracking loss remains unconfirmed in DCS.",
+    "Block II helmet-cued shots remain unverified; post-launch datalink is not implemented.",
+    "HARM PB/SP modes, an 85-mile TOO hit and automatic TOO loft remain unverified.",
+    "AI MALICE can launch with closed main bay doors; AI Block II bay sequencing and AI HARM attacks remain unverified.",
+    "AI and dedicated-server missiles without the helper do not receive its missile enhancements.",
+    "AI top speed, supersonic idle response and the complete regional damage response remain unverified."
   ],
   "livery_files": {
     "F23B-01-usaf-langley/description.lua": "757c6b84f8c919cde4a888f965f16a1fc4fcfceb7e8db62f6593ef93f847c11d",
@@ -148,7 +149,7 @@
     "F23B-10-nasa-research/f23b_10_nasa_research.dds": "f705d913c1d84f3474c75f39d0f7ad08181c175c90b7262ba094d34dfacf80c5",
     "F23B-10-nasa-research/f23b_10_nasa_research_roughmet.dds": "2c5a9bfc7516e49c7cccb033ca1b98e03b925375fb42921d805c5e9802674ea6"
   },
-  "kind": "CANDIDATE",
+  "kind": "RELEASE",
   "runtime_is_final": true,
   "final_core_dependent": []
 }

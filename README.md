@@ -1,107 +1,86 @@
 # F-23B Black Widow II
 
-v1.5 is prepared for its final owner flight. The published download remains v1.4.
-
-The full Hornet radar, datalink and SA page in a stealth airframe, with the project flight core and carefree, fast and stable defaults.
-Player internal bays open before weapon release. The earlier MALICE motor recorded a **336-mile A-50 kill** with continuing target support; motor C awaits its long shot.
-AI F-23Bs can use MALICE; their main bay doors can remain closed during launch. Current installs change **no DCS game files**.
+A fictional stealth fighter for DCS World, with the native Hornet cockpit, radar, datalink and SA page.
+v1.5 adds a new flight core, HARM capability, revised internal bays and improved missile support.
 
 ![F-23B in DCS World](docs/images/f23b-exterior.jpg)
 
-## Current download: v1.4
+## Download v1.5
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
 The weapon and radar connection supports **DCS 2.9.30.28738**.
-Single-player; VR and multiplayer not yet tested.
+**Multiplayer is untested. VR is untested.**
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.4.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4.zip) |
-| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4-Setup.exe), which does the same thing for you |
+| Copy and paste | [F-23B-v1.5.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5.zip) |
+| Installer | [F-23B-v1.5-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Setup.exe) |
 
-Both include the same aircraft, weapons, ten liveries and documentation.
+Both options install identical aircraft, weapons, ten liveries and documentation.
+No separate Python installation is needed. Current installations change no DCS game files.
 
-**Manual install**
+For the ZIP, close DCS and extract its contents into your active Saved Games profile.
+For setup, close DCS, run the EXE, confirm the game and profile folders, then select **Install / Repair**.
+Read [installation and upgrade instructions](INSTALL.md) before replacing an older version.
+Start an **F-23B Quick Start** mission and use your Hornet controls.
 
-- Close DCS.
-- Extract the ZIP and drag its contents into `Saved Games\DCS`.
+[Illustrated pilot guide](docs/PILOT_GUIDE.md) · [What's new](docs/RELEASE_NOTES.md) · [Known limits](KNOWN_ISSUES.md)
 
-**Manual upgrade**
+## Aircraft and weapons
 
-- Close DCS and delete `Mods\aircraft\F-23B` and `Mods\aircraft\F-23B-Player` first.
-- Copy the extracted contents into the same profile.
+- A project flight core with stable handling, smoother hard pulls and low-speed recovery.
+- Reduced pitch bounce and strong high-altitude acceleration.
+- Design speeds of about Mach 2.0 dry and Mach 2.47 in afterburner at 35,000 ft.
+- Thrust-based fuel use with improved endurance.
+- Native Hornet radar, MSI, datalink, EW and RWR, plus a **640 NM** SA scale.
+- Sequenced internal bays that open before each player weapon release.
+- **AIM-424 MALICE:** radar-guided air-to-air missile with loft control, two motor pulses and retained target support.
+- **AIM-9X Block II:** infrared air-to-air missile with flare rejection.
+- **AGM-88G AARGM-ER:** project HARM with native HARM controls and TOO guidance.
+- A SEAD preset with three HARMs, two MALICE and two Block II missiles.
+- Wing and fin damage effects, speed-sensitive ground steering, exterior lights and afterburner visuals.
+- A smoother exterior skin, charcoal-grey project missiles and ten included liveries.
 
-**Manual removal**
-
-- Close DCS and delete those two aircraft folders.
-- Delete the ten supplied `F23B-...` folders in `Liveries\F-23B` and, optionally, `F-23B-docs`.
-
-**September 17/18 users:** run DCS Repair with **Check all files (slow)** once before your first manual upgrade.
-Those releases changed stock game files. Copying a ZIP cannot restore them.
-See [the exact steps and method switching](INSTALL.md).
-
-For setup, close DCS, run the EXE, confirm both folders, then select **Install / Repair**.
-Start an **F-23B Quick Start** mission. Your first flight uses the Langley livery and your Hornet controls.
-
-[Illustrated pilot guide](docs/PILOT_GUIDE.md) ·
-[Release details](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest) ·
-[Feedback and questions](https://github.com/Mile-High-Digital-Works/f23b-public/discussions)
-
-## In the aircraft
-
-- Native Hornet radar, MSI, datalink, SA, EW and RWR, with a 640 NM SA scale.
-- Sequenced player internal bays, AIM-424 MALICE with loft control and a second motor pulse, and project AIM-9X Block II.
-- Friendly-track selection protection and AI weapon use.
-- Fourteen offline handling corners pass with protection on by default; smoother 140-degree-per-second roll and progressive hard pulls.
-- Dry Mach 2.0 at 35,000 ft; the afterburner target remains Mach 2.47.
-- Eighteen regional contact shells, retained wheels and ground lines, speed-limited steering and the accepted nose strut.
-- One canopy frame in the pilot view, exterior lights, and new afterburner visuals.
-- Ten liveries: four USAF schemes, two heritage schemes, Crimson Widow, Arctic Splinter, Desert Aggressor and NASA Research.
-
-![F-23B pilot cockpit](docs/images/f23b-cockpit.jpg)
+![The Hornet cockpit used by the F-23B](docs/images/f23b-cockpit.jpg)
 
 ![Ten included liveries](docs/images/f23b-liveries.jpg)
 
-![Afterburner at dusk](docs/images/f23b-afterburner.jpg)
+## Flying and compatibility
 
-## FAQ
+Use **AMRAAM** on the Hornet display to select MALICE, and **Sidewinder** to select Block II.
+Press the trigger for air-to-air missiles. Use **Weapon Release** for HARM.
+A brief press queues the bay opening, release and closing sequence.
 
-**Do I need the Hornet?** Yes. It must be installed and activated. The download does not contain its proprietary files.
+Keep the radar operating while supporting MALICE.
+Radar OFF, standby, inhibit or loss of the radar connection ends retained support.
+Missile range depends on altitude, speed, target motion and support; maximum engagement ranges are not established.
 
-**What happens after a DCS update?** Installation remains available. If the connection cannot start, an in-game message says **connection OFF**.
-Custom weapons, radar upgrades and SA 640 are then unavailable. Flight, the native cockpit and radar, bays, lights and liveries remain available.
-Use [a compatible release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest).
+After a DCS update, the weapon and radar connection can switch off.
+If **weapon and radar connection OFF** appears, MALICE, Block II, radar upgrades and SA 640 are unavailable.
+Flight, the native cockpit and radar, bays, lights and liveries remain available.
+Use a [release compatible with your DCS build](https://github.com/Mile-High-Digital-Works/f23b-public/releases).
 
-**Multiplayer or VR?** Single-player; VR and multiplayer not yet tested.
+AI MALICE can launch while the main bay doors remain closed.
+AI missile enhancements require the helper on the simulation controlling the missile.
+See [known limitations](KNOWN_ISSUES.md) for multiplayer, VR and weapon restrictions.
 
-**Windows warns about the unsigned installer.** Use the ZIP.
+## Help and licences
 
-**How do I remove it?** Delete the two aircraft folders and supplied liveries, or select **Remove** in setup.
+Choose an **F-23B |** scheme in the mission editor or rearming menu.
+If Windows warns about the unsigned installer, use the ZIP.
 
-**Where are the liveries?** Choose an `F-23B |` scheme in the mission editor or rearming menu. All ten are included.
+[Feedback and questions](https://github.com/Mile-High-Digital-Works/f23b-public/discussions) ·
+[Report a bug](https://github.com/Mile-High-Digital-Works/f23b-public/issues/new?template=bug_report.yml)
 
-## Limits and licences
-
-The 336-mile kill is one supported flight, not a guaranteed launch range. Exact 350-mile shots remain unverified.
-MALICE's coasting-apex estimate is not a hard altitude cap. With Block II selected, the helmet display shows `9X`, its count and the aiming cross. A helmet-cued shot has not been flown. Block II post-launch datalink is not implemented.
-AI uses the extended MALICE energy profile when the player also flies an F-23B.
-MALICE rejects chaff and can recover from lost tracking using fresh target updates. Keep the radar operating to maintain support through impact.
-These functions require the weapon helper on the missile's controlling simulation. AI and dedicated-server missiles without that helper are not covered.
-For v1.5, AI F-23Bs can launch MALICE with their main bay doors closed. The AI Block II bay sequence remains unverified.
-MALICE is this project's DCS game version of the [publicly reported Navy AIM-424 name](https://aviationweek.com/defense/missile-defense-weapons/us-navy-testing-new-long-range-air-air-missile); its numerical definitions are game values.
-See [known limitations](KNOWN_ISSUES.md).
-
-The combined software uses **GPL-3.0-or-later**, with retained file-level MIT grants.
-Original documentation and eligible original creative content use **CC BY-SA 4.0**.
+Software uses **GPL-3.0-or-later**, with retained file-level MIT grants.
+Eligible original documentation and creative content use **CC BY-SA 4.0**.
 Purchased models and derived textures retain separate asset terms.
+
 Credits: **F-23B project contributors** for the flight core and integration; **SytaPastel** for the licensed YF-23 visual source.
 
 [Licence and asset terms](LICENCE.md) · [Credits and component notices](CREDITS.md) ·
-[Report a bug](https://github.com/Mile-High-Digital-Works/f23b-public/issues/new?template=bug_report.yml)
-
 [Build and test](BUILDING.md) · [Source layout](docs/SOURCE_LAYOUT.md) · [Contributing](CONTRIBUTING.md)
 
-The release includes the corresponding software source archive and SHA-256 checksums.
-The [September 29 release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/tag/release-2026-09-29) remains available for DCS 2.9.29.27468.
+The release includes corresponding software source and SHA-256 checksums.
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.

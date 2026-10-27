@@ -1,13 +1,14 @@
-# Install or remove F-23B v1.4
+# Install or remove F-23B v1.5
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
 The weapon and radar connection supports **DCS 2.9.30.28738**.
 Both options install the same aircraft, weapons, ten liveries and documentation.
+**Multiplayer is untested. VR is untested.**
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.4.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4.zip) |
-| Installer | [F-23B-v1.4-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest/download/F-23B-v1.4-Setup.exe), which does the same thing for you |
+| Copy and paste | [F-23B-v1.5.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5.zip) |
+| Installer | [F-23B-v1.5-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Setup.exe), which does the same thing for you |
 
 ## One-time step for September 17 or 18 users
 
@@ -51,7 +52,7 @@ Licences, notices and corresponding-source details are together in `F-23B-docs`.
 ## Installer
 
 1. Close DCS, its updater and ModelViewer.
-2. Run **F-23B-v1.4-Setup.exe**.
+2. Run **F-23B-v1.5-Setup.exe**.
 3. Confirm the DCS game folder and Saved Games profile.
 4. Select **Install / Repair**.
 
@@ -62,7 +63,7 @@ Setup keeps your controls, missions and unrelated liveries.
 ## Switching methods
 
 Setup adopts an unchanged manual install when its complete file set matches a known release.
-Known releases are September 29, October 1, October 3, and v1.4.
+Known earlier releases are September 29, October 1, October 3, and v1.4. The current v1.5 package is also recognized.
 If files differ, setup preserves them and displays one instruction:
 
 > Move the existing F-23B aircraft, supplied livery and F-23B-docs folders to a backup location, then run setup again.
@@ -83,6 +84,7 @@ DCS 2.9.29.27468 users can retain the [September 29 release](https://github.com/
 ## First flight and help
 
 Start DCS and select an **F-23B Quick Start** mission. It uses the Langley livery.
+Move MALICE from station 3 to station 2 in older missions.
 Your Hornet controls apply. Read the [pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/blob/main/docs/PILOT_GUIDE.md).
 Choose any supplied `F-23B |` livery in the mission editor or rearming menu.
 

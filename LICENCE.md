@@ -77,8 +77,8 @@ Match these notices to the final installer's actual component versions before re
 Blender, Matplotlib and Pillow are build tools; their programs are not bundled
 with the rendered pictures. The source archive retains existing file notices.
 
-The v1.5 candidate manifest and checksums identify this local package.
-DCS 2.9.30.28738 is pinned. The final owner flight and publication remain pending. The v1.4 pin is retained as historical evidence.
+The v1.5 release manifest and checksums identify the package and corresponding software source.
+The weapon and radar connection supports DCS 2.9.30.28738. Multiplayer and VR are untested.
 
 ## Annex A: GNU GPL version 3
 

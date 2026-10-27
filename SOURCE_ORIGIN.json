@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Corresponding source for the final private v1.5 acceptance build. Historical implementations are available in their release commits.",
+  "description": "Corresponding software source for F-23B v1.5. Historical implementations remain in their release commits.",
   "unchanged_files": {
     "COPYING": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
     "LICENSES/MIT.txt": "b2ffc91f892b8977a39d4c5e592cea65a29c43c119eb9ec88bda34ce618f7c75",
@@ -99,9 +99,9 @@
       "native/radar-helper/MaliceRecovery.h": "8f39314bd52d31f4fc48c8c9ebe423d8e27ec0859b620c8507d27bdc9ce83ced",
       "native/radar-helper/MaliceRecovery_test.cpp": "794df5afc9c9322d9d133227f09d7424b591789b5f1931b5019b34da487d674a",
       "native/radar-helper/build.ps1": "4f9ff54b05848fd53a3c86351480298fb954d1f4ebc45fa2b75218c9701f17fe",
-      "README.md": "1ffd73d7bfff2653977c976cdb436a32ee7ad4e6bc8940f14a892ecc3e32e856",
-      "docs/PILOT_GUIDE.md": "ca6fc6b3042d852c79c953db5985ace04077105b8cfc6b3b5eec8d366f93d4eb",
-      "docs/RELEASE_NOTES.md": "b20eefa287296c7685304d2036e8b07cfa305c441d26020829b9dfcf206e8d4b"
+      "README.md": "5ce8538cfb8ea2b10ecbc6df30d2db222bcbfa122f9ebc4f2e536cbf38489e80",
+      "docs/PILOT_GUIDE.md": "cbbe04f3ee8a6fdab297040229762b1e56e618b7a0bb8d6a9b865cdf1885fc1b",
+      "docs/RELEASE_NOTES.md": "dc61ca7b26b8aa9010675e16c4f763e986ef6d58cb4b961dac0dd7335d3aa9a9"
     },
     "helper_sha256": "7c3e5e7f77f65466bf046826277cc456bd4b16c76857177cd9fd4942f4cb9c51"
   }

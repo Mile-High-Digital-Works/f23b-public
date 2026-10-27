@@ -1,57 +1,50 @@
-# F-23B v1.5
+# F-23B Black Widow II v1.5
 
-AI F-23Bs use the player's engine multipliers; AI top speed in DCS is unverified.
-Idle thrust now falls above Mach 1.3 to slow the jet; flight confirmation is pending.
+v1.5 updates handling, endurance, internal weapon carriage and missile support.
 
-This build is prepared for the final owner flight. It has not been published.
+## Downloads
 
-The default core provides carefree protection, a calmer roll response, smoother
-hard pulls and low-speed recovery. All fourteen offline corners pass.
-Dry power targets Mach 2.0 at 35,000 ft; afterburner targets remain unchanged.
-With the stick centred, extra pitch damping stops the bounce after a quick pull or release.
-High-altitude drag now matches the earlier build's recorded flights, so supersonic acceleration at 35,000 ft is back.
-Top speeds stay Mach 2.0 dry and Mach 2.47 afterburner. Both changes are checked offline, not flown.
-The Hornet retains its cockpit, radar, datalink, engines, tanks and gear.
-Fuel consumption now follows applied thrust; the dry/afterburner check was within 0.4% of target. Unlimited fuel is respected.
-A project fuel economy of 0.6 makes the 10,800 lb internal fuel last as if the jet carried 18,000 lb.
-Burn never falls below the Hornet engines' own burn. This factor is calculated from recorded flights, not flown.
-The exterior skin no longer shows sculpted dents and pockmarks. Rivets and panel lines stay.
-Eighteen regional contact shells replace the single airframe shell. Wheels and
-ground lines retain their verified geometry. Wing and fin damage now reduce the corresponding lift and control authority. A named left outer-wing hit reached the core and produced a rolling moment toward the damaged side. Other regions remain unflown.
+| Method | Download |
+| --- | --- |
+| Copy and paste | [F-23B-v1.5.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5.zip) |
+| Installer | [F-23B-v1.5-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Setup.exe) |
 
-AGM-88G AARGM-ER is a fictional project HARM for the three roof trapezes: stations 2, 3 and 7.
-It uses a project-original compact model, native HARM guidance and explicit project performance factors.
-The visual is 10.43 ft long with a 7.5-inch body.
-Each main bay door now carries one MALICE (stations 4 and 6) and one Block II rail (stations 1 and 9).
-The doors open 150 degrees. The door missiles swing clear of the bay before the trapezes lower the HARMs.
-The centre trapeze (station 2) also accepts one MALICE for the three-MALICE loadout.
-The new SEAD preset loads three HARMs, two MALICE and two Block II.
-The aircraft now accepts the SEAD task. Before, a mission load changed an F-23B SEAD group to CAP.
-The mission editor offers the SEAD preset for SEAD groups. AI HARM attacks in flight remain unverified.
-With a project HARM aboard, any Weapon Release press opens the bay, lowers the three trapezes, sends one release and closes the bay.
-A Weapon Release or weapon-select button saved for the Hornet is copied once to the F-23B entry in your saved controls,
-with a backup of the file. Saving the controls in DCS then keeps it.
-This works in the cockpit and outside views and in every master mode, including HARM Pullback.
-Two recorded flights fired three HARMs, three MALICE and two Block II from these stations. Each store left from its displayed position.
-The HARM and MALICE shots hit their targets. Recorded TOO hits: 23 miles from 15,000 ft and 68 miles from 35,000 ft at Mach 1.2.
-The HARM's declared range and TOO detection distance are the stock HARM values. PB and SP modes remain unverified.
-A level release at 35,000 ft and Mach 1.2 hit an emitter 67.93 miles away in 214.80 seconds. Peak speed was 3,327 knots. Speed fell below 600 knots after 51.87 miles flown. An 85-mile hit and faster turning remain unverified. TOO handoff was lost before the 45-degree turn-test release.
-A mission that loaded MALICE on station 3 must move that MALICE to station 2.
+Both install identical files, including both aircraft modules, three project weapons, ten liveries and the pilot guide.
+Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
+The weapon and radar connection supports **DCS 2.9.30.28738**.
+**Multiplayer is untested. VR is untested.**
 
-MALICE retains motor C and its 58.7-mile fixture result. Its long shot remains open.
-Block II does not lock other air-to-air missiles. With a designated hostile aircraft it locks only that aircraft.
-MALICE holds its second motor pulse within about 10 seconds of the target, and accepts target updates again after a long gap.
-MALICE rejects chaff and retains supported target updates through terminal flight. After sustained tracking loss, it can steer using fresh updates.
-Seeker, motor, loft, and gain settings remain unchanged. AI and dedicated-server missiles without the weapon helper are not covered.
-These helper changes have three fixture shots; wider flight confirmation is pending. The selected revised slate appears in both builds.
-AI MALICE may launch with closed main bay doors. No AI bay controller is added.
-Block II post-launch datalink is not implemented. Multiplayer and VR remain unverified.
+## Changes
 
-The original project flight core and SDK adapter replace the retired model in
-both the DLL and source archive. Existing GPL and MIT file grants remain.
-The ZIP and setup install identical files. No DCS game file is changed.
+- New flight core with stable handling, smoother hard pulls, low-speed recovery and reduced pitch bounce.
+- Restored high-altitude acceleration, with design speeds of Mach 2.0 dry and Mach 2.47 in afterburner at 35,000 ft.
+- Thrust-based fuel consumption and improved endurance.
+- Wing and fin damage effects.
+- Project AGM-88G AARGM-ER with HARM TOO guidance and a three-HARM SEAD preset.
+- Revised internal bays: HARMs on roof trapezes; MALICE and Block II on the doors.
+- MALICE chaff rejection and retained target support after a supported radar track disappears.
+- Block II flare rejection and target filtering.
+- Existing Hornet weapon-release and weapon-select bindings copied once into the F-23B controls, with a backup.
+- Smoother skin textures, charcoal-grey project missiles and revised menu artwork.
 
-Read [installation](../INSTALL.md), [known limits](../KNOWN_ISSUES.md),
-[licence](../LICENCE.md) and [credits](../CREDITS.md).
+## Upgrading and limits
+
+Read [installation instructions](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/INSTALL.md) before upgrading.
+Move any MALICE assigned to station 3 in an older mission to station 2.
+Select the SEAD preset for three HARMs, two MALICE and two Block II missiles.
+
+Cockpit weapon labels remain AMRAAM, Sidewinder and HARM.
+AI MALICE can launch with closed main bay doors.
+MALICE recovery after sustained tracking loss remains unconfirmed in game.
+HARM PB/SP modes and full missile engagement ranges remain unverified.
+Block II post-launch datalink is not implemented.
+
+[Printable pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Pilot-Guide.html) ·
+[Known limits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/KNOWN_ISSUES.md) ·
+[Licence](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/LICENCE.md) ·
+[Credits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/CREDITS.md)
+
+Current installations change no DCS game files.
+Corresponding software source and SHA-256 checksums are included with the release.
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.

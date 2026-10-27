@@ -15,7 +15,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PIN = 'config/releases/release-v1.5.json'
 DOCS = 'F-23B-docs/'
 TEXT = ('.lua', '.lods', '.txt')
-NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md',
+NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md', 'KNOWN_ISSUES.md',
+           'docs/PILOT_GUIDE.md', 'docs/RELEASE_NOTES.md', 'docs/images/f23b-cockpit.jpg',
            'config/licensing/third-party-code-reuse.json',
            'config/licensing/liveries-v1.4.json', 'docs/PILOT_GUIDE.html']
 
