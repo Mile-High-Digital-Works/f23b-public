@@ -110,7 +110,10 @@ int main(int argc,char**argv) {
             }
         }
         auto result=observe(rows[i].v,0);
-        for(std::size_t j=0;j<result.size();++j) out<<(j?",":"")<<result[j];out<<'\n';
+        for(std::size_t j=0;j<result.size();++j) {
+            out<<(j?",":"")<<result[j];
+        }
+        out<<'\n';
     }
     std::cout<<"FREE REPLAY "<<rows.size()<<" rows\n";
 }
