@@ -18,6 +18,7 @@ import zipfile
 import native_patch
 
 MODULES = ('F-23B', 'F-23B-Player')
+RELEASE_VERSION = 'v1.5'
 STATE = '.f23b-install'  # Earlier releases kept their receipt in the DCS profile.
 DOCS = 'F-23B-docs'
 MANIFEST = DOCS + '/release.json'
@@ -227,8 +228,8 @@ def perform(action, dcs, profile, archive, request_elevation=False, receipt_dir=
             if name not in old_files:
                 raise ValueError(UNMANAGED if receipt is None else
                                  'Preserve this added file outside the installation before continuing: ' + str(profile / name))
-            if action == 'remove' and digest != old_files[name]:
-                raise ValueError('Preserve this changed file before removing the aircraft: ' + str(profile / name))
+            if digest != old_files[name]:
+                raise ValueError('Move this changed file to a backup location before continuing: ' + str(profile / name))
         mismatches = []
         if action == 'install':
             mismatches = check_dcs(dcs, json.loads((package / DOCS / 'dcs-requirements.json').read_text()))
@@ -289,7 +290,7 @@ def perform(action, dcs, profile, archive, request_elevation=False, receipt_dir=
     if action == 'remove':
         return 'F-23B removed. Your controls, missions and unrelated liveries were kept.' + (game if changes else '')
     status = (' ' + CONNECTION_OFF) if mismatches else ' Weapon and radar connection: compatible.'
-    return 'F-23B v1.5 installed.' + game + status + ' Start DCS and select an F-23B Quick Start mission.'
+    return f'F-23B {RELEASE_VERSION} installed.' + game + status + ' Start DCS and select an F-23B Quick Start mission.'
 
 
 def elevated_action(action, dcs, profile):
@@ -370,7 +371,7 @@ def gui(archive):
     frame = ttk.Frame(root, padding=24)
     frame.grid()
     ttk.Label(frame, text='F-23B Black Widow II', font=('Segoe UI', 18, 'bold')).grid(row=0, column=0, columnspan=2, sticky='w')
-    ttk.Label(frame, text='v1.4 | Aircraft, weapons and ten liveries', padding=(0, 6, 0, 14)).grid(row=1, column=0, columnspan=2, sticky='w')
+    ttk.Label(frame, text=f'{RELEASE_VERSION} | Aircraft, weapons and ten liveries', padding=(0, 6, 0, 14)).grid(row=1, column=0, columnspan=2, sticky='w')
     entries = []
     for row, (label, value) in enumerate(zip(('DCS game folder', 'Saved Games DCS profile'), defaults())):
         ttk.Label(frame, text=label).grid(row=2 + row * 2, column=0, sticky='w')
@@ -384,7 +385,7 @@ def gui(archive):
                 field.insert(0, folder)
         ttk.Button(frame, text='Browse…', command=browse).grid(row=3 + row * 2, column=1, padx=(10, 0), pady=(4, 12))
         entries.append(entry)
-    ttk.Label(frame, wraplength=550, text='Requires an installed, activated F/A-18C Hornet. Close DCS before continuing. Tested connection: DCS 2.9.30.28738. Other DCS builds install with the version-dependent connection disabled.\n\nInstalls the same files as F-23B-v1.4.zip. Administrator permission is requested only to remove game-file changes from earlier releases.').grid(row=6, column=0, columnspan=2, sticky='w', pady=(0, 18))
+    ttk.Label(frame, wraplength=550, text='Requires an installed, activated F/A-18C Hornet. Close DCS before continuing. Tested connection: DCS 2.9.30.28738. Other DCS builds install with the version-dependent connection disabled.\n\n' + f'Installs the same files as F-23B-{RELEASE_VERSION}.zip. Administrator permission is requested only to remove game-file changes from earlier releases.').grid(row=6, column=0, columnspan=2, sticky='w', pady=(0, 18))
     status = tk.StringVar(value='Ready. No separate Python installation is needed.')
     ttk.Label(frame, textvariable=status, wraplength=550).grid(row=8, column=0, columnspan=2, sticky='w', pady=(16, 0))
     results = queue.Queue()

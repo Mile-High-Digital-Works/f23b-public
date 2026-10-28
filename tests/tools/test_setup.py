@@ -61,9 +61,34 @@ class SetupTests(unittest.TestCase):
         return installer.run(action, self.dcs, self.package)
 
     def test_complete_install_repair_remove_preserves_user_files(self):
+        pin = Path(__file__).resolve().parents[2] / 'config/releases/release-v1.5.json'
+        self.assertEqual(json.loads(pin.read_text())['name'], 'F-23B-' + setup.RELEASE_VERSION)
         self.setup_action('install')
+        record = self.state / 'receipt.json'
+        scenarios = [('fixture', 'Mods/aircraft/F-23B/entry.lua'),
+                     ('fixture', 'Liveries/F-23B/F-23B Test/description.lua'),
+                     (setup.V14_RELEASE, 'Mods/aircraft/F-23B/entry.lua'),
+                     (setup.V14_RELEASE, 'Liveries/F-23B/F-23B Test/description.lua')]
+        for source, name in scenarios:
+            with self.subTest(source=source, name=name):
+                receipt = json.loads(record.read_text())
+                receipt['source_commit'] = source
+                record.write_text(json.dumps(receipt))
+                target = self.profile / name
+                original = target.read_bytes()
+                target.write_bytes(b'personal changes')
+                for action in ('install', 'remove'):
+                    before = record.read_bytes()
+                    with self.assertRaisesRegex(ValueError, 'Move this changed file to a backup'):
+                        self.setup_action(action)
+                    self.assertEqual(target.read_bytes(), b'personal changes')
+                    self.assertEqual(record.read_bytes(), before)
+                target.unlink()
+                self.setup_action('install')
+                self.assertEqual(target.read_bytes(), original)
+
         target = self.profile / 'Mods/aircraft/F-23B/entry.lua'
-        target.write_bytes(b'damaged')
+        target.unlink()
         self.setup_action('install')
         self.assertEqual(target.read_bytes(), b'fixture aircraft')
         # This release adds nothing to the DCS game folder.

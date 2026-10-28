@@ -59,6 +59,8 @@ Licences, notices and corresponding-source details are together in `F-23B-docs`.
 No separate Python installation is needed. Administrator permission is requested only to remove earlier F-23B game-file changes.
 Use **Remove** in setup to remove the aircraft, supplied liveries and documentation.
 Setup keeps your controls, missions and unrelated liveries.
+If setup finds a changed supplied file, move it to a backup location before continuing.
+Run **Install / Repair** again to restore the supplied file.
 
 ## Switching methods
 
