@@ -6,15 +6,15 @@
 #include <initializer_list>
 
 namespace f23radar {
-// MALICE INS and seeker profile for WeaponBlocks 37c61b61... / WeaponsBase 66d48df0... (DCS 2.9.30.28738).
+// MALICE INS and seeker profile for WeaponBlocks a922713e... / WeaponsBase de2d4188... (DCS 2.9.31.29434).
 // A missile's wSimulationSystem uses the scheme embedded in its ammunition descriptor
 // (+0xd8, or +0xcc8 for the network variant). The scheme holds one descriptor pointer per block.
-// wINS_Strapdown::refineTargetData discards every datalink message once INS +0x108 (time since
+// wINS_Strapdown::refineTargetData discards every datalink message once INS +0x250 (time since
 // the last applied message) exceeds descriptor +0xa0 (3.9 s), and it never recovers.
 // INS descriptor +0x60 is the INS operating time (100 s). MALICE flies 70-150 s, so both are
 // widened for MALICE only. Seeker FOV +0x70 narrows from 140 to 15 degrees; a definition that already
 // declares 15 degrees is accepted, and restoring writes back the value that was loaded.
-// Seeker handoff and reference range: the unnamed wGP_AMRAAM block (descriptor vtable RVA 0x3ba288)
+// Seeker handoff and reference range: the unnamed wGP_AMRAAM block (descriptor vtable RVA 0x3e5638)
 // enters seeker search when range < descriptor +0x60 (controlGuidanceMode). The wSN_ARA constructor
 // sets the detection threshold 5/(+0xd0)^4, so a 5 m2 target is visible at lock_range_5sqm (+0xd0).
 // isSignalOutsideOfMLC scales in-band clutter by doppler_bandwidth (+0x100) / band width.
@@ -33,8 +33,8 @@ constexpr double stockMaliceFov = 140.0 * radians, maliceFov = 15.0 * radians;
 constexpr double stockHandoff = 16000.0, maliceHandoff = 16.0 * 1852.0;          // 29,632 m
 constexpr double stockLockRange5 = 18000.0, maliceLockRange5 = 40000.0;
 constexpr double stockDopplerBandwidth = 16.0, maliceDopplerBandwidth = 4.0;
-constexpr uintptr_t guidanceDescriptorVtable = 0x3ba288;   // WeaponBlocks wGP_AMRAAM_Descriptor
-constexpr uintptr_t wcseDescriptorVtable = 0x3bca88;       // WeaponBlocks wWCSE_AMRAAM_Descriptor (RTTI)
+constexpr uintptr_t guidanceDescriptorVtable = 0x3e5638;   // WeaponBlocks wGP_AMRAAM_Descriptor
+constexpr uintptr_t wcseDescriptorVtable = 0x3e7e38;       // WeaponBlocks wWCSE_AMRAAM_Descriptor (RTTI)
 
 template<class T> T profileField(const void* p, size_t offset) {
     T value; std::memcpy(&value, static_cast<const char*>(p)+offset, sizeof(value)); return value;

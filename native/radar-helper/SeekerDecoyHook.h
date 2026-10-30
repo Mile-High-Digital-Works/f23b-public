@@ -52,7 +52,7 @@ inline bool rejectUndesignated(const WsType& parent, uint16_t projectBlockII, co
 // behind the target on nearly the same line of sight. That constant does not depend on ccm_k0, so a
 // head-on shot at a flaring target is decoyed even with ccm_k0 = 0.001.
 // The hook answers 0 for a flare when the asking missile is the project Block II. All else is stock.
-constexpr uintptr_t weaponsRelockImport = 0x198498, missilePositionOffset = 0x1a4;
+constexpr uintptr_t weaponsRelockImport = 0x1ed498, missilePositionOffset = 0x1a4;
 
 // MovingObject::Type() must be `lea rax, [rcx + disp32]; ret`. Returns disp32, or 0 for other code.
 inline uint32_t typeAccessorOffset(const unsigned char* code) {

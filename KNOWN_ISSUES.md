@@ -4,7 +4,7 @@
 
 - **Multiplayer is untested. VR is untested.**
 - Windows and an installed, activated F/A-18C Hornet are required.
-- The weapon and radar connection supports **DCS 2.9.30.28738**.
+- The weapon and radar connection supports **DCS 2.9.31.29434**.
 - On incompatible DCS builds, the connection switches off and displays an in-game message.
 - MALICE, Block II, radar upgrades and SA 640 are unavailable while the connection is off.
 - Flight, the native cockpit and radar, bays, lights and liveries remain available.

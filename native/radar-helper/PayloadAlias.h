@@ -39,12 +39,12 @@ constexpr uint16_t stockAim120B = 24, stockAim9X = 136, stockAgm88C = 65;
 constexpr uintptr_t payloadStationTypeSlot = 0x98, payloadContainerTypeSlot = 0xa0;
 constexpr uintptr_t payloadStationCountSlot = 0x1b8, payloadWeaponCountSlot = 0xd0;
 // FA18C import-table slots (2.9.30.28738, loaded image) that consume a wsType.
-constexpr uintptr_t importSetMissileData = 0x60ff20;      // cockpit::MissileSight::setMissileData
-constexpr uintptr_t importDescriptorByType = 0x611520;    // wGetAmmunitionDescriptorByType
-constexpr uintptr_t importSidewinderNew = 0x610380;       // cockpit::eqSidewinderNew::eqSidewinderNew
-constexpr uintptr_t importCurrentPayload = 0x60fe58;      // cockpit::c_payload, verified against live export
-constexpr uintptr_t importLaunchZone = 0x611480;           // Weapons.dll DLZ
-constexpr uintptr_t armamentVtable = 0x61ebb8, amraamSelectorVtable = 0x61e7c8;
+constexpr uintptr_t importSetMissileData = 0x75af20;      // cockpit::MissileSight::setMissileData
+constexpr uintptr_t importDescriptorByType = 0x75c520;    // wGetAmmunitionDescriptorByType
+constexpr uintptr_t importSidewinderNew = 0x75b380;       // cockpit::eqSidewinderNew::eqSidewinderNew
+constexpr uintptr_t importCurrentPayload = 0x75ae58;      // cockpit::c_payload, verified against live export
+constexpr uintptr_t importLaunchZone = 0x75c480;           // Weapons.dll DLZ
+constexpr uintptr_t armamentVtable = 0x76c2b8, amraamSelectorVtable = 0x76bec8;
 
 // The native radar-missile launch at 0x2f3a1d uses SMS+0xda14 to select a
 // station selector at +0xded0. AMRAAM is index 2 (constructor 0x2ec2e4).

@@ -18,7 +18,7 @@ import zipfile
 import native_patch
 
 MODULES = ('F-23B', 'F-23B-Player')
-RELEASE_VERSION = 'v1.5'
+RELEASE_VERSION = 'v1.5.1'
 STATE = '.f23b-install'  # Earlier releases kept their receipt in the DCS profile.
 DOCS = 'F-23B-docs'
 MANIFEST = DOCS + '/release.json'
@@ -385,7 +385,7 @@ def gui(archive):
                 field.insert(0, folder)
         ttk.Button(frame, text='Browse…', command=browse).grid(row=3 + row * 2, column=1, padx=(10, 0), pady=(4, 12))
         entries.append(entry)
-    ttk.Label(frame, wraplength=550, text='Requires an installed, activated F/A-18C Hornet. Close DCS before continuing. Tested connection: DCS 2.9.30.28738. Other DCS builds install with the version-dependent connection disabled.\n\n' + f'Installs the same files as F-23B-{RELEASE_VERSION}.zip. Administrator permission is requested only to remove game-file changes from earlier releases.').grid(row=6, column=0, columnspan=2, sticky='w', pady=(0, 18))
+    ttk.Label(frame, wraplength=550, text='Requires an installed, activated F/A-18C Hornet. Close DCS before continuing. Tested connection: DCS 2.9.31.29434. Other DCS builds install with the version-dependent connection disabled.\n\n' + f'Installs the same files as F-23B-{RELEASE_VERSION}.zip. Administrator permission is requested only to remove game-file changes from earlier releases.').grid(row=6, column=0, columnspan=2, sticky='w', pady=(0, 18))
     status = tk.StringVar(value='Ready. No separate Python installation is needed.')
     ttk.Label(frame, textvariable=status, wraplength=550).grid(row=8, column=0, columnspan=2, sticky='w', pady=(16, 0))
     results = queue.Queue()

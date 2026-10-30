@@ -14,7 +14,7 @@ from release_assets import branding
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--runtime-dir', type=Path, help='Folder containing the flown aircraft modules')
 args = parser.parse_args()
-pin = json.loads((ROOT / 'config/releases/release-v1.5.json').read_text())
+pin = json.loads((ROOT / 'config/releases/release-v1.5.1.json').read_text())
 manifest = json.loads((ROOT / 'config/releases/menu-v1.5.json').read_text())
 expected = {n for n in pin['runtime_files'] if n.endswith('.png') and n not in pin['removed']
             and ('/Theme/' in n or '/Encyclopedia/' in n)}

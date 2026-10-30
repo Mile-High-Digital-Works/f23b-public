@@ -395,11 +395,11 @@ static void terminal(void* block, double step) {
                 auto sensor = f23radar::sibling(block, *id, sensors.sensor, weaponBase+f23radar::radarSensorVtable, accessible);
                 auto ins = f23radar::sibling(block, *id, sensors.ins, weaponBase+f23radar::strapdownVtable, accessible);
                 const char* failedCheck = !sensor || !accessible(sensor, 0x348) ? "sensor"
-                    : !ins || !accessible(ins, 0x110) ? "INS"
+                    : !ins || !accessible(ins, 0x258) ? "INS"
                     : !accessible(block, 0x4f8, true) ? "GP-state" : nullptr;
                 if (failedCheck) skipRecovery(block, failedCheck);
                 else {
-                    insAge = field<double>(ins, 0x108);
+                    insAge = field<double>(ins, 0x250);
                     useFallback = f23radar::useMaliceRecovery(true, field<int>(block, 0x158),
                         field<unsigned char>(block, 0x167) != 0, field<int>(sensor, 0x344),
                         field<unsigned>(sensor, 0x2bc), insAge);
@@ -454,9 +454,9 @@ static void startRecovery(void* malice, void* stock, int planned) {
     nativeCandidate = reinterpret_cast<Candidate>(weaponBase+f23radar::chaffCallbackThunk);
     chaffStatus = !knownSensors ? -50
         : !chaffObjectType || !check(f23radar::chaffCallbackThunk, thunk, sizeof(thunk))
-          || !check(0x2ede00, callback, sizeof(callback))
-          || !accessible(reinterpret_cast<void*>(weaponBase+0x3965e8), 8)
-          || field<uintptr_t>(reinterpret_cast<void*>(weaponBase), 0x3965e8) != reinterpret_cast<uintptr_t>(chaffObjectType)
+          || !check(0x313b30, callback, sizeof(callback))
+          || !accessible(reinterpret_cast<void*>(weaponBase+0x3be5e8), 8)
+          || field<uintptr_t>(reinterpret_cast<void*>(weaponBase), 0x3be5e8) != reinterpret_cast<uintptr_t>(chaffObjectType)
           || !chaffHook.prepare(reinterpret_cast<uintptr_t*>(weaponBase+f23radar::chaffCallbackSlot),
               weaponBase+f23radar::chaffCallbackThunk, reinterpret_cast<void*>(&candidate)) ? -51
         : !chaffHook.install() ? -52 : 1;

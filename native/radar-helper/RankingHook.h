@@ -66,7 +66,7 @@ class RankingHook {
 public:
     void* trampoline() const { return relay ? relay+32 : nullptr; }
     bool prepare(uintptr_t module, void* replacementFunction) {
-        auto target = reinterpret_cast<unsigned char*>(module+0x3a24f0);
+        auto target = reinterpret_cast<unsigned char*>(module+0x4ecee0);
         if (entry) return entry == target;
         if ((reinterpret_cast<uintptr_t>(target)&7) || std::memcmp(target, prologue, 11)) return false;
         SYSTEM_INFO info{}; GetSystemInfo(&info);

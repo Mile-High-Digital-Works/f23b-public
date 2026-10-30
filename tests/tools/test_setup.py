@@ -61,7 +61,7 @@ class SetupTests(unittest.TestCase):
         return installer.run(action, self.dcs, self.package)
 
     def test_complete_install_repair_remove_preserves_user_files(self):
-        pin = Path(__file__).resolve().parents[2] / 'config/releases/release-v1.5.json'
+        pin = Path(__file__).resolve().parents[2] / 'config/releases/release-v1.5.1.json'
         self.assertEqual(json.loads(pin.read_text())['name'], 'F-23B-' + setup.RELEASE_VERSION)
         self.setup_action('install')
         record = self.state / 'receipt.json'

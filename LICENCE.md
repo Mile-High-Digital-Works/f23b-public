@@ -1,6 +1,6 @@
 # F-23B licence and asset terms
 
-v1.5 final private acceptance build. Release manifests identify the exact files and source.
+F-23B v1.5.1. Release manifests identify the exact files and source.
 The rights below and the complete third-party terms remain in force.
 
 Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue tracker](https://github.com/Mile-High-Digital-Works/f23b-public/issues).
@@ -77,8 +77,8 @@ Match these notices to the final installer's actual component versions before re
 Blender, Matplotlib and Pillow are build tools; their programs are not bundled
 with the rendered pictures. The source archive retains existing file notices.
 
-The v1.5 release manifest and checksums identify the package and corresponding software source.
-The weapon and radar connection supports DCS 2.9.30.28738. Multiplayer and VR are untested.
+The v1.5.1 release manifest and checksums identify the package and corresponding software source.
+The weapon and radar connection supports DCS 2.9.31.29434. Multiplayer and VR are untested.
 
 ## Annex A: GNU GPL version 3
 

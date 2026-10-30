@@ -116,7 +116,7 @@ public:
     bool prepare(uintptr_t module, void* replacementFunction) {
         static constexpr unsigned char bytes[] =
             {0x40,0x53,0x48,0x83,0xec,0x60,0x80,0xb9,0x61,0x01,0x00,0x00,0x00};
-        return AlignedEntryHook::prepare(module+0x2c7090, replacementFunction, bytes, sizeof(bytes));
+        return AlignedEntryHook::prepare(module+0x2ecdc0, replacementFunction, bytes, sizeof(bytes));
     }
 };
 }

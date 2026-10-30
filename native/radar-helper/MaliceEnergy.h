@@ -5,11 +5,11 @@
 #include <string>
 
 namespace f23radar {
-constexpr uintptr_t guidanceVtable = 0x3ba238, engineVtable = 0x3ac840;
-constexpr uintptr_t guidanceSimulate = 0x2cd270, engineSimulate = 0x18afc0;
-constexpr uintptr_t engineSwitch = 0x18b070, loftEntry = 0x2c7090;
+constexpr uintptr_t guidanceVtable = 0x3e55e8, engineVtable = 0x3d7a60;
+constexpr uintptr_t guidanceSimulate = 0x2f2fa0, engineSimulate = 0x1ae4a0;
+constexpr uintptr_t engineSwitch = 0x1ae550, loftEntry = 0x2ecdc0;
 // wWCSE_AMRAAM vtable (export ??_7wWCSE_AMRAAM@@6B@) and simulate (export ?simulate@wWCSE_AMRAAM@@UEAANN@Z).
-constexpr uintptr_t wcseVtable = 0x3bca38, wcseSimulate = 0x307a60;
+constexpr uintptr_t wcseVtable = 0x3e7de8, wcseSimulate = 0x32d790;
 constexpr double delayedMarch = 1e9;
 constexpr const char* controllerRunHash = "f4f764748943e476d4e9f0ddce22c2ed59b0ef4e796b4dda6bec11fe2ae74355";
 

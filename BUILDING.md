@@ -58,7 +58,7 @@ The script runs the native test groups and writes the DLL to `build/native-radar
 ## Release packaging
 
 `tools/package_release.py` packages the aircraft module files of the flown
-build. `config/releases/release-v1.5.json` pins every runtime file by
+build. `config/releases/release-v1.5.1.json` pins every runtime file by
 SHA-256 and lists the unused files that the release removes, with reasons.
 Every shipped script and configuration file must equal the committed source.
 For v1.5, `config/releases/menu-v1.5.json` selects the revised slate. Packaging
@@ -93,7 +93,7 @@ After committing the source and packaging the aircraft as above:
 ```powershell
 python -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements-setup.txt
-.venv/Scripts/python.exe tools/build_setup.py --aircraft-zip "PATH/TO/F-23B-v1.5.zip"
+.venv/Scripts/python.exe tools/build_setup.py --aircraft-zip "PATH/TO/F-23B-v1.5.1.zip"
 ```
 
 The build uses [PyInstaller](https://pyinstaller.org/en/stable/usage.html) to bundle
@@ -114,7 +114,7 @@ Extract the ZIP into a clean profile fixture. Install the compiled EXE into a se
 clean fixture with an empty Config directory. Compare both with this command:
 
 ```powershell
-python tools/verify_installation.py --aircraft-zip "PATH/F-23B-v1.5.zip" --profile "PATH/TO/FIXTURE"
+python tools/verify_installation.py --aircraft-zip "PATH/F-23B-v1.5.1.zip" --profile "PATH/TO/FIXTURE"
 ```
 
 The check compares every file path and SHA-256, including documentation and liveries.
@@ -123,7 +123,7 @@ Repeat against the actual compiled EXE for fresh install, repair, removal, histo
 upgrades, matching manual adoption, modified manual refusal, and a mismatched DCS fixture.
 The release preserves the flown aircraft bytes. Documentation-only packaging does not require another DCS flight.
 
-## v1.5 release
+## v1.5.1 release
 
 The pin is marked RELEASE. Multiplayer and VR are untested and are listed as release limitations.
 The installed defaults include stable handling, low-speed recovery and the dry-power curve.

@@ -1,10 +1,10 @@
-# F-23B v1.5 — pilot guide
+# F-23B v1.5.1 — pilot guide
 
 Requires an installed, activated **DCS: F/A-18C Hornet**.
-The weapon and radar connection supports **DCS 2.9.30.28738**.
+The weapon and radar connection supports **DCS 2.9.31.29434**.
 **Multiplayer is untested. VR is untested.**
 
-[Download the printable guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Pilot-Guide.html).
+[Download the printable guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Pilot-Guide.html).
 Open it in a browser and select Print.
 
 ![The Hornet cockpit used by the F-23B](images/f23b-cockpit.jpg)

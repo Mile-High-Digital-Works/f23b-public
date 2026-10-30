@@ -2,19 +2,20 @@
 
 A fictional stealth fighter for DCS World, with the native Hornet cockpit, radar, datalink and SA page.
 v1.5 adds a new flight core, HARM capability, revised internal bays and improved missile support.
+v1.5.1 updates the weapon and radar connection for DCS 2.9.31.29434.
 
 ![F-23B in DCS World](docs/images/f23b-exterior.jpg)
 
-## Download v1.5
+## Download v1.5.1
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
-The weapon and radar connection supports **DCS 2.9.30.28738**.
+The weapon and radar connection supports **DCS 2.9.31.29434**.
 **Multiplayer is untested. VR is untested.**
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.5.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5.zip) |
-| Installer | [F-23B-v1.5-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Setup.exe) |
+| Copy and paste | [F-23B-v1.5.1.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1.zip) |
+| Installer | [F-23B-v1.5.1-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Setup.exe) |
 
 Both options install identical aircraft, weapons, ten liveries and documentation.
 No separate Python installation is needed. Current installations change no DCS game files.

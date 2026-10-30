@@ -1,17 +1,18 @@
-# F-23B Black Widow II v1.5
+# F-23B Black Widow II v1.5.1
 
+v1.5.1 updates the weapon and radar connection for DCS 2.9.31.29434.
 v1.5 updates handling, endurance, internal weapon carriage and missile support.
 
 ## Downloads
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.5.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5.zip) |
-| Installer | [F-23B-v1.5-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Setup.exe) |
+| Copy and paste | [F-23B-v1.5.1.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1.zip) |
+| Installer | [F-23B-v1.5.1-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Setup.exe) |
 
 Both install identical files, including both aircraft modules, three project weapons, ten liveries and the pilot guide.
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
-The weapon and radar connection supports **DCS 2.9.30.28738**.
+The weapon and radar connection supports **DCS 2.9.31.29434**.
 **Multiplayer is untested. VR is untested.**
 
 ## Changes
@@ -29,7 +30,7 @@ The weapon and radar connection supports **DCS 2.9.30.28738**.
 
 ## Upgrading and limits
 
-Read [installation instructions](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/INSTALL.md) before upgrading.
+Read [installation instructions](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/INSTALL.md) before upgrading.
 Move any MALICE assigned to station 3 in an older mission to station 2.
 Select the SEAD preset for three HARMs, two MALICE and two Block II missiles.
 
@@ -39,10 +40,10 @@ MALICE recovery after sustained tracking loss remains unconfirmed in game.
 HARM PB/SP modes and full missile engagement ranges remain unverified.
 Block II post-launch datalink is not implemented.
 
-[Printable pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Pilot-Guide.html) ·
-[Known limits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/KNOWN_ISSUES.md) ·
-[Licence](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/LICENCE.md) ·
-[Credits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5/CREDITS.md)
+[Printable pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Pilot-Guide.html) ·
+[Known limits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/KNOWN_ISSUES.md) ·
+[Licence](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/LICENCE.md) ·
+[Credits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/CREDITS.md)
 
 Current installations change no DCS game files.
 Corresponding software source and SHA-256 checksums are included with the release.

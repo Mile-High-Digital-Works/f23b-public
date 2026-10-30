@@ -1,14 +1,14 @@
-# Install or remove F-23B v1.5
+# Install or remove F-23B v1.5.1
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
-The weapon and radar connection supports **DCS 2.9.30.28738**.
+The weapon and radar connection supports **DCS 2.9.31.29434**.
 Both options install the same aircraft, weapons, ten liveries and documentation.
 **Multiplayer is untested. VR is untested.**
 
 | Method | Download |
 | --- | --- |
-| Copy and paste | [F-23B-v1.5.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5.zip) |
-| Installer | [F-23B-v1.5-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5/F-23B-v1.5-Setup.exe), which does the same thing for you |
+| Copy and paste | [F-23B-v1.5.1.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1.zip) |
+| Installer | [F-23B-v1.5.1-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Setup.exe), which does the same thing for you |
 
 ## One-time step for September 17 or 18 users
 
@@ -52,7 +52,7 @@ Licences, notices and corresponding-source details are together in `F-23B-docs`.
 ## Installer
 
 1. Close DCS, its updater and ModelViewer.
-2. Run **F-23B-v1.5-Setup.exe**.
+2. Run **F-23B-v1.5.1-Setup.exe**.
 3. Confirm the DCS game folder and Saved Games profile.
 4. Select **Install / Repair**.
 
@@ -65,7 +65,7 @@ Run **Install / Repair** again to restore the supplied file.
 ## Switching methods
 
 Setup adopts an unchanged manual install when its complete file set matches a known release.
-Known earlier releases are September 29, October 1, October 3, and v1.4. The current v1.5 package is also recognized.
+Known earlier releases are September 29, October 1, October 3, v1.4, and v1.5. The current package is also recognized.
 If files differ, setup preserves them and displays one instruction:
 
 > Move the existing F-23B aircraft, supplied livery and F-23B-docs folders to a backup location, then run setup again.

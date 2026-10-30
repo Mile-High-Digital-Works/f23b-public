@@ -8,7 +8,7 @@ static void require(bool ok, const char* message) {
     if (!ok) { std::fprintf(stderr, "%s\n", message); std::abort(); }
 }
 static std::vector<unsigned char> stockImage() {
-    std::vector<unsigned char> image(0x700000, 0xcc);
+    std::vector<unsigned char> image(0x900000, 0xcc);
     std::memcpy(image.data() + saRangeStockConstant, &saRangeStockLimit, 8);
     std::memcpy(image.data() + saRangeExtendedConstant, &saRangeExtendedLimit, 8);
     for (const auto& p : saRangePatches) {

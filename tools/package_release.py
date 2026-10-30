@@ -12,7 +12,7 @@ from verify_source import verify
 from release_assets import branding, fix_mission
 
 ROOT = Path(__file__).resolve().parents[1]
-PIN = 'config/releases/release-v1.5.json'
+PIN = 'config/releases/release-v1.5.1.json'
 DOCS = 'F-23B-docs/'
 TEXT = ('.lua', '.lods', '.txt')
 NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md', 'KNOWN_ISSUES.md',

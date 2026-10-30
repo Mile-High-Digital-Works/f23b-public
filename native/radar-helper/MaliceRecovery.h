@@ -4,9 +4,9 @@
 #include <array>
 
 namespace f23radar {
-constexpr uintptr_t chaffCallbackSlot = 0x3bbcf8, chaffCallbackThunk = 0x2ee4e0;
-constexpr uintptr_t terminalGuidance = 0x2c7200, inertialGuidance = 0x2c6e90, seekerControl = 0x2c8e10;
-constexpr uintptr_t radarSensorVtable = 0x3bbb40, strapdownVtable = 0x3b90c8;
+constexpr uintptr_t chaffCallbackSlot = 0x3e70a8, chaffCallbackThunk = 0x314210;
+constexpr uintptr_t terminalGuidance = 0x2ecf30, inertialGuidance = 0x2ecbc0, seekerControl = 0x2eeb40;
+constexpr uintptr_t radarSensorVtable = 0x3e6ef0, strapdownVtable = 0x3e4378;
 // Owner's Stage 27 policy: two 2-second reports plus margin. No native descriptor changes.
 constexpr double recoveryFreshSeconds = 4.5;
 

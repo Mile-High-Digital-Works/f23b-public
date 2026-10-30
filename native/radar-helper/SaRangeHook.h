@@ -4,9 +4,9 @@
 #include <cstring>
 
 namespace f23radar {
-// FA18C.dll 1303ca95...: each SA SCL press halves the SA scale; below 5 NM it wraps to 320 NM.
-// Two paths store the scale. The integer path (RVA 0x3fb1d6) loads the wrap with `mov eax, 0x140`.
-// The double path (RVA 0x389d8a) loads 320.0 from a constant that six other sites share, and
+// FA18C.dll 89a30860...: each SA SCL press halves the SA scale; below 5 NM it wraps to 320 NM.
+// Two paths store the scale. The integer path (RVA 0x545bc6) loads the wrap with `mov eax, 0x140`.
+// The double path (RVA 0x4d477a) loads 320.0 from a constant that six other sites share, and
 // stores 320.0 from a `movabs` immediate. The F-23B changes only these three wrap values to 640,
 // so its SA scale cycles 40, 20, 10, 5, 640, 320, ... Restoring writes back the stock bytes.
 // Stock Hornets without an F-23B session never see the change.
@@ -18,13 +18,13 @@ struct SaRangePatch {
 };
 inline constexpr SaRangePatch saRangePatches[3] = {
     // mov eax, 0x140 -> mov eax, 0x280
-    {0x3fb1ec, {0xb8}, 1, 1, 4, {0x40, 0x01, 0x00, 0x00}, {0x80, 0x02, 0x00, 0x00}},
-    // movsd xmm3, [rip + disp]: 320.0 at 0x61f678 -> the module's read-only 640.0 at 0x6236b0
-    {0x389db0, {0xf2, 0x0f, 0x10, 0x1d}, 4, 4, 4, {0xc0, 0x58, 0x29, 0x00}, {0xf8, 0x98, 0x29, 0x00}},
+    {0x545bdc, {0xb8}, 1, 1, 4, {0x40, 0x01, 0x00, 0x00}, {0x80, 0x02, 0x00, 0x00}},
+    // movsd xmm3, [rip + disp]: 320.0 at 0x76cd78 -> the module's read-only 640.0 at 0x770db0
+    {0x4d47a0, {0xf2, 0x0f, 0x10, 0x1d}, 4, 4, 4, {0xd0, 0x85, 0x29, 0x00}, {0x08, 0xc6, 0x29, 0x00}},
     // movabs rax, 320.0 -> movabs rax, 640.0
-    {0x389db8, {0x48, 0xb8}, 2, 2, 8, {0, 0, 0, 0, 0, 0, 0x74, 0x40}, {0, 0, 0, 0, 0, 0, 0x84, 0x40}},
+    {0x4d47a8, {0x48, 0xb8}, 2, 2, 8, {0, 0, 0, 0, 0, 0, 0x74, 0x40}, {0, 0, 0, 0, 0, 0, 0x84, 0x40}},
 };
-inline constexpr uintptr_t saRangeStockConstant = 0x61f678, saRangeExtendedConstant = 0x6236b0;
+inline constexpr uintptr_t saRangeStockConstant = 0x76cd78, saRangeExtendedConstant = 0x770db0;
 inline constexpr double saRangeStockLimit = 320.0, saRangeExtendedLimit = 640.0;
 
 // 1 stock, 2 extended, 0 anything else. `base` is the loaded FA18C.dll image.

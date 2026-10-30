@@ -6,15 +6,15 @@
 
 namespace f23radar {
 // A missile asks its launcher LinkToTarget(target) each frame. The Hornet answers with
-// avLinkToTargetResponder::is_tracking (FA18C 2.9.30.28738 RVA 0x49d7b0). Native support
+// avLinkToTargetResponder::is_tracking (FA18C 2.9.31.29434 RVA 0x5e81a0). Native support
 // covers the L&S, designated tracks and TWS tracks that pass a fire-control-quality gate.
 // The F-23B extension keeps the native answer and the native power/operate/inhibit gates.
 // It also accepts a missile's own target while that target remains an MSI trackfile.
 // It never creates tracks, changes the L&S or locks, and only answers for the F-23B radar.
 using TrackingFunction = bool(*)(void*, unsigned, unsigned);
 constexpr uintptr_t responderOffset = 0xb8;   // radar -> avLinkToTargetResponder base
-constexpr uintptr_t trackingSlot = 0x635ac8;  // responder vtable slot 1 (is_tracking)
-constexpr uintptr_t nativeTracking = 0x49d7b0;
+constexpr uintptr_t trackingSlot = 0x7831c8;  // responder vtable slot 1 (is_tracking)
+constexpr uintptr_t nativeTracking = 0x5e81a0;
 constexpr size_t msiTrackStride = 0x228;      // same vector as the friendly-ranking hook
 
 template<class T> T supportField(const void* p, size_t offset) {
@@ -67,7 +67,7 @@ bool msiTrackfile(void* mc, void* radar, unsigned target, Access access) {
 }
 
 // Project decision (October 18, 2026, Stage 27): MALICE support through terminal flight.
-// A MALICE datalink block (WeaponBlocks wWCSE_AMRAAM::simulate 0x307a60) asks LinkToTarget at 0x3081e0
+// A MALICE datalink block (WeaponBlocks wWCSE_AMRAAM::simulate 0x32d790) asks LinkToTarget at 0x32df10
 // with its target ID (+0x290) and the missile type. On "yes" it sends the target object's own position
 // and velocity (0x30821a..0x30826d); the trackfile only decides the answer. Native MSI erases an
 // offboard track after 14 s without reports, and the INS then moves the target at constant velocity.

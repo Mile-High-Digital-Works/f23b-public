@@ -232,7 +232,7 @@ static int primary_target(lua_State* L) {
             auto responder = field<uintptr_t>(context, 0x100);
             auto radar = reinterpret_cast<void*>(responder >= 0xb8 ? responder - 0xb8 : 0);
             if (accessible(radar, f23radar::radarSize)
-                && field<uintptr_t>(radar, 0) == module + 0x6359e8
+                && field<uintptr_t>(radar, 0) == module + 0x7830e8
                 && field<void*>(radar, 0x18) == context) {
                 side = target_side(reinterpret_cast<void*>(responder), id);
                 if (side == 2) valid = target_angles(context, id, az, el);
@@ -542,7 +542,7 @@ static void install_launch_zone() {
     auto runtime = GetModuleHandleW(L"Weapons.dll");
     const auto base = hornetBase.load();
     launchZoneStatus = -40;
-    if (!base || !matches(runtime, "6e3a4cb16c0c89cb7bc266d4f275d4e8659ab8e385464bb5d377832d7a2fa614")) return;
+    if (!base || !matches(runtime, "1d5af83082eb37d12c3b8c66821081ca3c7f2563218467e94f80f2c87786d62c")) return;
     stockLaunchZone = symbol<LaunchZoneFunction>(runtime,
         "?DLZ@@YAXPEAURocket_Const@@MMMMAEBVVec3f@osg@@11AEAM22@Z");
     globalInfoAddress = reinterpret_cast<void**>(GetProcAddress(GetModuleHandleW(L"WorldGeneral.dll"),
@@ -790,12 +790,12 @@ static int early_install() {
     auto cockpit = GetModuleHandleW(L"CockpitBase.dll"), weapons = GetModuleHandleW(L"WeaponsBase.dll");
     auto blocks = GetModuleHandleW(L"WeaponBlocks.dll"), weaponRuntime = GetModuleHandleW(L"Weapons.dll");
     if (!cockpit || !weapons || !blocks || !weaponRuntime) return -20;
-    if (!matches(cockpit, "163d55167503da8dd0ea9eb459e17206fc3dc8d6b4805b5b13bbe58341beb794")
-        || !matches(weapons, "a14d00c70d3cba0a3b129df9627280f2a5b01cb60d281484da4468c921d759df")
-        || !matches(blocks, "e1be3d2bf0d8f3c2dd93925f386b162b96f1db7318e9b319b54a61b66072b83b")
-        || !matches(weaponRuntime, "6e3a4cb16c0c89cb7bc266d4f275d4e8659ab8e385464bb5d377832d7a2fa614")) return -25;
+    if (!matches(cockpit, "fb0a09be70627c7790dea1527cedfee43082bb8b112484d5c85be1d99d33de95")
+        || !matches(weapons, "de2d4188e06767f5d728ab871d2c39c05f0c6702b63734e49124376984523e30")
+        || !matches(blocks, "a922713e070f62b23c343fcc609c242e1acf738882b2c3f4a98d0b42049fdd33")
+        || !matches(weaponRuntime, "1d5af83082eb37d12c3b8c66821081ca3c7f2563218467e94f80f2c87786d62c")) return -25;
     const auto path = expected_hornet_path();
-    if (path.empty() || !file_matches(path.c_str(), "fa6e89b5e193b7faf11a9de16269bb9314472532cf447254cbf38e1e9b375f31"))
+    if (path.empty() || !file_matches(path.c_str(), "89a30860b954627ca40917239356e1c0e462228adf9386f71f7e0f70c1507bdd"))
         return -25;
     weaponResourceName = symbol<decltype(weaponResourceName)>(weaponRuntime,
         "?weaponGetUniqueResourceName@@YA?AV?$basic_string_view@DU?$char_traits@D@std@@@std@@AEBVwsType@@@Z");
@@ -920,7 +920,7 @@ static int update(lua_State* L) {
                 auto responder = field<uintptr_t>(context, 0x100);
                 auto radar = reinterpret_cast<void*>(responder >= 0xb8 ? responder - 0xb8 : 0);
                 if (accessible(radar, f23radar::radarSize, true)
-                    && field<uintptr_t>(radar, 0) == module + 0x6359e8
+                    && field<uintptr_t>(radar, 0) == module + 0x7830e8
                     && field<void*>(radar, 0x18) == context) {
                     if (supportRadar.exchange(radar) != radar) supportMc.store(nullptr);
                     const void* targetObject = nullptr;
@@ -938,7 +938,7 @@ static int update(lua_State* L) {
                     if (accessible(model, f23radar::modelSize, true) && accessible(mode, 16)
                         && field<void*>(mode, 8) == radar) {
                         auto vtable = field<uintptr_t>(mode, 0);
-                        bool search = vtable == module + 0x636578 || vtable == module + 0x636848;
+                        bool search = vtable == module + 0x783c78 || vtable == module + 0x783f48;
                         status = tune.update(radar, model, search);
                         if (search && status >= 0 && toBoolean(L, 1)) owner = radar;
                     }
@@ -1022,10 +1022,10 @@ extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
     supportMc.store(nullptr);
     ++generation;
     launchLogTime = -1e9;
-    supported = matches(GetModuleHandleW(L"FA18C.dll"), "fa6e89b5e193b7faf11a9de16269bb9314472532cf447254cbf38e1e9b375f31")
-        && matches(GetModuleHandleW(L"CockpitBase.dll"), "163d55167503da8dd0ea9eb459e17206fc3dc8d6b4805b5b13bbe58341beb794")
-        && matches(GetModuleHandleW(L"edObjects.dll"), "dfcbde26de71f85d8b9b9b57554ad9f6781ed9bae9a2eb6b7a08e55c9199d468")
-        && matches(GetModuleHandleW(L"WorldGeneral.dll"), "7e9ad48e07f574333ab32c12c92a7be9c91173c57de9dda702fe433f04d6ad27");
+    supported = matches(GetModuleHandleW(L"FA18C.dll"), "89a30860b954627ca40917239356e1c0e462228adf9386f71f7e0f70c1507bdd")
+        && matches(GetModuleHandleW(L"CockpitBase.dll"), "fb0a09be70627c7790dea1527cedfee43082bb8b112484d5c85be1d99d33de95")
+        && matches(GetModuleHandleW(L"edObjects.dll"), "53921811f0b0ec487a7615dba8262dad622a94908c84d64528fa3fd62ea5102f")
+        && matches(GetModuleHandleW(L"WorldGeneral.dll"), "83d36b10205234da58b4a98dd06f75a84d6f3e13826d0a123e482eb53a7b8265");
     holderCoalition=symbol<int(*)()>(GetModuleHandleW(L"CockpitBase.dll"),"?getHolderCoalition@HumanRadiosKeeper@cockpit@@SA?AW4wcCoalitionName@@XZ");
     objectCoalition=symbol<int(*)(const void*)>(GetModuleHandleW(L"WorldGeneral.dll"),"?Coalition@MovingObject@@QEBA?BW4wcCoalitionName@@XZ");
     registryAddress=reinterpret_cast<void**>(GetProcAddress(GetModuleHandleW(L"edObjects.dll"),"?instance@RegisterManager@@2PEAV1@EA"));
@@ -1052,10 +1052,10 @@ extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
             const auto function = module + f23radar::nativeTracking;
             auto slot = reinterpret_cast<uintptr_t*>(module + f23radar::trackingSlot);
             nativeTrackingFunction = reinterpret_cast<f23radar::TrackingFunction>(function);
-            weaponsSupported = matches(GetModuleHandleW(L"WeaponsBase.dll"), "a14d00c70d3cba0a3b129df9627280f2a5b01cb60d281484da4468c921d759df")
-                && matches(GetModuleHandleW(L"WeaponBlocks.dll"), "e1be3d2bf0d8f3c2dd93925f386b162b96f1db7318e9b319b54a61b66072b83b");
+            weaponsSupported = matches(GetModuleHandleW(L"WeaponsBase.dll"), "de2d4188e06767f5d728ab871d2c39c05f0c6702b63734e49124376984523e30")
+                && matches(GetModuleHandleW(L"WeaponBlocks.dll"), "a922713e070f62b23c343fcc609c242e1acf738882b2c3f4a98d0b42049fdd33");
             malice_energy::nativeSupported = weaponsSupported
-                && matches(GetModuleHandleW(L"blocksim.dll"), "5952b84cca451babd6b3e46e8d3f12d71826df3c1661f98ef53a224c4dd73466");
+                && matches(GetModuleHandleW(L"blocksim.dll"), "2324f33d16181ba534154a1d90315d02f8983cb4d493bc2674d5af0517d4ac3e");
             try_profile();
             supportInstalled = accessible(reinterpret_cast<void*>(function), sizeof(entry))
                 && std::memcmp(reinterpret_cast<void*>(function), entry, sizeof(entry)) == 0
@@ -1078,10 +1078,10 @@ extern "C" __declspec(dllexport) int luaopen_f23b_primary(lua_State* L) {
     pushNumber = symbol<void(*)(lua_State*, double)>(lua, "lua_pushnumber");
     pushFunction = symbol<void(*)(lua_State*, LuaFunction, int)>(lua, "lua_pushcclosure");
     if (!pushNumber || !pushFunction) return 0;
-    if (!matches(GetModuleHandleW(L"FA18C.dll"), "fa6e89b5e193b7faf11a9de16269bb9314472532cf447254cbf38e1e9b375f31")
-        || !matches(GetModuleHandleW(L"CockpitBase.dll"), "163d55167503da8dd0ea9eb459e17206fc3dc8d6b4805b5b13bbe58341beb794")
-        || !matches(GetModuleHandleW(L"edObjects.dll"), "dfcbde26de71f85d8b9b9b57554ad9f6781ed9bae9a2eb6b7a08e55c9199d468")
-        || !matches(GetModuleHandleW(L"WorldGeneral.dll"), "7e9ad48e07f574333ab32c12c92a7be9c91173c57de9dda702fe433f04d6ad27")) return 0;
+    if (!matches(GetModuleHandleW(L"FA18C.dll"), "89a30860b954627ca40917239356e1c0e462228adf9386f71f7e0f70c1507bdd")
+        || !matches(GetModuleHandleW(L"CockpitBase.dll"), "fb0a09be70627c7790dea1527cedfee43082bb8b112484d5c85be1d99d33de95")
+        || !matches(GetModuleHandleW(L"edObjects.dll"), "53921811f0b0ec487a7615dba8262dad622a94908c84d64528fa3fd62ea5102f")
+        || !matches(GetModuleHandleW(L"WorldGeneral.dll"), "83d36b10205234da58b4a98dd06f75a84d6f3e13826d0a123e482eb53a7b8265")) return 0;
     holderCoalition = symbol<int(*)()>(GetModuleHandleW(L"CockpitBase.dll"),
         "?getHolderCoalition@HumanRadiosKeeper@cockpit@@SA?AW4wcCoalitionName@@XZ");
     objectCoalition = symbol<int(*)(const void*)>(GetModuleHandleW(L"WorldGeneral.dll"),

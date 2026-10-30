@@ -12,7 +12,7 @@ body:
     id: dcs-version
     attributes:
       label: DCS version
-      placeholder: 2.9.30.28738
+      placeholder: 2.9.31.29434
   - type: textarea
     id: problem
     attributes:
