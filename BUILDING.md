@@ -136,7 +136,12 @@ The release preserves the flown aircraft bytes. Documentation-only packaging doe
 
 The pin is marked RELEASE. Multiplayer and VR are untested and are listed as release limitations.
 The installed defaults include stable handling, low-speed recovery and the dry-power curve.
-No tuning file, damage logger or temporary test hook is shipped.
+No tuning file is shipped. The damage logger is compiled out.
+At each aircraft start, the flight bridge reads the optional file `Config/F23B-tuning.json`
+in `%USERPROFILE%\Saved Games\DCS`, or in the profile that `F23B_SAVED_GAMES` names.
+It adds an entry to `Logs/F23B-tuning.log` in that profile. Without the file, it uses the v1.5 defaults.
+The recorders write files only when `F23B_FORCE_BRIDGE_FIT`, `_STATE`, `_MECHANICS`,
+`_GROUND` or `F23B_NATIVE_FORWARD_TRACE` is set.
 The retired flight model and its tests are absent from the build and source archive.
 The source archive, DLL code sections and module manifest identify the same implementation.
 
