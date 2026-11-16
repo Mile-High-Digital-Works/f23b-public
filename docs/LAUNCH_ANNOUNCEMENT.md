@@ -7,7 +7,7 @@
 Hi everyone, v1.4 is up. Quite a bit has changed since my September 19 post, so this brings everything together.
 
 The aircraft now leaves the DCS game files alone. The weapon connection runs in memory while you fly the F-23B.
-MALICE has loft, a second motor pulse, and long-range loft control. An owner flight recorded a 336-mile A-50 kill with continuing target support.
+MALICE has loft, a second motor pulse, and long-range loft control. A test flight recorded a 336-mile A-50 kill with continuing target support.
 That is one supported flight, not a promised range for every shot.
 
 - AI F-23Bs fire MALICE and Block II. Friendly aircraft no longer enter automatic target ranking, and SA now reaches 640 NM.

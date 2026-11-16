@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "F23B-2026-10-01",
-  "description": "Aircraft module files of the build flown on October 1, 2026, with the radar helper re-pinned for DCS World 2.9.30.28536. The release removes unused files, adds a public build identity, draws original menu graphics and corrects the Quick Start mission requirements.",
+  "description": "Aircraft module files of the build tested on October 1, 2026, with the radar helper re-pinned for DCS World 2.9.30.28536. The release removes unused files, adds a public build identity, draws original menu graphics and corrects the Quick Start mission requirements.",
   "dcs_version": "2.9.30.28536",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "8d196bf834f0c340c0265abe512cc923be00fca2da1130a0dfddc794059335b0",

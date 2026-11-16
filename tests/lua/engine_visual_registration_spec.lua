@@ -57,7 +57,7 @@ check(#registered == 1, "expected exactly one registered aircraft, got " .. #reg
 local aircraft = registered[1]
 check(aircraft.Name == "F-23B", "wrong aircraft registered: " .. tostring(aircraft.Name))
 
-check(aircraft.RCS == 0.00001, "registered RCS differs from owner-selected project value")
+check(aircraft.RCS == 0.00001, "registered RCS differs from the project-defined value")
 local light_contract = {
     [WOLALIGHT_STROBES] = {193}, [WOLALIGHT_LANDING_LIGHTS] = {210},
     [WOLALIGHT_TAXI_LIGHTS] = {210}, [WOLALIGHT_NAVLIGHTS] = {190, 191, 192},
