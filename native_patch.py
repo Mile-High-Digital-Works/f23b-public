@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Install or restore F-23B missile definitions using the user's own DCS files."""
+"""Restore DCS game files changed by earlier F-23B releases, with atomic writes."""
 import argparse
 import hashlib
 import json
@@ -38,13 +38,14 @@ def replacement(base, project, kind):
 def atomic_write(path, data):
     temp = path.with_name(path.name + '.f23b-pending')
     try:
-        with temp.open('xb') as stream:
-            stream.write(data)
-            stream.flush()
-            os.fsync(stream.fileno())
+        stream = temp.open('xb')
     except FileExistsError:
         raise ValueError('An unfinished write already exists: ' + str(temp))
     try:
+        with stream:
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
         os.replace(temp, path)
     finally:
         if temp.exists():
