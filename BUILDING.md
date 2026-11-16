@@ -57,7 +57,7 @@ The script runs the native test groups and writes the DLL to `build/native-radar
 
 ## Release packaging
 
-`tools/package_release.py` packages the aircraft module files of the flown
+`tools/package_release.py` packages the aircraft module files of the released
 build. `config/releases/release-v1.5.1.json` pins every runtime file by
 SHA-256 and lists the unused files that the release removes, with reasons.
 Every shipped script and configuration file must equal the committed source.
@@ -67,21 +67,20 @@ dimensions; it does not regenerate the artwork. Font files are not bundled.
 The release pin sets `runtime_is_final` to true for byte preservation.
 Packaging preserves
 every module byte, including Quick Start missions, and checks installed parity.
-The v1.4 pin remains a historical baseline.
 
 ```powershell
 python -m pip install -r requirements-release.txt
-python -B tools/package_release.py --runtime-dir "PATH/TO/FLOWN/Mods/aircraft" --liveries-dir "PATH/TO/PACK/Liveries/F-23B"
+python -B tools/package_release.py --runtime-dir "PATH/TO/RELEASE/Mods/aircraft" --liveries-dir "PATH/TO/PACK/Liveries/F-23B"
 ```
 
-Check the actual menu PNGs with `python -B tests/check_branding.py --runtime-dir "PATH/TO/FLOWN/Mods/aircraft"`.
+Check the actual menu PNGs with `python -B tests/check_branding.py --runtime-dir "PATH/TO/RELEASE/Mods/aircraft"`.
 Hosted CI checks the committed menu manifest; licensed runtime images remain local release inputs.
 
-Select the committed accepted pin with `--pin config/releases/release-<version>.json`.
-The flown module folders are a private release input and are not downloaded by CI.
-They contain the licensed visual derivatives. The Blender source for these
-derivatives remains private; it is not corresponding software source.
-Before release, compare both rebuilt DLLs with the accepted runtime by code
+Select the committed release pin with `--pin config/releases/release-<version>.json`.
+The release module folders are a separate release input and are not downloaded by CI.
+They contain the licensed visual derivatives. The Blender sources for these
+derivatives are not part of the corresponding software source.
+Before release, compare both rebuilt DLLs with the released runtime by code
 section hash. Other sections contain build paths and timestamps, so whole-file
 hashes can differ. The v1.5 helper and bridge match their corresponding source rebuilds by normalized content.
 Packaging produces local release files. It does not publish them or change repository visibility.
@@ -103,6 +102,7 @@ beside the aircraft/source archives. The payload must match the committed source
 The GUI requests administrator access only when verified earlier game-file changes need restoration. Command-line fixture runs can operate without
 elevation in temporary folders. Setup never downloads code at runtime.
 The executable is unsigned unless a release maintainer signs it separately.
+Before release, match LICENCE.md Annexes D to G to the bundled component versions.
 
 Setup installs only into the Saved Games profile. It adds nothing to the DCS
 game folder. It removes the September 18 cockpit connection and restores the
@@ -121,7 +121,7 @@ The check compares every file path and SHA-256, including documentation and live
 Setup receipts remain outside the profile so both methods install identical files.
 Repeat against the actual compiled EXE for fresh install, repair, removal, historical
 upgrades, matching manual adoption, modified manual refusal, and a mismatched DCS fixture.
-The release preserves the flown aircraft bytes. Documentation-only packaging does not require another DCS flight.
+Packaging preserves the released aircraft bytes. A documentation-only package needs no new flight test.
 
 ## v1.5.1 release
 
