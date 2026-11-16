@@ -8,7 +8,7 @@ local ranking_failed = false
 local support_reported, support_target, profile_reported, alias_reported
 local alias_ticks = 0
 local energy_reported, sa_range_reported, decoy_reported, flight_decoy_reported
-local connection_off = "F-23B weapon and radar connection OFF. MALICE, Block II, radar upgrades and SA 640 are unavailable. "
+local connection_off = "F-23B weapon and radar connection OFF. MALICE, Block II, stock radar missiles (including AIM-120C), project HARM, radar upgrades and SA 640 are unavailable. "
     .. "Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available. "
     .. "Get a compatible F-23B release: github.com/Mile-High-Digital-Works/f23b-public/releases/latest"
 local function report(message, failed, player_message)
@@ -20,7 +20,9 @@ local function report(message, failed, player_message)
     end
 end
 local function connection_failed(message)
+    native_update = nil
     report(message, true, connection_off)
+    return nil, -1, nil, nil, false, 0, false
 end
 local function check_old_connection()
     -- Read only. A slow DCS repair restores the stock file; the ZIP cannot do so.
@@ -41,36 +43,35 @@ return function(ranking_scope, cue_ir)
         check_old_connection()
         local path = LockOn_Options.script_path .. "../../bin/F23B_Radar.dll"
         if type(package) ~= "table" or type(package.loadlib) ~= "function" then
-            connection_failed("Native library loading is unavailable"); return
+            return connection_failed("Native library loading is unavailable")
         end
         local loaded, loader, reason = pcall(package.loadlib, path, "luaopen_f23b_radar")
         if not loaded or not loader then
-            connection_failed("Load failed: " .. tostring(reason or loader)); return
+            return connection_failed("Load failed: " .. tostring(reason or loader))
         end
         local ok, result = pcall(loader)
         if not ok or type(result) ~= "function" then
-            connection_failed("Initialization failed: " .. tostring(result)); return
+            return connection_failed("Initialization failed: " .. tostring(result))
         end
         native_update = result
     end
-    if not native_update then return end
+    if not native_update then return nil, -1, nil, nil, false, 0, false end
     local ok, status, target, side, ranking, az, el, cue_valid, support, grants, granted, profile, diag,
         alias, malice_type, blockii_type, alias_diag, launch_zone_diag, energy_status, energy_message, energy_diag,
         sa_range_status, decoy_status, decoy_rejects, flight_decoy_status, flight_decoy_rejects,
         missile_rejects, designation_rejects, harm_bay_mask = pcall(
         native_update, ranking_scope == true, cue_ir == true)
     if not ok then
-        connection_failed("Update failed: " .. tostring(status))
-        native_update = nil
-        return
+        return connection_failed("Update failed: " .. tostring(status))
+    end
+    if type(status) ~= "number" then
+        return connection_failed("Update returned an invalid status: " .. tostring(status))
     end
     if status ~= last_status then
         if status == 1 then
             report("Radar upgrade active: RWS/TWS scan 130 deg/s; detector gate 16 ms; signal margin +3 dB", false)
         elseif status < 0 then
-            connection_failed("Compatibility or native-state check failed: " .. tostring(status))
-            native_update = nil
-            return nil, -1
+            return connection_failed("Compatibility or native-state check failed: " .. tostring(status))
         elseif last_status == 1 then
             report("Native settings restored outside RWS/TWS", false)
         end
@@ -163,5 +164,5 @@ return function(ranking_scope, cue_ir)
         report("Native ranking exclusion failed its memory checks; launch guard remains active", true)
         ranking_failed = true
     end
-    return target, side, az, el, cue_valid == 1, harm_bay_mask or 0
+    return target, side, az, el, cue_valid == 1, harm_bay_mask or 0, true
 end

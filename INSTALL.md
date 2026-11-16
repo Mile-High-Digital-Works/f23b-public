@@ -78,7 +78,8 @@ Development directory links are not supported by setup.
 
 Both methods allow installation on other DCS builds. The ZIP has no installation-time version check.
 The aircraft checks the connection in game and shows **weapon and radar connection OFF** when it cannot connect.
-MALICE, Block II, radar upgrades and the 640 NM SA scale are then unavailable.
+Radar missile launches, including stock AIM-120C, are blocked while the connection is off.
+MALICE, Block II, project HARM operation, radar upgrades and the 640 NM SA scale are also unavailable.
 Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available.
 Get a compatible build from [the latest release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest).
 DCS 2.9.29.27468 users can retain the [September 29 release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/tag/release-2026-09-29).

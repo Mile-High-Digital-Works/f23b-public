@@ -4,7 +4,7 @@
 #include "PayloadAlias.h"
 
 namespace f23radar {
-// Block II flare rejection in the Hornet cockpit Sidewinder seeker (CockpitBase 2.9.30.28738).
+// Block II flare rejection in the Hornet cockpit Sidewinder seeker (CockpitBase 2.9.31.29434).
 // cockpit::avIRSensor::search (RVA 0x330bd0) asks viObjectManager for nearby objects. Its handler
 // (RVA 0x330340) accepts aircraft, helicopters, wing parts, missiles, bombs and the flare type
 // {1, 3, 31, 14}. An accepted object becomes a lock candidate when it is nearer than
@@ -23,13 +23,13 @@ inline bool rejectDecoy(const WsType& parent, uint16_t projectBlockII, const WsT
     return projectBlockII && airToAirMissile(parent) && parent.level4 == projectBlockII && flareType(object);
 }
 
-// Owner decision, October 12, 2026. Two more answers of the same slot, Block II seeker only.
+// Two additional rules use the same slot for the Block II seeker only.
 // 1. An air-to-air missile is not a lock candidate. The stock handler accepts missiles, and a second
 //    Block II then left the rail with the first Block II as its target (fixture run values-headon2).
 //    Other missiles, bombs and every aircraft keep the stock answer from this rule.
 // 2. While the radar's designated target is a hostile aircraft, another aircraft is not a lock candidate.
 //    Two MiGs 1.3 degrees apart were both inside the seeker cone; the seeker took the one that was not
-//    designated (owner flight, October 2). With no hostile designation the stock answer applies.
+//    designated (test flight, October 2). With no hostile designation the stock answer applies.
 //    The comparison uses object addresses only. The designated address is never read through.
 inline bool aircraftType(const WsType& type) {
     return type.level1 == 1 && (type.level2 == 1 || type.level2 == 2);   // airplane or helicopter

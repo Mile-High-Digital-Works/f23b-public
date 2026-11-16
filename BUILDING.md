@@ -67,7 +67,7 @@ The script runs the native test groups and writes the DLL to `build/native-radar
 ## Release packaging
 
 `tools/package_release.py` packages the aircraft module files of the released
-build. `config/releases/release-v1.5.1.json` pins every runtime file by
+build. `config/releases/release-v1.5.2.json` pins every runtime file by
 SHA-256 and lists the unused files that the release removes, with reasons.
 Every shipped script and configuration file must equal the committed source.
 For v1.5, `config/releases/menu-v1.5.json` selects the revised slate. Packaging
@@ -101,7 +101,7 @@ After committing the source and packaging the aircraft as above:
 ```powershell
 python -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements-setup.txt
-.venv/Scripts/python.exe tools/build_setup.py --aircraft-zip "PATH/TO/F-23B-v1.5.1.zip"
+.venv/Scripts/python.exe tools/build_setup.py --aircraft-zip "PATH/TO/F-23B-v1.5.2.zip"
 ```
 
 The build uses [PyInstaller](https://pyinstaller.org/en/stable/usage.html) to bundle
@@ -123,7 +123,7 @@ Extract the ZIP into a clean profile fixture. Install the compiled EXE into a se
 clean fixture with an empty Config directory. Compare both with this command:
 
 ```powershell
-python tools/verify_installation.py --aircraft-zip "PATH/F-23B-v1.5.1.zip" --profile "PATH/TO/FIXTURE"
+python tools/verify_installation.py --aircraft-zip "PATH/F-23B-v1.5.2.zip" --profile "PATH/TO/FIXTURE"
 ```
 
 The check compares every file path and SHA-256, including documentation and liveries.
@@ -132,16 +132,22 @@ Repeat against the actual compiled EXE for fresh install, repair, removal, histo
 upgrades, matching manual adoption, modified manual refusal, and a mismatched DCS fixture.
 Packaging preserves the released aircraft bytes. A documentation-only package needs no new flight test.
 
-## v1.5.1 release
+## v1.5.2 build
 
-The pin is marked RELEASE. Multiplayer and VR are untested and are listed as release limitations.
-The installed defaults include stable handling, low-speed recovery and the dry-power curve.
-No tuning file is shipped. The damage logger is compiled out.
-At each aircraft start, the flight bridge reads the optional file `Config/F23B-tuning.json`
-in `%USERPROFILE%\Saved Games\DCS`, or in the profile that `F23B_SAVED_GAMES` names.
-It adds an entry to `Logs/F23B-tuning.log` in that profile. Without the file, it uses the v1.5 defaults.
-The recorders write files only when `F23B_FORCE_BRIDGE_FIT`, `_STATE`, `_MECHANICS`,
-`_GROUND` or `F23B_NATIVE_FORWARD_TRACE` is set.
+DCS validation of this build is pending. Multiplayer and VR remain untested.
+The flight defaults retain the existing handling and dry-power curve.
+`F23B_DEVELOPMENT_HOOKS` defaults to OFF. Release builds do not read tuning files
+or use the FIT, STATE, MECHANICS, GROUND or TRACE recorder variables.
+The damage logger remains disabled by default.
+
+For development, configure a separate build directory with
+`-DF23B_DEVELOPMENT_HOOKS=ON`. This enables `Config/F23B-tuning.json` and
+`Logs/F23B-tuning.log` in `%USERPROFILE%\Saved Games\DCS`, or the profile named
+by `F23B_SAVED_GAMES`. It also enables `F23B_FORCE_BRIDGE_FIT`,
+`F23B_FORCE_BRIDGE_STATE`, `F23B_FORCE_BRIDGE_MECHANICS`,
+`F23B_FORCE_BRIDGE_GROUND` and `F23B_FORCE_BRIDGE_TRACE`.
+Use a separate build directory with hooks OFF for release packaging.
+
 The retired flight model and its tests are absent from the build and source archive.
 The source archive, DLL code sections and module manifest identify the same implementation.
 

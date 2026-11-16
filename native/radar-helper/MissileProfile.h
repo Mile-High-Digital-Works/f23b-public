@@ -20,7 +20,7 @@ namespace f23radar {
 // isSignalOutsideOfMLC scales in-band clutter by doppler_bandwidth (+0x100) / band width.
 // MALICE's declared 16 NM active search and 40 km sensor range never reached these unnamed or
 // radar-base fields through Lua; the profile applies them in memory, MALICE only.
-// Updates flow while the launcher supports the target. Since Stage 27 (October 18, 2026) a supported
+// Updates flow while the launcher supports the target. A supported
 // MALICE also keeps support after its trackfile is erased, until impact (SupportHook.h).
 // Update window: 600 s since October 12, 2026 (was 60 s). After a gap longer than the window the INS
 // never takes a message again. With 60 s a track that the Hornet lost and found again could not

@@ -3,6 +3,6 @@ model = {
 		{"F-23B-visual.edm", 50000.0};
 	};
 	-- Measured F-23 wheel contact and airframe collision lines.
-	-- Built by experiments/native-force-bridge/build_collision.py.
+	-- The contact mesh supplies wheel and airframe collision geometry.
 	collision_shell = "F-23B-contact.edm";
 }

@@ -12,7 +12,7 @@ template<class T> T rankField(const void* p, size_t offset) {
     T value; std::memcpy(&value, static_cast<const char*>(p)+offset, sizeof(value)); return value;
 }
 
-// These offsets belong only to the hash-checked FA18C 2.9.30.28738 ranker.
+// These offsets belong only to the hash-checked FA18C 2.9.31.29434 ranker.
 // Mask 0x198 is consulted by every eligibility pass. The ranker does not write it.
 // Keep the native vector and HAFU data intact; restore masks before returning.
 template<class Access, class Coalition>

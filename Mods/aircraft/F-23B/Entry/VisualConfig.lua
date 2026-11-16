@@ -1,9 +1,9 @@
 -- SPDX-License-Identifier: MIT
--- Tracked selector for the real private F-23B development exterior. Private
--- compiled assets remain ignored; build and packaging fail closed if absent.
+-- Exterior configuration for the F-23B runtime. Licensed
+-- compiled assets are separate build inputs and must be present for packaging.
 return {
-    content_class = "PRIVATE_LICENSED_DEVELOPMENT_REQUIRED",
-    package_version = "1.5",
+    content_class = "RELEASE_RUNTIME",
+    package_version = "1.5.2",
     display_name = "F-23B Black Widow II",
     exterior_shape = "F-23B",
     cockpit_shape = "F-23B-cockpit",
@@ -30,7 +30,7 @@ return {
             { -6.90, -0.328309045,  1.314346552 }
         },
         elevation = -1.5,
-        -- These dimensions retain the accepted September 4 plume proportions.
+        -- These dimensions retain the configured plume proportions.
         -- A longer plume enlarges the game's per-frame ring jump on this small nozzle.
         diameter = 0.5106,
         exhaust_length_ab = 2.67,

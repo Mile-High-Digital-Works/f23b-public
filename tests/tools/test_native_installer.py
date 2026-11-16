@@ -57,6 +57,23 @@ class NativeInstallerTests(unittest.TestCase):
     def run_action(self, action):
         return installer.run(action, self.dcs, self.package)
 
+    def test_process_check_refuses_dcs_and_maintenance_tools(self):
+        for image in ('DCS.exe', 'DCS_server.exe', 'dCs_SeRvEr.ExE',
+                      'DCS_updater.exe', 'ModelViewer2.exe'):
+            with self.subTest(image=image), patch.object(installer.os, 'name', 'nt'), \
+                    patch.object(installer.subprocess, 'run') as run:
+                run.return_value.stdout = f'"{image}","1234","Console","1","1,024 K"\n'
+                with self.assertRaisesRegex(ValueError, 'Close DCS'):
+                    installer.ensure_closed()
+                run.assert_called_once_with(['tasklist', '/FO', 'CSV', '/NH'], check=True,
+                                            capture_output=True, text=True)
+
+    def test_process_check_accepts_unrelated_processes(self):
+        with patch.object(installer.os, 'name', 'nt'), \
+                patch.object(installer.subprocess, 'run') as run:
+            run.return_value.stdout = '"other_DCS_server.exe","1234","Console","1","1,024 K"\n'
+            installer.ensure_closed()
+
     def test_install_verify_idempotence_and_restore(self):
         self.run_action('install')
         self.run_action('install')

@@ -18,7 +18,7 @@ import zipfile
 import native_patch
 
 MODULES = ('F-23B', 'F-23B-Player')
-RELEASE_VERSION = 'v1.5.1'
+RELEASE_VERSION = 'v1.5.2'
 STATE = '.f23b-install'  # Earlier releases kept their receipt in the DCS profile.
 DOCS = 'F-23B-docs'
 MANIFEST = DOCS + '/release.json'

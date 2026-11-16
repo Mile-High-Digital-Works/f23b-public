@@ -48,6 +48,6 @@
   "finish": "Project charcoal grey; subdued identification bands and grey stencils; visual only",
   "sha256": "28e7fc067a793ab2650a5d415c63d09ff8f3693318fbcd75c11c29266e9bdb1f",
   "bytes": 194333,
-  "provenance": "Project-original procedural mesh; owner-approved uniform visual reduction, illustrative fin/nose geometry; simulation physics unchanged",
-  "bay_clearance": "See capacity audit; DCS flight release not observed"
+  "provenance": "Project-original procedural mesh; uniform visual reduction, illustrative fin/nose geometry; simulation physics unchanged",
+  "bay_clearance": "Bay clearance and flight release require runtime checks"
 }

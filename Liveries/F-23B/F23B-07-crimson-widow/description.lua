@@ -7,4 +7,4 @@ livery = {
 }
 custom_args = { [1013] = 1 }
 name = "F-23B | Crimson Widow"
-countries = { "USA", "USAFAggressors" }
+countries = { "USA", "AUSAF" }

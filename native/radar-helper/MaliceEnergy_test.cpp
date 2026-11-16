@@ -52,7 +52,7 @@ int main() {
     EnergyState untriggered; CHECK(!untriggered.ignite(3, 0, -1, 77.39472752));
 
     // Arrival limit: the pulse holds inside 10 s of flight and fires outside it. It is not latched.
-    // Owner shot of October 2: boost burnout at 9.1 km to go, about 2,130 m/s. 4.3 s to go: held.
+    // Recorded shot of October 2: boost burnout at 9.1 km to go, about 2,130 m/s. 4.3 s to go: held.
     EnergyState shortRange; shortRange.observe(0, 1, 1.5);
     CHECK(shortRange.timeToGo(9100, 2130) < 5 && shortRange.closing == 0);
     CHECK(!shortRange.ignite(3, 0, -1, 77.39472752, 9100, 2130) && shortRange.withheld && !shortRange.fired);
@@ -63,7 +63,7 @@ int main() {
     shortRange.track(21.0, 5700); CHECK(std::fabs(shortRange.closing-300) < 1e-9);
     CHECK(shortRange.timeToGo(6000, 2130) == 20);
     CHECK(shortRange.ignite(3, 0, -1, 77.39472752, 6000, 2130) && shortRange.fired);
-    // Accepted 94 km shot: seeker handoff at 29.6 km, closing about 2,050 m/s. 14.4 s: the pulse fires.
+    // Recorded 94 km shot: seeker handoff at 29.6 km, closing about 2,050 m/s. 14.4 s: the pulse fires.
     EnergyState accepted; accepted.observe(0, 1, 36.56);
     accepted.track(36.0, 30780); accepted.track(36.5, 29755);
     CHECK(std::fabs(accepted.closing-2050) < 1e-6 && accepted.timeToGo(29632, 1800) > 14);
@@ -101,7 +101,7 @@ int main() {
     // The ceiling suspends the loft while the coasting apex would pass 30 km. It does not latch.
     EnergyState owner; owner.initialize(0, 563000, 10000);
     CHECK(owner.loft(.02, 560000, 20000, 12.0, 2110) == .025);               // First sample sets the reference.
-    // Owner shot 1 at 12 s: 22 deg climb at 2,110 m/s from 20 km. Coasting apex is about 49 km.
+    // Recorded shot 1 at 12 s: 22 deg climb at 2,110 m/s from 20 km. Coasting apex is about 49 km.
     CHECK(owner.loft(.02, 559000, 20039.5, 12.05, 2110) == 0 && owner.coastApex(20039.5, 2110) > 45000);
     CHECK(owner.loft(.02, 558000, 20039.5, 12.06, 2110) == 0);              // Under 0.05 s keeps the last climb.
     owner.loft(.02, 557500, 29990, 59.9, 2500);                               // Level sample after the climb.
@@ -110,7 +110,7 @@ int main() {
     CHECK(owner.loft(.02, 555000, 29990, 61, 2500) == .025);                 // Descending below it: resumes.
     CHECK(owner.loft(.02, 40000, 29000, 200, 2000) == 0 && owner.loftStopped);
     CHECK(owner.loft(.02, 60000, 20000, 201, 2000) == 0);                    // The range cutoff still latches.
-    // Accepted 129 km test at 10 s: 15 deg at 1,473 m/s from 9.2 km. Coasting apex about 16.6 km: loft continues.
+    // Recorded 129 km test at 10 s: 15 deg at 1,473 m/s from 9.2 km. Coasting apex about 16.6 km: loft continues.
     EnergyState mid; mid.initialize(0, 129000, 8000);
     mid.loft(.02, 128000, 9200, 10.0, 1473);
     CHECK(mid.loft(.02, 127000, 9219.06, 10.05, 1473) == .025 && mid.coastApex(9219.06, 1473) < 18000);
@@ -137,7 +137,7 @@ int main() {
     CHECK(planEnergy(ammo.data(), stock.data(), wb, bs, ids, count, access) == 1);
     CHECK(ids[0].wcse == nullptr);                       // No datalink descriptor: hold off, energy unchanged.
 
-    // Support hold identity (Stage 26): the MALICE datalink descriptor, never one shared with the stock AIM-120C.
+    // Support hold identity: the MALICE datalink descriptor, never one shared with the stock AIM-120C.
     auto wcseDesc = descriptor("", wb+wcseDescriptorVtable), stockWcse = descriptor("", wb+wcseDescriptorVtable);
     void* withWcse[] = {gp.data(), boost.data(), march.data(), controller.data(), wcseDesc.data()};
     std::array<char, 0xd00> ammo2{}, stock2{};

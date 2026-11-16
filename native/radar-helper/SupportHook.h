@@ -66,7 +66,7 @@ bool msiTrackfile(void* mc, void* radar, unsigned target, Access access) {
     return false;
 }
 
-// Project decision (October 18, 2026, Stage 27): MALICE support through terminal flight.
+// MALICE support continues through terminal flight.
 // A MALICE datalink block (WeaponBlocks wWCSE_AMRAAM::simulate 0x32d790) asks LinkToTarget at 0x32df10
 // with its target ID (+0x290) and the missile type. On "yes" it sends the target object's own position
 // and velocity (0x30821a..0x30826d); the trackfile only decides the answer. Native MSI erases an

@@ -170,8 +170,39 @@ package.loadlib = function() return function() return function() return -1 end e
 tick = dofile(path); tick(); tick()
 assert(messages[#messages]:find("connection OFF", 1, true))
 assert(messages[#messages]:find("MALICE, Block II", 1, true))
+assert(messages[#messages]:find("AIM-120C", 1, true))
+assert(messages[#messages]:find("HARM", 1, true))
 assert(messages[#messages]:find("native Hornet cockpit", 1, true))
 assert(messages[#messages]:find("releases/latest", 1, true))
+-- Connection availability is separate from an absent target, including nil/error updates.
+for _, callback in ipairs({
+    function() return 0 end,
+    function() return 1, 720, 2 end,
+}) do
+    package.loadlib = function() return function() return callback end end
+    tick = dofile(path)
+    local _, _, _, _, _, _, connected = tick()
+    assert(connected == true, "working helper was reported unavailable")
+end
+for _, callback in ipairs({
+    function() return -1 end,
+    function() return nil end,
+    function() error("update failure") end,
+}) do
+    package.loadlib = function() return function() return callback end end
+    tick = dofile(path)
+    local old_notices = notices
+    for _ = 1, 2 do
+        local target, side, _, _, cue_valid, harm_mask, connected = tick()
+        assert(target == nil and side == -1 and cue_valid == false and harm_mask == 0 and connected == false,
+            "failed helper did not return a stable unavailable state")
+    end
+    assert(notices == old_notices + 1, "connection failure was not bounded to one notice")
+end
+package.loadlib = function() return nil, "missing DLL" end
+tick = dofile(path)
+local _, _, _, _, _, _, connected = tick()
+assert(connected == false, "missing helper was not reported unavailable")
 -- Detect the old cockpit edit once, without writing to the DCS installation.
 local original_io = io
 local closed = false

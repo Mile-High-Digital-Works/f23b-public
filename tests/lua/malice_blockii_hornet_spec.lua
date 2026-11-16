@@ -1,3 +1,4 @@
+-- SPDX-License-Identifier: GPL-3.0-or-later
 -- Exercise real payload definitions, pylon choices, presets and quick missions.
 _ = function(s) return s end
 CAT_AIR_TO_AIR, AIM_120, AIM_9X, AIM_9_CX_PIL = 1, 24, 136, 1.03

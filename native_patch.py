@@ -58,7 +58,7 @@ def ensure_closed():
     result = subprocess.run(['tasklist', '/FO', 'CSV', '/NH'], check=True,
                             capture_output=True, text=True)
     for line in result.stdout.lower().splitlines():
-        if line.startswith(('"dcs.exe",', '"dcs_updater.exe",', '"modelviewer2.exe",')):
+        if line.startswith(('"dcs.exe",', '"dcs_server.exe",', '"dcs_updater.exe",', '"modelviewer2.exe",')):
             raise ValueError('Close DCS, its updater and ModelViewer before continuing')
 
 

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Generate original x64 ABI-preserving entry points for named EFM exports."""
 from pathlib import Path
 import sys

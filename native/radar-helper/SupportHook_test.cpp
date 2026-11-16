@@ -88,7 +88,7 @@ int main() {
     nativeTarget = 7; CHECK(reinterpret_cast<f23radar::TrackingFunction>(page[1])(nullptr, 7, 0));
     VirtualFree(page, 0, MEM_RELEASE);
 
-    // MALICE support hold (Stage 27): only a missile that had support, through terminal flight,
+    // MALICE support hold: only a missile that had support, through terminal flight,
     // only while the mission computer is linked to this radar.
     f23radar::MaliceSupportQuery query;
     CHECK(!f23radar::maliceHoldAllowed(query, true));                              // never supported

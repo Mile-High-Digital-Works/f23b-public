@@ -19,6 +19,7 @@
 #include <type_traits>
 #include "bridge_context.hpp"
 #include "tuning_runtime.hpp"
+#ifdef F23B_DEVELOPMENT_HOOKS
 void load_core_tuning_at_start() {
     wchar_t path[32768]{};
     const auto override_length=GetEnvironmentVariableW(L"F23B_SAVED_GAMES",path,32768);
@@ -30,6 +31,7 @@ void load_core_tuning_at_start() {
         f23b::flight_core::load_development_tuning(std::filesystem::path(path)/L"Saved Games"/L"DCS");
 }
 #endif
+#endif
 
 // Only documented, typed SDK inputs are dispatched to both implementations.
 // All other native callbacks remain unchanged in the compatibility experiment.
@@ -38,7 +40,7 @@ template<class... Args, void(*Own)(Args...)>
 struct Both<Own> {
     static inline void(*native)(Args...){};
     static void invoke(Args... args) {
-#ifdef F23B_INDEPENDENT_CORE
+#if defined(F23B_INDEPENDENT_CORE) && defined(F23B_DEVELOPMENT_HOOKS)
         if constexpr(sizeof...(Args)==0) {
             if constexpr(Own==&own_ed_fm_cold_start||Own==&own_ed_fm_hot_start||Own==&own_ed_fm_hot_start_in_air)
                 load_core_tuning_at_start();
@@ -136,7 +138,9 @@ void simulate_native_engines(double dt) {
     runtime.input.engine_left_running = false;
     runtime.input.engine_right_running = false;
     own_ed_fm_simulate(dt);
+#ifdef F23B_DEVELOPMENT_HOOKS
     const auto aerodynamic_output = runtime.output;
+#endif
     std::array<double, 2> thrust{}, flow{};
     for (std::size_t i = 0; i < 2; ++i) {
         const auto base = i == 0 ? ED_FM_ENGINE_1_RPM : ED_FM_ENGINE_2_RPM;
@@ -164,9 +168,11 @@ void simulate_native_engines(double dt) {
             Both<&own_ed_fm_refueling_add_fuel>::native(-amount);
         runtime.internal_fuel_kg=std::max(0.,native_fuel());
     }
-    static double time = 0.0, last = -1.0;
+    static double time = 0.0;
     time += dt;
     damage_bridge_time=time;
+#ifdef F23B_DEVELOPMENT_HOOKS
+    static double last = -1.0;
     if (time - last >= 0.05) {
         last = time;
         record_fit_sample(time, dt, aerodynamic_output);
@@ -207,6 +213,7 @@ void simulate_native_engines(double dt) {
                 << thrust[0] << ',' << thrust[1] << '\n';
         }
     }
+#endif
 }
 }
 

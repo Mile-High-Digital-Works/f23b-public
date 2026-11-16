@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 """Generate private adapter names and callback selection in our own loader."""
 from pathlib import Path
 import re

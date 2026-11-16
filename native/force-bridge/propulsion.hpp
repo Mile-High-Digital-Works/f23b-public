@@ -6,12 +6,12 @@
 #include "../flight-core/development_options.hpp"
 
 namespace f23b::bridge {
-// Owner-requested moderate speed tune; project simulation settings.
+// Project thrust settings for the simulated flight model.
 inline constexpr double native_thrust_scale = 2.0; // previously 1.75 (+14.29%)
-// PROJECT CHOICE (owner request, October 15): the native Hornet tanks hold 4,900 kg (10,800 lb).
+// Fuel scaling uses the native Hornet tank capacity of 4,900 kg (10,800 lb).
 // Burn scales as if the larger F-23B airframe held 18,000 lb: 10,800 / 18,000 = 0.6.
 inline constexpr double fuel_economy = 0.6;
-// Owner rule: burn follows applied thrust, times fuel_economy. Never below the native burn.
+// Burn follows applied thrust, times fuel_economy. Never below the native burn.
 inline double extra_fuel_flow(double native_flow,double native_thrust,double applied_thrust,
     bool unlimited,const DryThrustSettings& settings) {
     if(unlimited||!settings.enabled||!std::isfinite(native_flow)||!std::isfinite(native_thrust)
@@ -21,7 +21,7 @@ inline double extra_fuel_flow(double native_flow,double native_thrust,double app
 }
 // Native SDK fan-speed fraction, not cockpit core RPM or a sampled HOTAS axis.
 // Measured hot-start idle is 0.212 steady / below 0.269 during settling.
-// Keep that range unaugmented; recover the accepted gain before MIL power.
+// Keep that range unaugmented; recover the configured gain before MIL power.
 inline double native_engine_gain(double related_rpm) {
     if (!std::isfinite(related_rpm)) return 1.0;
     const double blend = std::clamp((related_rpm - 0.30) / 0.40, 0.0, 1.0);
@@ -52,7 +52,7 @@ inline double add_native_engine(performance::Output& output,
     const performance::MassState& mass, std::size_t engine,
     double native_thrust_n, double native_flow_kg_s, double related_rpm,
     double mach=0.,bool augmented=false,const DryThrustSettings& settings={},double throttle=.775) {
-    // Accepted engine-axis locations in VisualConfig.lua. Straight axial thrust;
+    // Engine-axis locations match VisualConfig.lua. Straight axial thrust;
     // no virtual vectoring or independently running second engine simulation.
     constexpr double axis_y_m = -0.320670754;
     constexpr double half_spacing_m = 1.311020017;

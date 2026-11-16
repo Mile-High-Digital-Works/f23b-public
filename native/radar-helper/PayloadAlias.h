@@ -5,7 +5,7 @@
 #include <string>
 
 namespace f23radar {
-// Independent MALICE and Block II through the native Hornet weapon path (DCS 2.9.30.28738).
+// Independent MALICE and Block II through the native Hornet weapon path (DCS 2.9.31.29434).
 // FA18C reads each station's wsType through the human payload interface (IwHumanPayload
 // vtable +0x98 station store, +0xa0 weapon inside a container). It then accepts only listed
 // stock missiles, for example the Sidewinder set at FA18C RVA 0x31b1d9 in 2.9.29.27468 (level4 22, 136, 143, 1007).
@@ -38,7 +38,7 @@ inline int projectWeaponKind(const char* text, size_t length) {
 constexpr uint16_t stockAim120B = 24, stockAim9X = 136, stockAgm88C = 65;
 constexpr uintptr_t payloadStationTypeSlot = 0x98, payloadContainerTypeSlot = 0xa0;
 constexpr uintptr_t payloadStationCountSlot = 0x1b8, payloadWeaponCountSlot = 0xd0;
-// FA18C import-table slots (2.9.30.28738, loaded image) that consume a wsType.
+// FA18C import-table slots (2.9.31.29434, loaded image) that consume a wsType.
 constexpr uintptr_t importSetMissileData = 0x75af20;      // cockpit::MissileSight::setMissileData
 constexpr uintptr_t importDescriptorByType = 0x75c520;    // wGetAmmunitionDescriptorByType
 constexpr uintptr_t importSidewinderNew = 0x75b380;       // cockpit::eqSidewinderNew::eqSidewinderNew

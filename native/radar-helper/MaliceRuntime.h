@@ -14,7 +14,7 @@ using Switch = void(*)(void*, int);
 static f23radar::SlotHook guidanceHook, engineHook, wcseHook;
 static f23radar::MaliceLoftHook loftHook;
 static Simulate nativeGuidance{}, nativeEngine{}, nativeLoft{}, nativeWcse{};
-// Support hold (Stage 26): 0 off, 1 active, -47 no MALICE datalink identity, -48 unknown bytes, -49 install failed.
+// Support hold status: 0 off, 1 active, -47 no MALICE datalink identity, -48 unknown bytes, -49 install failed.
 // A hold failure never changes the energy profile.
 static int holdStatus = 0;
 static Switch nativeSwitch{};

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Per-cockpit APG-73 candidate for DCS 2.9.30.28738.
+// Per-cockpit APG-73 helper for DCS 2.9.31.29434.
 #include <windows.h>
 #include <bcrypt.h>
 #include <cstdint>
@@ -30,6 +30,7 @@ static int (*toBoolean)(lua_State*, int);
 static void* (*toUserdata)(lua_State*, int);
 static void (*pushString)(lua_State*, const char*);
 static void (*pushNil)(lua_State*);
+static int (*checkStack)(lua_State*, int);
 static double (*modelTime)();          // World.dll wTime::GetModelTime, the clock native MSI aging uses
 static f23radar::SupportDiagTable supportDiag;
 static std::atomic<void*> rankingOwner{nullptr};
@@ -246,7 +247,7 @@ static int primary_target(lua_State* L) {
     pushNumber(L, valid ? 1 : 0);
     return 5;
 }
-// Set only while a MALICE datalink block asks its launcher (MaliceRuntime.h, Stage 26).
+// Set only while a MALICE datalink block asks its launcher (MaliceRuntime.h).
 static thread_local f23radar::MaliceSupportQuery* maliceSupportQuery = nullptr;
 static std::atomic<unsigned long long> supportHolds{0};
 // Native answer first. The extension applies only to the F-23B radar, only behind the
@@ -900,6 +901,8 @@ static int close_owner(lua_State* L) {
     return 0;
 }
 static int update(lua_State* L) {
+    // Reserve all result slots before writing them. Lua guarantees room for one failure status.
+    if (!checkStack(L, 28)) { pushNumber(L, -5); return 1; }
     int status = -1;
     unsigned targetID=0;
     int side=-1;
@@ -1008,13 +1011,14 @@ extern "C" __declspec(dllexport) int luaopen_f23b_radar(lua_State* L) {
     toUserdata = symbol<void*(*)(lua_State*,int)>(lua, "lua_touserdata");
     pushString = symbol<void(*)(lua_State*,const char*)>(lua, "lua_pushstring");
     pushNil = symbol<void(*)(lua_State*)>(lua, "lua_pushnil");
+    checkStack = symbol<int(*)(lua_State*,int)>(lua, "lua_checkstack");
     modelTime = symbol<double(*)()>(GetModuleHandleW(L"World.dll"), "?GetModelTime@wTime@@SANXZ");
     auto newUserdata = symbol<void*(*)(lua_State*,size_t)>(lua, "lua_newuserdata");
     auto createTable = symbol<void(*)(lua_State*,int,int)>(lua, "lua_createtable");
     auto setField = symbol<void(*)(lua_State*,int,const char*)>(lua, "lua_setfield");
     auto setMetatable = symbol<int(*)(lua_State*,int)>(lua, "lua_setmetatable");
     if (!pushNumber || !pushFunction || !toBoolean || !toUserdata || !newUserdata
-        || !createTable || !setField || !setMetatable || !pushString || !pushNil) return 0;
+        || !createTable || !setField || !setMetatable || !pushString || !pushNil || !checkStack) return 0;
     rankingOwner.store(nullptr);
     rankingResult.store(0);
     designatedAircraft.store(nullptr);

@@ -10,6 +10,9 @@ void check(bool ok,const char* name) { if(!ok)throw std::runtime_error(name); }
 void native_body(double,double,double,double,double,double,double,double,double,
                  double,double,double,double,double,double,double,double,double,double,double) {}
 void native_start() {}
+void native_simulation(double) {}
+double native_value(unsigned) { return 0.; }
+double native_fuel_value() { return 1000.; }
 int main() {
     static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_state),PFN_CURRENT_STATE>);
     static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_state_body_axis),PFN_CURRENT_STATE_BODY_AXIS>);
@@ -61,6 +64,7 @@ int main() {
     start();const auto baseline=fitted_parameters();
     check(std::memcmp(&core::runtime_parameters,&baseline,sizeof(baseline))==0,"start without tuning is byte-identical");
     std::ofstream(profile/"Config/F23B-tuning.json")<<R"({"tau_roll":1000,"unknown":9})";
+#ifdef F23B_DEVELOPMENT_HOOKS
     start();check(core::runtime_parameters.tau_roll==.4,"start applies clamped file");
     std::ofstream(profile/"Config/F23B-tuning.json")<<R"({"tau_roll":0.025})";
     runtime.model.step(.006,a,m,b,u);
@@ -71,5 +75,31 @@ int main() {
     std::ifstream tuning_log(profile/"Logs/F23B-tuning.log");
     const std::string logged((std::istreambuf_iterator<char>(tuning_log)),std::istreambuf_iterator<char>());
     check(logged.find("ignored unknown key: unknown")!=std::string::npos&&logged.find("applied tau_roll=0.4")!=std::string::npos,"runtime override log");
+    tuning_log.close();
+#else
+    for(const auto* name:{"ed_fm_cold_start","ed_fm_hot_start","ed_fm_hot_start_in_air"}) {
+        auto release_start=reinterpret_cast<void(*)()>(f23b_select_callback(name,reinterpret_cast<FARPROC>(&native_start)));
+        release_start();
+        check(std::memcmp(&core::runtime_parameters,&baseline,sizeof(baseline))==0,"release start ignores tuning file");
+    }
+    check(!std::filesystem::exists(profile/"Logs/F23B-tuning.log"),"release starts do not write tuning logs");
+#endif
+    const wchar_t* recorders[]={L"F23B_FORCE_BRIDGE_FIT",L"F23B_FORCE_BRIDGE_STATE",
+        L"F23B_FORCE_BRIDGE_MECHANICS",L"F23B_FORCE_BRIDGE_GROUND"};
+    for(const auto* recorder:recorders)SetEnvironmentVariableW(recorder,(profile/recorder).c_str());
+    f23b_select_callback("ed_fm_get_param",reinterpret_cast<FARPROC>(&native_value));
+    f23b_select_callback("ed_fm_get_internal_fuel",reinterpret_cast<FARPROC>(&native_fuel_value));
+    auto simulate=reinterpret_cast<void(*)(double)>(f23b_select_callback("ed_fm_simulate",reinterpret_cast<FARPROC>(&native_simulation)));
+    simulate(.06);
+    for(const auto* recorder:recorders) {
+#ifdef F23B_DEVELOPMENT_HOOKS
+        check(std::filesystem::exists(profile/recorder)&&std::filesystem::file_size(profile/recorder)>0,"development recorder writes samples");
+#else
+        check(!std::filesystem::exists(profile/recorder),"release ignores recorder variables");
+#endif
+        SetEnvironmentVariableW(recorder,nullptr);
+    }
+    SetEnvironmentVariableW(L"F23B_SAVED_GAMES",nullptr);
+    std::filesystem::remove_all(profile);
     std::cout<<"INDEPENDENT BRIDGE PASS: SDK state/control mapping, exact force/moment, native propulsion, rest output\n";
 }

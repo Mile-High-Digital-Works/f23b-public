@@ -1,51 +1,35 @@
-# F-23B Black Widow II v1.5.1
+# F-23B Black Widow II v1.5.2
 
-v1.5.1 updates the weapon and radar connection for DCS 2.9.31.29434.
-v1.5 updates handling, endurance, internal weapon carriage and missile support.
+Release preparation is in progress. DCS validation and package checks are pending.
+The [latest published release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest) remains the available download.
 
-## Downloads
+## Prepared changes
 
-| Method | Download |
-| --- | --- |
-| Copy and paste | [F-23B-v1.5.1.zip](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1.zip) |
-| Installer | [F-23B-v1.5.1-Setup.exe](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Setup.exe) |
+- Keep radar launches blocked when the weapon connection is unavailable, with a specific message.
+- Pair weapon-release inputs across master-mode changes.
+- Disable tuning-file and recorder hooks in release builds; retain an explicit development build option.
+- Reserve Lua stack space for the radar helper's status results.
+- Align module versions, update the bay description, and correct livery country restrictions.
+- Improve installer recovery, dedicated-server detection, source checks and automated test coverage.
 
-Both install identical files, including both aircraft modules, three project weapons, ten liveries and the pilot guide.
-Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
-The weapon and radar connection supports **DCS 2.9.31.29434**.
-**Multiplayer is untested. VR is untested.**
+The HARM definition update and its visual and simulated-performance specification remain in progress.
+No changed runtime behavior is claimed as flight-validated here.
 
-## Changes
+## Known limits
 
-- New flight core with stable handling, smoother hard pulls, low-speed recovery and reduced pitch bounce.
-- Restored high-altitude acceleration, with design speeds of Mach 2.0 dry and Mach 2.47 in afterburner at 35,000 ft.
-- Thrust-based fuel consumption and improved endurance.
-- Wing and fin damage effects.
-- Project AGM-88G AARGM-ER with HARM TOO guidance and a three-HARM SEAD preset.
-- Revised internal bays: HARMs on roof trapezes; MALICE and Block II on the doors.
-- MALICE chaff rejection and retained target support after a supported radar track disappears.
-- Block II flare rejection and target filtering.
-- Existing Hornet weapon-release and weapon-select bindings copied once into the F-23B controls, with a backup.
-- Smoother skin textures, charcoal-grey project missiles and revised menu artwork.
+- DCS validation of the v1.5.2 maintenance build is pending.
+- Multiplayer is untested. VR is untested.
+- The weapon and radar connection supports DCS 2.9.31.29434.
+- With the weapon and radar connection off, radar missile launches including stock AIM-120C are blocked; MALICE, Block II, project HARM operation, radar upgrades and SA 640 are unavailable.
+- Full missile engagement ranges are not established.
+- MALICE recovery after sustained tracking loss remains unconfirmed in DCS.
+- Block II helmet-cued shots remain unverified; post-launch datalink is not implemented.
+- HARM PB/SP modes, an 85-mile TOO hit and automatic TOO loft remain unverified.
+- AI MALICE can launch with closed main bay doors; AI Block II bay sequencing and AI HARM attacks remain unverified.
+- AI and dedicated-server missiles without the helper do not receive its missile enhancements.
+- AI top speed, supersonic idle response and the complete regional damage response remain unverified.
 
-## Upgrading and limits
-
-Read [installation instructions](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/INSTALL.md) before upgrading.
-Move any MALICE assigned to station 3 in an older mission to station 2.
-Select the SEAD preset for three HARMs, two MALICE and two Block II missiles.
-
-Cockpit weapon labels remain AMRAAM, Sidewinder and HARM.
-AI MALICE can launch with closed main bay doors.
-MALICE recovery after sustained tracking loss remains unconfirmed in game.
-HARM PB/SP modes and full missile engagement ranges remain unverified.
-Block II post-launch datalink is not implemented.
-
-[Printable pilot guide](https://github.com/Mile-High-Digital-Works/f23b-public/releases/download/v1.5.1/F-23B-v1.5.1-Pilot-Guide.html) ·
-[Known limits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/KNOWN_ISSUES.md) ·
-[Licence](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/LICENCE.md) ·
-[Credits](https://github.com/Mile-High-Digital-Works/f23b-public/blob/v1.5.1/CREDITS.md)
-
-Current installations change no DCS game files.
-Corresponding software source and SHA-256 checksums are included with the release.
+Both installation methods must pass the same file-inventory and checksum checks before release.
+Software source and checksums will accompany the completed release.
 
 THIS MATERIAL IS NOT MADE OR SUPPORTED BY EAGLE DYNAMICS SA.
