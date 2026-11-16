@@ -14,5 +14,5 @@ from log excerpts before sharing them.
 
 The software is GPL-3.0-or-later with retained file-level MIT grants. Contributions
 must have compatible rights and preserve existing attribution. Purchased models,
-game assets, SDK files, credentials, and private purchase evidence are not source
+game assets, SDK files, credentials, and purchase records are not source
 contributions. Models and other creative assets have separate license terms.

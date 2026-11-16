@@ -13,7 +13,7 @@
 | `tests/tools/` | Installer regression tests using temporary fixtures |
 | `tools/` | Source verification and release packaging |
 | `config/licensing/` | Attribution for included third-party-derived software |
-| `config/releases/` | Flown aircraft file inventory, removed files, and supported DCS binaries |
+| `config/releases/` | Release file inventory, removed files, and supported DCS binaries |
 | `docs/images/` | Project screenshots |
 
 Releases to v1.4 had these three folders under `experiments/`. The current build uses the original project core.
@@ -21,5 +21,4 @@ Releases to v1.4 had these three folders under `experiments/`. The current build
 The Git tree contains software, documentation, and the documentation captures
 listed in `config/releases/documentation-images.json`. Runtime images, textures,
 models, missions, and the DLLs belong to the separately prepared aircraft ZIP.
-Development history, private working assets, old releases, and agent instruction
-files are absent from this repository.
+Licensed visual sources and older release packages are not part of this repository.

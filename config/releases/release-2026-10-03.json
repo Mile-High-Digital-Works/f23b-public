@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "F23B-2026-10-03",
-  "description": "Aircraft module files of the October 2 owner-flown build for DCS World 2.9.30.28536, with the MALICE coasting-apex loft limit and updated launch-zone anchors. The release retains the existing flight bridge and assets, removes unused files, adds a public build identity, draws original menu graphics and corrects the Quick Start mission requirements.",
+  "description": "Aircraft module files of the October 2 test build for DCS World 2.9.30.28536, with the MALICE coasting-apex loft limit and updated launch-zone anchors. The release retains the existing flight bridge and assets, removes unused files, adds a public build identity, draws original menu graphics and corrects the Quick Start mission requirements.",
   "dcs_version": "2.9.30.28536",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "8d196bf834f0c340c0265abe512cc923be00fca2da1130a0dfddc794059335b0",
