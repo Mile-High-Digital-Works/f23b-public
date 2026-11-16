@@ -39,8 +39,17 @@ lua tests/lua/malice_blockii_hornet_spec.lua
 ```
 
 The installer tests use temporary fixtures. They do not patch an installed game.
-Hosted CI runs these checks on Windows and Linux. The full native bridge and
-real SDK checks require a local Windows installation.
+Use Lua 5.1 for the Lua specs. DCS uses that version.
+
+Hosted CI runs the Python checks and the flight-core tests on Windows and Linux.
+On Linux, it also runs the five Lua specs with Lua 5.1. It runs the three
+radar-helper tests that need no Windows headers, and the steering, ground-yaw
+and propulsion bridge tests.
+On Windows, it also builds `F23B_Radar.dll` with MinGW `g++` and runs the
+radar-helper test groups. It builds and runs the same three bridge tests with MSVC.
+Hosted CI does not build `F23B_ForceBridge.dll`. That build, the bridge
+control-output and bridge-model tests, and each check in DCS need the DCS
+headers of a local Windows installation.
 
 ## Native radar helper
 

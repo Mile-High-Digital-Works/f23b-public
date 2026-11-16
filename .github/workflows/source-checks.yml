@@ -35,3 +35,54 @@ jobs:
         run: cmake --build build/flight --config Release
       - name: Test
         run: ctest --test-dir build/flight -C Release --output-on-failure
+      - name: Install Lua 5.1
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y lua5.1
+      - name: Lua specs under Lua 5.1
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          for spec in radar_upgrade exterior_visual_adapter input_bridge_profile engine_visual_registration malice_blockii_hornet; do
+            lua5.1 "tests/lua/${spec}_spec.lua"
+          done
+      - name: Radar helper tests without Windows headers
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          out="$RUNNER_TEMP/radar"; mkdir -p "$out"
+          for name in PayloadAlias RadarTune SaRangeHook; do
+            g++ -std=c++17 -O2 -Wall -Wextra -Werror "native/radar-helper/${name}_test.cpp" -o "$out/${name}_test"
+            "$out/${name}_test"
+          done
+      - name: Bridge tests without DCS headers
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          out="$RUNNER_TEMP/bridge"; mkdir -p "$out"
+          # tuning.hpp:31 raises one -Wmisleading-indentation warning.
+          g++ -std=c++20 -O2 -Wall -Wextra -Werror -Wno-error=misleading-indentation -Inative/flight-core -c native/flight-core/bridge_model.cpp -o "$out/bridge_model.o"
+          g++ -std=c++20 -O2 -Wall -Wextra -Werror native/force-bridge/steering_tests.cpp -o "$out/steering_tests"
+          g++ -std=c++20 -O2 -Wall -Wextra -Werror -Inative/flight-core native/force-bridge/ground_yaw_tests.cpp "$out/bridge_model.o" -o "$out/ground_yaw_tests"
+          g++ -std=c++20 -O2 -Wall -Wextra -Werror -Inative/flight-core native/force-bridge/propulsion_tests.cpp "$out/bridge_model.o" -o "$out/propulsion_tests"
+          for name in steering_tests ground_yaw_tests propulsion_tests; do "$out/$name"; done
+      - name: Build the radar helper and run its tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          g++ --version
+          ./native/radar-helper/build.ps1 -OutputDirectory "$env:RUNNER_TEMP/native-radar"
+      - name: Configure bridge tests without DCS headers
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: cmake -S native/force-bridge -B build/bridge -A x64 -DFIT_PARAMETERS_DIR="$PWD/native/flight-core"
+      - name: Build bridge tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: cmake --build build/bridge --config Release --target f23b_native_steering_tests f23b_ground_yaw_tests f23b_native_propulsion_tests
+      - name: Run bridge tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ctest --test-dir build/bridge -C Release -R '^f23b_(native_steering|ground_yaw|native_propulsion)_tests$' --output-on-failure
