@@ -12,7 +12,9 @@ The [latest published release](https://github.com/Mile-High-Digital-Works/f23b-p
 - Align module versions, update the bay description, and correct livery country restrictions.
 - Improve installer recovery, dedicated-server detection, source checks and automated test coverage.
 
-The HARM definition update and its visual and simulated-performance specification remain in progress.
+The HARM visual uses long body strakes, compact tail controls and a gray finish.
+Its stock TOO acquisition envelope and existing performance values are retained.
+The runtime definition update and comparative flight validation remain incomplete.
 No changed runtime behavior is claimed as flight-validated here.
 
 ## Known limits

@@ -73,7 +73,7 @@
     "F-23B/Weapons/F23B_AIM424_MALICE.lua": "eb3a8c638033d729b3edacea61ececa34a7fa34532df45c5c113a84312f11635",
     "F-23B/Weapons/F23B_AIM9X_BLOCKII.lua": "a6832ebc924ddf746fdd9c51552f3301a95fb7f9e17f237d6366bd15ffc64f57",
     "F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
-    "F-23B/Shapes/F23B_AGM88G.edm": "f4f9b91626576cf979c87335ed4cd020f71a5f04137a9e9d0e3c073b5d94ec9d",
+    "F-23B/Shapes/F23B_AGM88G.edm": "27d7f565cefd777b4a6d93c2d0455f09021efa9ace6b3527701a6f00a02b181f",
     "F-23B/Shapes/F23B_AIM9X_BLOCKII.edm": "40013ada7670434f91f8ba4c951348a0cea78066d8b03839aade4f5b643b2ee3"
   },
   "removed": {
@@ -107,7 +107,7 @@
     "F-23B/Entry/VisualConfig.lua"
   ],
   "validation_limits": [
-    "DCS validation of the v1.5.2 maintenance build is pending.",
+    "DCS validation of the v1.5.2 maintenance build, including the revised HARM visual, is pending.",
     "Multiplayer is untested. VR is untested.",
     "The weapon and radar connection supports DCS 2.9.31.29434.",
     "With the weapon and radar connection off, radar missile launches including stock AIM-120C are blocked; MALICE, Block II, project HARM operation, radar upgrades and SA 640 are unavailable.",

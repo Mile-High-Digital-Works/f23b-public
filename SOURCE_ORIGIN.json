@@ -72,7 +72,7 @@
       "native/radar-helper/Radar.cpp": "225285cdb25819418549f34ed6f29ef6b9c93063a88174f7dcb904205b11c473",
       "tests/lua/exterior_visual_adapter_spec.lua": "81e48a8619ce89debd9def1550cc866932bbe96df2695d6730c054067e6b9154",
       "tests/lua/input_bridge_profile_spec.lua": "6688afa1ce25a0fc1d4bfb0a935ad857b211c972a4a89bf513ea224e9ecbcabe",
-      "tools/blender/build_agm88g_model.py": "752b8b7f7947ebf68265a3873f1090c04787a8e45a0fba127cf956c3a7802b8b",
+      "tools/blender/build_agm88g_model.py": "f63d717e99be48cceb4fd22e552f98caa2af37a0221c5e6eafe4f5c48066e7ea",
       "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13.md": "3f90ab7409f0a151abc6159771bd0ee2b115e95d738fb8101291b6c514f10708",
       "docs/evidence/F23B_AGM88G_MODEL_ORIGIN_2026-10-13/stock-size.json": "e82c7bcd00b6ff60bd5b253c0dd920fe54994a1d2c0a70c14cea309a7c1d69ad",
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/RadarUpgrade.lua": "907d59788edaf765323a7a298f7ffffdbc60f0b5798d18eac4024a9d4aa34ea7",
@@ -99,7 +99,7 @@
       "native/radar-helper/build.ps1": "f51d1fd066dcea51c379c4e4c10b04706351c0c0d81f5533c70ea1cbb9ddc1c7",
       "README.md": "eabb3fe6a92226ab4944761969ce8b2efdf9fe6bf1525485676dce67cbdb2316",
       "docs/PILOT_GUIDE.md": "b152299e4d2796b0cb57506f0a719c80fd5155de38ae151749654742b50c435c",
-      "docs/RELEASE_NOTES.md": "e9042c7b97a8b12309056892f9f395a0de1c1bfe28afc78284d10c7ea4e15362",
+      "docs/RELEASE_NOTES.md": "da4a6dabfd9f5966636ba28e4a661d2e00db566837c1afad6f2c8312cc61b956",
       "Mods/aircraft/F-23B/Shapes/F-23B.lods": "9ff3bb282370824787bc05e76f7d9b0e65220b7f88e6ce88522f06dba8c7abe5"
     },
     "helper_sha256": "c0c26e7e65950324c8b9f4de07309b89e896661688d82433ea4f9b6bf4c8097f"

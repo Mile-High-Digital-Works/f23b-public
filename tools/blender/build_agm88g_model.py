@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
 """Build project-original HARM and Block II visuals with the MALICE EDM route.
 
-Only stock bounding length and descriptor diameter inform this mesh. Every
-vertex, fin planform, material and marking below is authored by this project.
+The sizing input fixes the existing store envelope. Every vertex, fin
+planform, material and marking below is authored by this project.
 """
 import argparse
 import hashlib
@@ -22,7 +22,7 @@ parser.add_argument('--mesh-output', required=True)
 parser.add_argument('--blend-output', required=True)
 parser.add_argument('--blockii', action='store_true', help='Build the original Block II visual instead of HARM')
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
-# Same official addon setup as the accepted MALICE builder. This generator
+# Same official addon setup as the MALICE builder. This generator
 # stays self-contained so its corresponding source can ship with the mesh.
 addon = Path(args.addon_path).resolve()
 sys.path.insert(0, str(addon))
@@ -45,10 +45,10 @@ PREFIX = 'BLOCKII' if args.blockii else 'AGM88G'
 LENGTH = stock['length_m'] * SCALE
 DIAMETER = stock['diameter_m'] * SCALE
 RADIUS = DIAMETER / 2
-# The running modern stock motor uses nozzle_position.x = -2.1.
+# Preserve the existing mount and exhaust coordinates.
 TAIL = -1.6 if args.blockii else -2.1 * SCALE
 NOSE = TAIL + LENGTH
-WING_RADIUS = .105 if args.blockii else .214
+WING_RADIUS = .105 if args.blockii else .118
 FIN_RADIUS = .135 if args.blockii else .174
 inverse = ROOT_TRANSFORM_MATRIX.inverted()
 bpy.ops.object.select_all(action='SELECT')
@@ -67,12 +67,12 @@ def material(name, color):
     return m
 
 
-body = material(SHAPE + '_body', (.10, .125, .15))
-radome = material(SHAPE + '_radome', (.045, .055, .068))
-metal = material(SHAPE + '_metal', (.075, .09, .105))
+body = material(SHAPE + '_body', (.10, .125, .15) if args.blockii else (.28, .30, .31))
+radome = material(SHAPE + '_radome', (.045, .055, .068) if args.blockii else (.40, .38, .32))
+metal = material(SHAPE + '_metal', (.075, .09, .105) if args.blockii else (.11, .12, .13))
 dark = material(SHAPE + '_nozzle', (.018, .023, .028))
-ink = material(SHAPE + '_stencil', (.25, .28, .30))
-yellow = material(SHAPE + '_band', (.24, .20, .105))
+ink = material(SHAPE + '_stencil', (.25, .28, .30) if args.blockii else (.055, .062, .066))
+yellow = material(SHAPE + '_band', (.24, .20, .105) if args.blockii else (.34, .26, .09))
 
 
 def mesh(name, vertices, faces, mat, smooth=False):
@@ -122,7 +122,7 @@ body_factor = RADIUS / (.1905 / 2) if args.blockii else 1.0
 lathe('AGM88G_body', [(TAIL, .073 * body_factor), (TAIL + .04, .081 * body_factor),
                      (TAIL + .13, RADIUS - .0006),
                      (NOSE - .53, RADIUS - .0006)], body, caps=False)
-# An original pointed ogive and eight swept surfaces give a HARM-like layout.
+# Preserve the body and radome envelope of each store.
 NOSE_LENGTH = .10 if args.blockii else .53
 nose_rings = ([(NOSE - .53, RADIUS - .0006)] if args.blockii else []) + [(NOSE - NOSE_LENGTH, RADIUS - .0006)]
 lathe('AGM88G_radome', nose_rings +
@@ -171,11 +171,13 @@ for k in range(4):
             [(TAIL + .045, .051), (TAIL + .52, .061),
              (TAIL + .24, FIN_RADIUS), (TAIL + .075, FIN_RADIUS)])
     else:
-        fin('AGM88G_mid_wing_' + str(k), angle,
-            [(-.63, .088), (.34, .088), (-.05, WING_RADIUS), (-.49, WING_RADIUS)])
+        # Long shallow strakes and compact tail controls give the ER-inspired profile.
+        fin('AGM88G_strake_' + str(k), angle,
+            [(TAIL + .45, .091), (NOSE - .57, .091),
+             (NOSE - .76, WING_RADIUS), (TAIL + .58, WING_RADIUS)])
         fin('AGM88G_tail_fin_' + str(k), angle,
-            [(TAIL + .045, .084), (TAIL + .62, .092),
-             (TAIL + .33, FIN_RADIUS), (TAIL + .07, FIN_RADIUS)])
+            [(TAIL + .045, .084), (TAIL + .37, .092),
+             (TAIL + .25, FIN_RADIUS), (TAIL + .075, FIN_RADIUS)])
 
 
 def stencil(text, x, angle, size, direction):
@@ -222,7 +224,7 @@ for obj in bpy.context.scene.objects:
         a, b, c = (points[i] for i in tri.vertices)
         quality['degenerate_triangles'] += int((b - a).cross(c - a).length < 1e-13)
         volume += a.dot(b.cross(c)) / 6
-    if any(token in obj.name for token in ('mid_wing', 'tail_fin', 'radome')):
+    if any(token in obj.name for token in ('mid_wing', 'strake', 'tail_fin', 'radome')):
         assert all(n == 2 for n in edges.values()), (obj.name, 'open solid')
         assert volume > 0, (obj.name, 'inward winding')
         quality['closed_solids'][obj.name] = {'outward_winding': True, 'volume_m3': volume}
@@ -241,7 +243,7 @@ result = bpy.ops.edm.export(filepath=str(output))
 assert 'FINISHED' in result and output.stat().st_size > 1000, result
 Path(args.mesh_output).write_text(json.dumps({'vertices': vertices, 'faces': faces}), encoding='utf-8')
 report = dict(status='OFFLINE_PASS', visual_scale=SCALE, body_length_m=LENGTH,
-              body_diameter_m=DIAMETER, mid_wing_span_m=2 * WING_RADIUS,
+              body_diameter_m=DIAMETER, mid_wing_span_m=2 * WING_RADIUS if args.blockii else 0,
               tail_fin_span_m=2 * FIN_RADIUS, dcs_bounds_m=bounds,
               exhaust_x_m=TAIL, sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
               bytes=output.stat().st_size, mesh_quality=quality,
@@ -251,5 +253,10 @@ report = dict(status='OFFLINE_PASS', visual_scale=SCALE, body_length_m=LENGTH,
               provenance='Project-original procedural mesh; stock metadata gives overall length and body diameter only.',
               licence='CC-BY-SA-4.0; attribution: F-23B project contributors',
               simulation_performance_changed=False)
+if not args.blockii:
+    report.update(finish='Military grey body, contrasting radome, subdued band and dark stencils; visual only',
+                  provenance='Project-original procedural mesh; predefined dimensions preserve the existing store envelope.',
+                  strake_span_m=2 * WING_RADIUS, visual_reference='AARGM-ER-inspired silhouette; original geometry',
+                  runtime_validation='OPEN')
 output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
 print('MODEL_RESULT', json.dumps(report), flush=True)
