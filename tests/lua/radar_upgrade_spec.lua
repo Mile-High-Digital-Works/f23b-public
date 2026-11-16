@@ -117,6 +117,54 @@ count = #logs; tick(); assert(#logs == count, "SA status repeated")
 sa_status = -50; tick()
 assert(logs[#logs]:find("code -50", 1, true) and levels[#levels] == log.ERROR)
 sa_status = 0; count = #logs; tick(); assert(#logs == count, "inactive SA status logged")
+-- Block II flare rejection is reported once as INFO, a refusal once as an error, and the count rarely.
+local decoy_status, decoy_rejects, flight_status, flight_rejects = 1, 0, 0, 0
+package.loadlib = function()
+    return function() return function()
+        return 0,0,0,0,0,0,0,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,0,nil,nil,0,decoy_status,decoy_rejects,flight_status,flight_rejects
+    end end
+end
+local function decoy_logs()
+    local found = {}
+    for _, line in ipairs(logs) do if line:find("Block II flare rejection", 1, true) then found[#found+1] = line end end
+    return found
+end
+logs = {}; levels = {}; tick = dofile(path); tick()
+assert(#decoy_logs() == 1 and logs[#logs]:find("flare rejection active", 1, true) and levels[#levels] == log.INFO)
+tick(); assert(#decoy_logs() == 1, "flare rejection status repeated")
+decoy_rejects = 37; tick(); assert(#decoy_logs() == 1, "flare rejection count logged every tick")
+for _ = 1, 1000 do tick() end
+assert(#decoy_logs() == 2 and decoy_logs()[2]:find("seeker=37 flight=0", 1, true), "flare rejection count not reported")
+decoy_status = -42; tick()
+assert(logs[#logs]:find("code -42", 1, true) and levels[#levels] == log.ERROR)
+flight_status = 1; tick()
+assert(logs[#logs]:find("active in flight", 1, true) and levels[#levels] == log.INFO)
+local flight_count = #logs; tick(); assert(#logs == flight_count, "in-flight status repeated")
+flight_status = -45; tick()
+assert(logs[#logs]:find("code -45", 1, true) and levels[#levels] == log.ERROR)
+flight_status = 0; flight_rejects = 0
+decoy_status = 0; decoy_rejects = 0; logs = {}; tick = dofile(path); tick()
+assert(#decoy_logs() == 0, "inactive flare rejection logged")
+-- Block II seeker: refused missiles and undesignated aircraft are counted and reported rarely, never as an error.
+local missile_rejects, designation_rejects = 0, 0
+package.loadlib = function()
+    return function() return function()
+        return 0,0,0,0,0,0,0,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,0,nil,nil,0,1,0,0,0,missile_rejects,designation_rejects
+    end end
+end
+local function seeker_logs()
+    local found = {}
+    for _, line in ipairs(logs) do if line:find("Block II seeker diag", 1, true) then found[#found+1] = line end end
+    return found
+end
+logs = {}; levels = {}; tick = dofile(path); tick()
+tick(); assert(#seeker_logs() == 0, "seeker diagnostics logged with no refusal")
+missile_rejects = 12; designation_rejects = 5; tick(); assert(#seeker_logs() == 0, "seeker count logged every tick")
+for _ = 1, 1000 do tick() end
+assert(#seeker_logs() == 1 and seeker_logs()[1]:find("missiles=12 undesignated=5", 1, true), "seeker count not reported")
+for i, line in ipairs(logs) do
+    if line:find("Block II seeker diag", 1, true) then assert(levels[i] == log.INFO, "seeker count reported as an error") end
+end
 -- A manual installation on an unknown DCS build must give an actionable message.
 package.loadlib = function() return function() return function() return -1 end end end
 tick = dofile(path); tick(); tick()
@@ -139,4 +187,4 @@ assert(closed and #messages == before + 1)
 assert(messages[#messages]:find("Check all files (slow)", 1, true))
 io = original_io
 package.loadlib = original
-print("PASS: radar loader, bounded failures, native reports, manual-install warning and read-only legacy detection")
+print("PASS: radar loader, bounded failures, native reports, flare rejection, manual-install warning and read-only legacy detection")
