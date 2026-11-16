@@ -7,7 +7,7 @@ body:
     attributes:
       label: Release
       description: Use the name or date shown on the GitHub release page.
-      placeholder: v1.4 (October 6, 2026)
+      placeholder: v1.5.1
   - type: input
     id: dcs-version
     attributes:
