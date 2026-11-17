@@ -19,6 +19,7 @@ NOTICES = ['LICENCE.md', 'CREDITS.md', 'INSTALL.md', 'KNOWN_ISSUES.md',
            'docs/PILOT_GUIDE.md', 'docs/RELEASE_NOTES.md', 'docs/images/f23b-cockpit.jpg',
            'docs/evidence/F23B_AGM88G_DEFINITION_2026-11-16.md',
            'config/licensing/third-party-code-reuse.json',
+           'config/releases/menu-v1.5.json',
            'config/licensing/liveries-v1.4.json', 'docs/PILOT_GUIDE.html']
 
 
