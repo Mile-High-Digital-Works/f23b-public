@@ -56,7 +56,8 @@ def ensure_closed():
     if os.name != 'nt':
         raise ValueError('The native installer requires Windows')
     result = subprocess.run(['tasklist', '/FO', 'CSV', '/NH'], check=True,
-                            capture_output=True, text=True)
+                            capture_output=True, text=True,
+                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
     for line in result.stdout.lower().splitlines():
         if line.startswith(('"dcs.exe",', '"dcs_server.exe",', '"dcs_updater.exe",', '"modelviewer2.exe",')):
             raise ValueError('Close DCS, its updater and ModelViewer before continuing')

@@ -66,7 +66,8 @@ class NativeInstallerTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'Close DCS'):
                     installer.ensure_closed()
                 run.assert_called_once_with(['tasklist', '/FO', 'CSV', '/NH'], check=True,
-                                            capture_output=True, text=True)
+                                            capture_output=True, text=True,
+                                            creationflags=getattr(installer.subprocess, 'CREATE_NO_WINDOW', 0))
 
     def test_process_check_accepts_unrelated_processes(self):
         with patch.object(installer.os, 'name', 'nt'), \
