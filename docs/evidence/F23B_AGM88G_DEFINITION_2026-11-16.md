@@ -20,6 +20,8 @@ The projectile and AI retain the independent project identity.
 
 The declared range limits, seeker detection distances, motor fuel, aerodynamic curves, control gains and warhead settings retain their existing values.
 The loadout remains one project store without an external rail. No new numerical tuning is included.
+The numerical baseline originated in DCS game tables, with project factors documented in the [value-origin record](https://github.com/Mile-High-Digital-Works/f23b-public/blob/4db5722da63212563b82767ead54c6573220c266/docs/evidence/F23B_AGM88G_VALUE_ORIGIN_2026-11-16.md).
+This rewrite does not alter that provenance or the existing licence terms.
 
 ## Declaration changes and limits
 

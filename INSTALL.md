@@ -1,9 +1,11 @@
-# Install or remove F-23B v1.5.1
+# Install or remove F-23B
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
 The weapon and radar connection supports **DCS 2.9.31.29434**.
 Both options install the same aircraft, weapons, ten liveries and documentation.
 **Multiplayer is untested. VR is untested.**
+
+The latest published downloads are v1.5.1. For a supplied candidate build, use its ZIP or setup executable with the same steps below.
 
 | Method | Download |
 | --- | --- |
@@ -52,7 +54,7 @@ Licences, notices and corresponding-source details are together in `F-23B-docs`.
 ## Installer
 
 1. Close DCS, its updater and ModelViewer.
-2. Run **F-23B-v1.5.1-Setup.exe**.
+2. Run the **F-23B-<version>-Setup.exe** supplied with your download.
 3. Confirm the DCS game folder and Saved Games profile.
 4. Select **Install / Repair**.
 

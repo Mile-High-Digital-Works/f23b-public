@@ -1,6 +1,6 @@
 # F-23B credits
 
-v1.5.1. Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue tracker](https://github.com/Mile-High-Digital-Works/f23b-public/issues).
+v1.5.2. Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue tracker](https://github.com/Mile-High-Digital-Works/f23b-public/issues).
 
 | Contributor | Contribution |
 | --- | --- |

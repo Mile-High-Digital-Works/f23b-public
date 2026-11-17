@@ -1,6 +1,6 @@
 # F-23B licence and asset terms
 
-F-23B v1.5.1. Release manifests identify the exact files and source.
+F-23B v1.5.2. Release manifests identify the exact files and source.
 The rights below and the complete third-party terms remain in force.
 
 Project maintainer: **Mile-High-Digital-Works**. Contact: [project issue tracker](https://github.com/Mile-High-Digital-Works/f23b-public/issues).
