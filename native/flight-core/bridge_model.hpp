@@ -21,7 +21,8 @@ struct PilotInput {
     double pitch{},roll{},yaw{},throttle_left{},throttle_right{};
     bool analog_pitch{true},analog_roll{true},analog_yaw{true};
     bool engine_left_running{},engine_right_running{};
-    bool gear_down{},speedbrake{},landing_flaps{},wheel_brake{};
+    bool gear_down{},landing_flaps{},wheel_brake{};
+    double speedbrake{};
 };
 struct EngineOutput { double thrust_n{},fuel_flow_kg_s{};bool combustion{}; };
 struct ControlOutput {

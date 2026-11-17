@@ -57,7 +57,8 @@ Radar OFF, standby, inhibit or loss of the radar connection ends retained suppor
 Missile range depends on altitude, speed, target motion and support; maximum engagement ranges are not established.
 
 After a DCS update, the weapon and radar connection can switch off.
-If **weapon and radar connection OFF** appears, MALICE, Block II, radar upgrades and SA 640 are unavailable.
+If **weapon and radar connection OFF** appears, radar missile launches are blocked, including stock AIM-120C.
+MALICE, Block II, project HARM operation, radar upgrades and SA 640 are also unavailable.
 Flight, the native cockpit and radar, bays, lights and liveries remain available.
 Use a [release compatible with your DCS build](https://github.com/Mile-High-Digital-Works/f23b-public/releases).
 

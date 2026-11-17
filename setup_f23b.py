@@ -18,7 +18,7 @@ import zipfile
 import native_patch
 
 MODULES = ('F-23B', 'F-23B-Player')
-RELEASE_VERSION = 'v1.5.1'
+RELEASE_VERSION = 'v1.5.2'
 STATE = '.f23b-install'  # Earlier releases kept their receipt in the DCS profile.
 DOCS = 'F-23B-docs'
 MANIFEST = DOCS + '/release.json'
@@ -26,7 +26,8 @@ OCTOBER_3_RELEASE = '40c67d86716bb002726db2da89c9ddfbffc26358'
 V14_RELEASE = 'f2cd004b6ec587cca88dda921eb3e23641232246'
 UNMANAGED = 'Move the existing F-23B aircraft, supplied livery and F-23B-docs folders to a backup location, then run setup again.'
 CONNECTION_OFF = ('The F-23B weapon and radar connection is OFF for this DCS build. '
-                  'MALICE, Block II, radar upgrades and the 640 NM SA scale are unavailable. '
+                  'Radar missile launches, including stock AIM-120C, are blocked. '
+                  'MALICE, Block II, project HARM operation, radar upgrades and the 640 NM SA scale are unavailable. '
                   'Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available. '
                   'Get a compatible release at https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest.')
 LEGACY_RELEASE = '35a471ede1df312a8af8ca10283a7cd7cf7ba95f'

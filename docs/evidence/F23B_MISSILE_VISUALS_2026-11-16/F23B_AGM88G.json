@@ -1,0 +1,71 @@
+{
+  "body_length_m": 3.1777535676956177,
+  "body_diameter_m": 0.1905,
+  "strake_span_m": 0.236,
+  "tail_fin_span_m": 0.348,
+  "dcs_bounds_m": [
+    [
+      -1.5750000476837158,
+      1.6027535200119019
+    ],
+    [
+      -0.12353155761957169,
+      0.12353155761957169
+    ],
+    [
+      -0.12353155761957169,
+      0.12353155761957169
+    ]
+  ],
+  "exhaust_x_m": -1.5750000000000002,
+  "sha256": "27d7f565cefd777b4a6d93c2d0455f09021efa9ace6b3527701a6f00a02b181f",
+  "bytes": 193883,
+  "mesh_quality": {
+    "degenerate_triangles": 0,
+    "closed_solids": {
+      "AGM88G_radome": {
+        "outward_winding": true,
+        "volume_m3": 0.00744096396292096
+      },
+      "AGM88G_strake_0": {
+        "outward_winding": true,
+        "volume_m3": 0.0002950523448816966
+      },
+      "AGM88G_tail_fin_0": {
+        "outward_winding": true,
+        "volume_m3": 0.00011858974782323153
+      },
+      "AGM88G_strake_1": {
+        "outward_winding": true,
+        "volume_m3": 0.0002950523448816966
+      },
+      "AGM88G_tail_fin_1": {
+        "outward_winding": true,
+        "volume_m3": 0.00011858974782323153
+      },
+      "AGM88G_strake_2": {
+        "outward_winding": true,
+        "volume_m3": 0.0002950523448816966
+      },
+      "AGM88G_tail_fin_2": {
+        "outward_winding": true,
+        "volume_m3": 0.00011858974782323153
+      },
+      "AGM88G_strake_3": {
+        "outward_winding": true,
+        "volume_m3": 0.0002950523448816966
+      },
+      "AGM88G_tail_fin_3": {
+        "outward_winding": true,
+        "volume_m3": 0.00011858974782323153
+      }
+    }
+  },
+  "source": "tools/blender/build_agm88g_model.py",
+  "shape": "F23B_AGM88G",
+  "finish": "Military grey body, contrasting radome, subdued band and dark stencils; visual only",
+  "provenance": "Project-original procedural mesh; predefined dimensions preserve the existing store envelope.",
+  "licence": "CC-BY-SA-4.0; attribution: F-23B project contributors",
+  "simulation_performance_changed": false,
+  "runtime_validation": "pending"
+}

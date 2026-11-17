@@ -9,7 +9,7 @@
 -- These are DCS design choices. Range and terminal behavior require flights.
 -- Network designation and midcourse support use native Hornet MSI services.
 -- Model is a full-scale project approximation, not an official MALICE drawing.
--- See docs/design/F23B_MALICE_BLOCKII.md for limits and verification.
+-- See KNOWN_ISSUES.md for current weapon limitations.
 local MALICE_NAME = "F23B_AIM424_MALICE"
 local MALICE_CLSID = F23B_MALICE_CLSID or "{F23B-AIM424-MALICE}"
 local MALICE_MODEL = "F23B_MALICE"
@@ -240,7 +240,7 @@ local F23B_AIM424_MALICE = {
         sens_near_dist = 100.0,
         sens_far_dist = MALICE_SENSOR_FAR_RANGE_M,
         -- Enable the seeker's own distance trigger. Preserve native launch support.
-        -- Engine predicate verified offline; Hornet scheme binding/flight remain OPEN.
+        -- The engine predicate is checked offline; runtime binding remains unverified.
         active_radar_lock_dist = MALICE_ACTIVE_SEARCH_RANGE_M,
         active_dist_trig_by_default = 1,
         ccm_k0 = 0.01,
@@ -314,8 +314,8 @@ local F23B_AIM424_MALICE = {
         1.0,
         2.0,
         21.0, -25.0, -3.0,
-        -- Launch-zone anchors [49..54], head-on/tail at 5, 10 and 1 km (owner decision, October 2, 2026).
-        -- The owner's reference is a 350-mile (563 km) shot. The Hornet DLZ fits a quadratic through 1/5/10 km
+        -- Launch-zone anchors [49..54], head-on/tail at 5, 10 and 1 km (project launch-zone settings).
+        -- The range reference is a 350-mile (563 km) shot. The Hornet DLZ fits a quadratic through 1/5/10 km
         -- at altitude own + delta/2: these give about 522, 570 and 600 km head-on at 10, 12.5 and 15 km.
         372000.0, 186000.0,
         522000.0, 300000.0,

@@ -58,7 +58,7 @@ assert(unrelated.down == 7777 and unrelated.up == 7778 and
 -- A release binding saved under the native Hornet hash must survive a DCS save of the
 -- controls. DCS saves only differences from this profile, keyed by the rewritten hash
 -- (Scripts/Input/Data.lua saveDeviceProfile), so the binding is moved once into the
--- owner's file. The profile itself must not carry it, or DCS saves nothing for it.
+-- saved input file. The profile itself must not carry it, or DCS saves nothing for it.
 local OLD, NEW = "d3003pnilu3003cd13vd1vpnilvu0", "d13006pnilu13006cdnilvd1vpnilvu0"
 local function fresh_profile()
     return { keyCommands = {

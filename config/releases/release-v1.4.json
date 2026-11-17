@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "F-23B-v1.4",
-  "description": "F-23B v1.4: accepted October 6 exterior, ten liveries, current DCS connection, and equal ZIP and setup installation options.",
+  "description": "F-23B v1.4: October 6 exterior, ten liveries, current DCS connection, and equal ZIP and setup installation options.",
   "dcs_version": "2.9.30.28738",
   "runtime_files": {
     "F-23B/Encyclopedia/Plane/F-23B/F-23B.png": "5b0006c9df50c1b35a7f3a9fc3b6c3223b8bcc4caf6dade5daf3952894576f7d",

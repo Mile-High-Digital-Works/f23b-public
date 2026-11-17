@@ -82,6 +82,7 @@ local state = {
     release_input = false,
     release_pending = false,
     native_release_down = false,
+    direct_release_down = false,
     release_remaining = 0.0,
     main_bay_hold = 0.0,
     loaded_harm_mask = 0,
@@ -290,6 +291,16 @@ local function set_weapon_mode(mode, name)
     end
 end
 
+local function end_direct_release()
+    if state.direct_release_down then
+        if not forward_hornet(HORNET_WEAPON_RELEASE, 0.0, "weapon-release") then
+            return false
+        end
+        state.direct_release_down = false
+    end
+    return true
+end
+
 local function end_native_release()
     if state.native_release_down then
         if not forward_hornet(HORNET_WEAPON_RELEASE, 0.0, "weapon-release") then
@@ -325,7 +336,9 @@ function SetCommand(command, value)
         local pressed = value >= PRESS_THRESHOLD
         -- A/G releases, and any release with a project HARM aboard (HARM Pullback works in every
         -- master mode), open the bay first. Nothing is read from the cockpit displays.
-        if air_to_ground or state.loaded_harm_mask > 0 then
+        if not pressed and state.direct_release_down then
+            end_direct_release()
+        elseif air_to_ground or state.loaded_harm_mask > 0 then
             if pressed and not state.release_input then
                 state.release_pending = true
                 state.release_in_ag = air_to_ground
@@ -334,7 +347,9 @@ function SetCommand(command, value)
                     .. " project HARM stations=" .. tostring(state.loaded_harm_mask))
             end
         elseif not state.release_pending and not state.native_release_down then
-            forward_hornet(HORNET_WEAPON_RELEASE, value, "weapon-release")
+            if forward_hornet(HORNET_WEAPON_RELEASE, value, "weapon-release") then
+                state.direct_release_down = pressed
+            end
         end
         state.release_input = pressed
         return
@@ -403,6 +418,10 @@ end
 
 function update()
     local air_to_air, air_to_ground = update_light_blackout()
+    -- Direct presses bypass the bay sequence but still need a matching release.
+    if state.direct_release_down and (air_to_ground or not state.release_input) then
+        end_direct_release()
+    end
     -- A master-mode change cancels a pending release and ends a held one.
     if (state.release_pending or state.native_release_down) and state.release_in_ag ~= air_to_ground then
         state.release_pending = false
@@ -457,7 +476,7 @@ function update()
         or state.selected_weapon == "9X" or state.selected_weapon == "9M"
     local radar_weapon = air_to_air and state.selected_mode == MODE_MISSILE
         and not ir_weapon and not gun_route
-    local radar_target, target_side, cue_az, cue_el, cue_valid, harm_mask = update_radar_upgrade(
+    local radar_target, target_side, cue_az, cue_el, cue_valid, harm_mask, connection_ready = update_radar_upgrade(
         air_to_air and not gun_route, ir_weapon and air_to_air)
     state.loaded_harm_mask = type(harm_mask) == "number" and harm_mask or 0
     -- With a project HARM aboard, every sequenced release lowers the three trapezes first.
@@ -474,10 +493,13 @@ function update()
             state.trigger_pending = false
             state.trigger_tap_remaining = 0.0
             end_native_trigger()
-            note("radar shot cancelled: no verified opposing target; id="
+            local reason = connection_ready and "no verified opposing target"
+                or "weapon and radar connection off"
+            note("radar shot cancelled: " .. reason .. "; id="
                 .. tostring(radar_target) .. " side=" .. tostring(target_side))
             if type(print_message_to_user) == "function" then
-                print_message_to_user("F-23B: radar shot inhibited. No verified hostile target.")
+                print_message_to_user("F-23B: radar shot inhibited. " .. (connection_ready
+                    and "No verified hostile target." or "Weapon and radar connection OFF."))
             end
         end
     end

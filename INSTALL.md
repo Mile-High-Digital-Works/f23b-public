@@ -1,9 +1,11 @@
-# Install or remove F-23B v1.5.1
+# Install or remove F-23B
 
 Requires Windows and an installed, activated **DCS: F/A-18C Hornet**.
 The weapon and radar connection supports **DCS 2.9.31.29434**.
 Both options install the same aircraft, weapons, ten liveries and documentation.
 **Multiplayer is untested. VR is untested.**
+
+The latest published downloads are v1.5.1. For a supplied candidate build, use its ZIP or setup executable with the same steps below.
 
 | Method | Download |
 | --- | --- |
@@ -52,7 +54,7 @@ Licences, notices and corresponding-source details are together in `F-23B-docs`.
 ## Installer
 
 1. Close DCS, its updater and ModelViewer.
-2. Run **F-23B-v1.5.1-Setup.exe**.
+2. Run the **F-23B-<version>-Setup.exe** supplied with your download.
 3. Confirm the DCS game folder and Saved Games profile.
 4. Select **Install / Repair**.
 
@@ -78,7 +80,8 @@ Development directory links are not supported by setup.
 
 Both methods allow installation on other DCS builds. The ZIP has no installation-time version check.
 The aircraft checks the connection in game and shows **weapon and radar connection OFF** when it cannot connect.
-MALICE, Block II, radar upgrades and the 640 NM SA scale are then unavailable.
+Radar missile launches, including stock AIM-120C, are blocked while the connection is off.
+MALICE, Block II, project HARM operation, radar upgrades and the 640 NM SA scale are also unavailable.
 Flight, the native Hornet cockpit and radar, bays, lights and liveries remain available.
 Get a compatible build from [the latest release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/latest).
 DCS 2.9.29.27468 users can retain the [September 29 release](https://github.com/Mile-High-Digital-Works/f23b-public/releases/tag/release-2026-09-29).

@@ -24,6 +24,8 @@ local writes
 local listened
 local forwarded
 local logs
+local player_messages = {}
+print_message_to_user = function(message) player_messages[#player_messages+1] = message end
 local hud_text
 local persist_writes
 local activity
@@ -527,7 +529,8 @@ radar_target, radar_side = 720, 1
 update()
 check(forwarded_count(3002, 0) == 1, "friendly selection did not cancel native launch delay")
 
-for _, side in ipairs({0, -1}) do
+for _, case in ipairs({{side=0}, {side=-1}, {}}) do
+    local side = case.side
     fresh_adapter(missile_hud("120B", 3))
     radar_side = side
     SetCommand(commands.SELECT_AMRAAM, 1)
@@ -536,6 +539,32 @@ for _, side in ipairs({0, -1}) do
     check(forwarded_count(3002, 1) == 0, "unverified radar target permitted a shot")
     check(forwarded_count(3013, 1) == 0, "unverified target was falsely classified friendly")
 end
+-- Missing helpers and failed updates keep radar shots inhibited with the actual reason.
+for _, failure in ipairs({"missing", "update"}) do
+    fresh_adapter(missile_hud("120C", 3))
+    if failure == "missing" then
+        package.loadlib = function() return nil, "missing DLL" end
+    else
+        radar_failure = true
+    end
+    SetCommand(commands.SELECT_AMRAAM, 1)
+    SetCommand(commands.TRIGGER_SECOND_DETENT, 1)
+    advance(160)
+    check(forwarded_count(3002, 1) == 0, "connection failure permitted a radar shot")
+    check(logged("radar shot cancelled: weapon and radar connection off"),
+        "connection failure was reported as an unverified target")
+    check(player_messages[#player_messages]:find("Weapon and radar connection OFF", 1, true),
+        "inhibited shot did not explain the connection failure")
+    package.loadlib = mock_loadlib
+end
+fresh_adapter(missile_hud("120C", 3))
+radar_target, radar_side = nil, nil
+SetCommand(commands.SELECT_AMRAAM, 1)
+SetCommand(commands.TRIGGER_SECOND_DETENT, 1)
+advance(160)
+check(forwarded_count(3002, 1) == 0, "nil target data permitted a radar shot")
+check(player_messages[#player_messages]:find("No verified hostile target", 1, true),
+    "a working connection with no target was reported as off")
 -- WVR IR acquisition and guns must not depend on the radar's target.
 for _, selection in ipairs({commands.SELECT_SIDEWINDER, commands.SELECT_GUN}) do
     fresh_adapter(missile_hud("9X", 2))
@@ -653,6 +682,56 @@ SetCommand(commands.WEAPON_RELEASE, 0)
 check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
     "release outside A/G was not forwarded unchanged")
 print("PASS: A/G tap/hold opens bay, releases once and closes; mode exit cancels; native binding preserved")
+-- Direct A/A or NAV presses retain their release edge across entry into A/G.
+for _, initial_mode in ipairs({{[47]=1,[48]=0}, {[47]=0,[48]=0}}) do
+    for _, switch_ticks in ipairs({0, 2}) do
+        fresh_adapter()
+        native_mode = initial_mode
+        SetCommand(commands.WEAPON_RELEASE, 1)
+        advance(10)
+        check(forwarded_count(3003, 1) == 1 and value(MAIN_BAY) == 0,
+            "direct release changed the bay sequence")
+        native_mode = {[47]=0,[48]=1}
+        advance(switch_ticks)
+        SetCommand(commands.WEAPON_RELEASE, 0)
+        advance(160)
+        check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
+            "A/A or NAV to A/G lost the direct release edge")
+        SetCommand(commands.WEAPON_RELEASE, 1)
+        SetCommand(commands.WEAPON_RELEASE, 0)
+        advance(160)
+        check(forwarded_count(3003, 1) == 2 and forwarded_count(3003, 0) == 2,
+            "cross-mode release prevented the next A/G press")
+    end
+end
+fresh_adapter()
+native_mode = {[47]=0,[48]=1}
+SetCommand(commands.WEAPON_RELEASE, 1)
+advance(25)
+native_mode = {[47]=1,[48]=0}
+update()
+SetCommand(commands.WEAPON_RELEASE, 0)
+advance(160)
+check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) >= 1,
+    "A/G to A/A lost the sequenced release edge")
+-- A failed direct release is retried without repeating its press.
+fresh_adapter()
+SetCommand(commands.WEAPON_RELEASE, 1)
+local deliver_release = hornet_device.performClickableAction
+local fail_release = true
+function hornet_device:performClickableAction(command, command_value, animated)
+    if command == 3003 and command_value == 0 and fail_release then
+        fail_release = false
+        error("release delivery failed")
+    end
+    return deliver_release(self, command, command_value, animated)
+end
+native_mode = {[47]=0,[48]=1}
+SetCommand(commands.WEAPON_RELEASE, 0)
+advance(3)
+check(forwarded_count(3003, 1) == 1 and forwarded_count(3003, 0) == 1,
+    "failed direct release was not retried exactly once")
+print("PASS: direct and sequenced weapon releases remain paired across master mode changes")
 
 -- Project HARM aboard: every sequenced release opens the doors, lowers all three roof trapezes
 -- (stations 2, 3, 7), releases once, retracts, then closes. Nothing is read from the cockpit displays.

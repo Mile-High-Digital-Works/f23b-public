@@ -31,7 +31,7 @@ Output Model::step(double dt,const Atmosphere& air,const MassState& mass,
     s.damage=core::sdk_damage;
     low_speed_recovery_=core::recovery_switch(low_speed_recovery_,parameters,s);
     s.recovery_active=low_speed_recovery_;
-    core::Input u{input.pitch,input.roll,input.yaw,double(input.speedbrake),
+    core::Input u{input.pitch,input.roll,input.yaw,input.speedbrake,
                   double(input.gear_down),double(input.landing_flaps)};
     const auto result=core::evaluate(parameters,s,u);
     if(!result.valid)return output_;

@@ -28,7 +28,8 @@ class Json {
             char c=source[position++];if(c=='"')return true;
             if(static_cast<unsigned char>(c)<32)return false;
             if(c=='\\') {
-                if(position>=source.size())return false;c=source[position++];
+                if(position>=source.size())return false;
+                c=source[position++];
                 if(c=='u') {
                     unsigned code=0;
                     for(int i=0;i<4;++i) {

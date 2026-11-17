@@ -73,14 +73,14 @@ void* sibling(void* block, const EnergyIdentity& id, void* descriptor, uintptr_t
 }
 
 // Project decision (October 2, 2026): suspend the loft while the coasting apex would pass the ceiling.
-// The owner's 384 and 524 km shots climbed 17-23 degrees and reached 57 and 97 km.
-// Accepted 80-130 km shots climbed 9-15 degrees to 13-17 km and stay below this limit.
+// Recorded 384 and 524 km shots climbed 17-23 degrees and reached 57 and 97 km.
+// Recorded 80-130 km shots climbed 9-15 degrees to 13-17 km and stay below this limit.
 // The 30 km ceiling is a project value set from those recorded flights; no shot has flown it yet.
 constexpr double loftCeiling = 30000, gravity = 9.80665;
 // Project decision (October 12, 2026): hold the second pulse when the missile is about to arrive.
-// On a short shot the seeker is active from launch, so the pulse fired at boost burnout. The owner's
+// On a short shot the seeker is active from launch, so the pulse fired at boost burnout. A recorded
 // 21.6 km shot got it at 9.1 km to go at Mach 7, where a 40 g turn has a radius near 12 km.
-// Accepted shots lit the pulse 14 to 19 s before the hit (94 km, 122 km and 541 km launches).
+// Recorded shots lit the pulse 14 to 19 s before the hit (94 km, 122 km and 541 km launches).
 // The limit is 10 s of flight at the present closing speed. It is not latched: a target that opens
 // the range again can still get the pulse.
 constexpr double minimumPulseTime = 10.0;

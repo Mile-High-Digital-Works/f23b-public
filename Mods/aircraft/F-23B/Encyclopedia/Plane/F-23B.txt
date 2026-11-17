@@ -18,8 +18,9 @@ Native systems and sound use the installed Hornet.
 
 Armament:
 Internal gun
-AIM-9X Block II on the two outward-swinging bay doors
-Three AIM-424 MALICE or AIM-120C missiles in the main bay
+AIM-424 MALICE and AIM-9X Block II on the two outward-swinging bay doors
+Project AGM-88G HARM on three roof-mounted trapezes
+The centre roof station also supports MALICE.
 Quick Start missions carry two AIM-9X Block II and three MALICE missiles.
 
 Installation:

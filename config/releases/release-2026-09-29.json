@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "F23B-2026-09-29",
-  "description": "Aircraft module files of the build flown on September 29, 2026. The release removes unused files, adds a public build identity, draws original menu graphics and corrects the Quick Start mission requirements.",
+  "description": "Aircraft module files of the build tested on September 29, 2026. The release removes unused files, adds a public build identity, draws original menu graphics and corrects the Quick Start mission requirements.",
   "dcs_version": "2.9.29.27468",
   "runtime_files": {
     "F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "8d196bf834f0c340c0265abe512cc923be00fca2da1130a0dfddc794059335b0",

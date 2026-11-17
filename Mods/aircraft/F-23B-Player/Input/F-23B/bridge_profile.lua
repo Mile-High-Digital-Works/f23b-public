@@ -55,7 +55,7 @@ end
 
 -- DCS saves a binding as a difference from this profile, by command hash. A binding saved
 -- under a native Hornet hash no longer matches a rewritten row, and the next save of the
--- controls drops it. Copy each such entry once to the rewritten hash in the owner's file,
+-- controls drops it. Copy each such entry once to the rewritten hash in the saved input file,
 -- before DCS reads that file. The old entries stay; a one-time backup keeps the original.
 local function migrate(diff_file, moves)
     if not diff_file or not diff_file.path or type(diff_file.diff) ~= "table"
@@ -137,7 +137,7 @@ return function(profile, devices, hotas_commands, commands, native_key_diffs, di
                 .. tostring(native))
         end
     end
-    -- If the owner's file cannot be updated, keep the saved assignment for this session.
+    -- If the saved input file cannot be updated, keep the saved assignment for this session.
     -- DCS then sees it as part of this profile and a later save of the controls drops it.
     if not migrate(diff_file, moves) then
         local function same(a, b)

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
+#ifdef F23B_DEVELOPMENT_HOOKS
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -31,3 +32,4 @@ inline void record_fit_sample(double time, double dt, const perf::Output& aero) 
     vector(runtime.world_position); vector(runtime.world_velocity);
     out << '\n';
 }
+#endif

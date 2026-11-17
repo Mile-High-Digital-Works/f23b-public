@@ -39,8 +39,17 @@ lua tests/lua/malice_blockii_hornet_spec.lua
 ```
 
 The installer tests use temporary fixtures. They do not patch an installed game.
-Hosted CI runs these checks on Windows and Linux. The full native bridge and
-real SDK checks require a local Windows installation.
+Use Lua 5.1 for the Lua specs. DCS uses that version.
+
+Hosted CI runs the Python checks and the flight-core tests on Windows and Linux.
+On Linux, it also runs the five Lua specs with Lua 5.1. It runs the three
+radar-helper tests that need no Windows headers, and the steering, ground-yaw
+and propulsion bridge tests.
+On Windows, it also builds `F23B_Radar.dll` with MinGW `g++` and runs the
+radar-helper test groups. It builds and runs the same three bridge tests with MSVC.
+Hosted CI does not build `F23B_ForceBridge.dll`. That build, the bridge
+control-output and bridge-model tests, and each check in DCS need the DCS
+headers of a local Windows installation.
 
 ## Native radar helper
 
@@ -57,8 +66,8 @@ The script runs the native test groups and writes the DLL to `build/native-radar
 
 ## Release packaging
 
-`tools/package_release.py` packages the aircraft module files of the flown
-build. `config/releases/release-v1.5.1.json` pins every runtime file by
+`tools/package_release.py` packages the aircraft module files of the released
+build. `config/releases/release-v1.5.2.json` pins every runtime file by
 SHA-256 and lists the unused files that the release removes, with reasons.
 Every shipped script and configuration file must equal the committed source.
 For v1.5, `config/releases/menu-v1.5.json` selects the revised slate. Packaging
@@ -67,21 +76,20 @@ dimensions; it does not regenerate the artwork. Font files are not bundled.
 The release pin sets `runtime_is_final` to true for byte preservation.
 Packaging preserves
 every module byte, including Quick Start missions, and checks installed parity.
-The v1.4 pin remains a historical baseline.
 
 ```powershell
 python -m pip install -r requirements-release.txt
-python -B tools/package_release.py --runtime-dir "PATH/TO/FLOWN/Mods/aircraft" --liveries-dir "PATH/TO/PACK/Liveries/F-23B"
+python -B tools/package_release.py --runtime-dir "PATH/TO/RELEASE/Mods/aircraft" --liveries-dir "PATH/TO/PACK/Liveries/F-23B"
 ```
 
-Check the actual menu PNGs with `python -B tests/check_branding.py --runtime-dir "PATH/TO/FLOWN/Mods/aircraft"`.
+Check the actual menu PNGs with `python -B tests/check_branding.py --runtime-dir "PATH/TO/RELEASE/Mods/aircraft"`.
 Hosted CI checks the committed menu manifest; licensed runtime images remain local release inputs.
 
-Select the committed accepted pin with `--pin config/releases/release-<version>.json`.
-The flown module folders are a private release input and are not downloaded by CI.
-They contain the licensed visual derivatives. The Blender source for these
-derivatives remains private; it is not corresponding software source.
-Before release, compare both rebuilt DLLs with the accepted runtime by code
+Select the committed release pin with `--pin config/releases/release-<version>.json`.
+The release module folders are a separate release input and are not downloaded by CI.
+They contain the licensed visual derivatives. The Blender sources for these
+derivatives are not part of the corresponding software source.
+Before release, compare both rebuilt DLLs with the released runtime by code
 section hash. Other sections contain build paths and timestamps, so whole-file
 hashes can differ. The v1.5 helper and bridge match their corresponding source rebuilds by normalized content.
 Packaging produces local release files. It does not publish them or change repository visibility.
@@ -93,7 +101,7 @@ After committing the source and packaging the aircraft as above:
 ```powershell
 python -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements-setup.txt
-.venv/Scripts/python.exe tools/build_setup.py --aircraft-zip "PATH/TO/F-23B-v1.5.1.zip"
+.venv/Scripts/python.exe tools/build_setup.py --aircraft-zip "PATH/TO/F-23B-v1.5.2.zip"
 ```
 
 The build uses [PyInstaller](https://pyinstaller.org/en/stable/usage.html) to bundle
@@ -103,6 +111,7 @@ beside the aircraft/source archives. The payload must match the committed source
 The GUI requests administrator access only when verified earlier game-file changes need restoration. Command-line fixture runs can operate without
 elevation in temporary folders. Setup never downloads code at runtime.
 The executable is unsigned unless a release maintainer signs it separately.
+Before release, match LICENCE.md Annexes D to G to the bundled component versions.
 
 Setup installs only into the Saved Games profile. It adds nothing to the DCS
 game folder. It removes the September 18 cockpit connection and restores the
@@ -114,20 +123,32 @@ Extract the ZIP into a clean profile fixture. Install the compiled EXE into a se
 clean fixture with an empty Config directory. Compare both with this command:
 
 ```powershell
-python tools/verify_installation.py --aircraft-zip "PATH/F-23B-v1.5.1.zip" --profile "PATH/TO/FIXTURE"
+python tools/verify_installation.py --aircraft-zip "PATH/F-23B-v1.5.2.zip" --profile "PATH/TO/FIXTURE"
 ```
 
 The check compares every file path and SHA-256, including documentation and liveries.
 Setup receipts remain outside the profile so both methods install identical files.
 Repeat against the actual compiled EXE for fresh install, repair, removal, historical
 upgrades, matching manual adoption, modified manual refusal, and a mismatched DCS fixture.
-The release preserves the flown aircraft bytes. Documentation-only packaging does not require another DCS flight.
+Packaging preserves the released aircraft bytes. A documentation-only package needs no new flight test.
 
-## v1.5.1 release
+## v1.5.2 build
 
-The pin is marked RELEASE. Multiplayer and VR are untested and are listed as release limitations.
-The installed defaults include stable handling, low-speed recovery and the dry-power curve.
-No tuning file, damage logger or temporary test hook is shipped.
+DCS validation of this build is pending. Multiplayer and VR remain untested.
+The flight defaults retain the existing handling and dry-power curve.
+The [HARM definition record](docs/evidence/F23B_AGM88G_DEFINITION_2026-11-16.md) separates retained settings from pending flight validation.
+`F23B_DEVELOPMENT_HOOKS` defaults to OFF. Release builds do not read tuning files
+or use the FIT, STATE, MECHANICS, GROUND or TRACE recorder variables.
+The damage logger remains disabled by default.
+
+For development, configure a separate build directory with
+`-DF23B_DEVELOPMENT_HOOKS=ON`. This enables `Config/F23B-tuning.json` and
+`Logs/F23B-tuning.log` in `%USERPROFILE%\Saved Games\DCS`, or the profile named
+by `F23B_SAVED_GAMES`. It also enables `F23B_FORCE_BRIDGE_FIT`,
+`F23B_FORCE_BRIDGE_STATE`, `F23B_FORCE_BRIDGE_MECHANICS`,
+`F23B_FORCE_BRIDGE_GROUND` and `F23B_FORCE_BRIDGE_TRACE`.
+Use a separate build directory with hooks OFF for release packaging.
+
 The retired flight model and its tests are absent from the build and source archive.
 The source archive, DLL code sections and module manifest identify the same implementation.
 

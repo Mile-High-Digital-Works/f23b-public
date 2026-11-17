@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Install or restore F-23B missile definitions using the user's own DCS files."""
+"""Restore DCS game files changed by earlier F-23B releases, with atomic writes."""
 import argparse
 import hashlib
 import json
@@ -38,13 +38,14 @@ def replacement(base, project, kind):
 def atomic_write(path, data):
     temp = path.with_name(path.name + '.f23b-pending')
     try:
-        with temp.open('xb') as stream:
-            stream.write(data)
-            stream.flush()
-            os.fsync(stream.fileno())
+        stream = temp.open('xb')
     except FileExistsError:
         raise ValueError('An unfinished write already exists: ' + str(temp))
     try:
+        with stream:
+            stream.write(data)
+            stream.flush()
+            os.fsync(stream.fileno())
         os.replace(temp, path)
     finally:
         if temp.exists():
@@ -55,9 +56,10 @@ def ensure_closed():
     if os.name != 'nt':
         raise ValueError('The native installer requires Windows')
     result = subprocess.run(['tasklist', '/FO', 'CSV', '/NH'], check=True,
-                            capture_output=True, text=True)
+                            capture_output=True, text=True,
+                            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
     for line in result.stdout.lower().splitlines():
-        if line.startswith(('"dcs.exe",', '"dcs_updater.exe",', '"modelviewer2.exe",')):
+        if line.startswith(('"dcs.exe",', '"dcs_server.exe",', '"dcs_updater.exe",', '"modelviewer2.exe",')):
             raise ValueError('Close DCS, its updater and ModelViewer before continuing')
 
 

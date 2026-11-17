@@ -18,7 +18,7 @@ declare_plugin(self_ID, {
     displayName = _("F-23B Black Widow II Player"),
     fileMenuName = _("F-23B Black Widow II Player"),
     shortName = "F-23B Player",
-    version = "1.5",
+    version = "1.5.2",
     state = "installed",
     developerName = _("F-23B Community Project"),
     info = _("F-23B Black Widow II player relationship. Requires the F-23B Core and an installed and activated DCS: F/A-18C."),
@@ -61,7 +61,7 @@ derivative_flight_model[2] = "F23B_ForceBridge"
 derivative_flight_model.config_path = hornet_config
 derivative_flight_model.user_options = aircraft_type
 
--- Modest owner-test handling tune using the native registration interface
+-- Handling configuration using the native registration interface
 -- measured in the 334902c parameter flights. DCS axes are X roll, Y yaw,
 -- Z pitch; component 4 is Ixy. Allocate a new vector so the stock Hornet
 -- remains unchanged. Scale the cross term consistently with the roll axis
@@ -76,7 +76,7 @@ derivative_flight_model.moment_of_inertia = {
 
 -- SPDX-License-Identifier: MIT
 -- Experimental measured gear fit. Execute after allocating derivative_flight_model.
--- Position/radius come from the accepted BLEND receipt. Spring/damping are
+-- Position/radius come from the model geometry record. Spring/damping are
 -- development estimates; this is not a claim of measured YF-23 strut behavior.
 local configure_ground = function(derivative_flight_model, FA18C)
 -- Provisional F-23 mass layout: ahead of the mains and on the engine-axis plane.

@@ -6,8 +6,8 @@
 #include "SupportHook.h"
 
 namespace f23radar {
-// Read-only support diagnostics for FA18C 2.9.30.28738. They change no support decision.
-// MSI trackfile fields (captured image, see the SURV continuity evidence):
+// Read-only support diagnostics for FA18C 2.9.31.29434. They change no support decision.
+// MSI trackfile fields in the supported build:
 //   +0xe8/+0xf0/+0xf8 source report times (model time), +0x101 current contribution present,
 //   +0x198 source eligibility mask, +0x19d memory state. Native aging clears a source after 14 s.
 enum SupportDecision : int { NativeSupport = 1, ExtensionSupport = 2, GatesClosed = 3, NoTrackfile = 4, NotLinked = 5,

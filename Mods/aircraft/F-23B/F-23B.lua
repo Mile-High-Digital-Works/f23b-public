@@ -287,7 +287,7 @@ local aircraft = {
     -- F-23 bay geometry is retained, while logical station numbers and store
     -- classes follow the Hornet SMS contract. No CJS or protected ED file is
     -- copied; these CLSIDs resolve from the installed DCS database.
-    -- October 13 bay (owner design): three roof trapezes carry the project HARM
+    -- Three roof trapezes carry the project HARM
     -- on stations 2, 3 and 7. Each bay door carries one MALICE (stations 4, 6)
     -- and one Block II rail (stations 1, 9). The doors open 150 degrees, so the
     -- door stores swing clear of the trapeze path. The centre trapeze also takes

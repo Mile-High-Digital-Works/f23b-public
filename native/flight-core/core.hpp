@@ -38,7 +38,7 @@ struct Parameters {
     Vec3 control_power_per_pa{};
     double lift_break_fraction{},post_stall_decrease_per_rad{},alpha_feedback_s_inv{};
     double force_bound_n{},moment_bound_nm{};
-    // Carefree handling (project choices, owner goal of October 11). Low-speed
+    // Carefree handling uses project settings. Low-speed
     // recovery: below recovery_kias with the nose above recovery_pitch the law
     // commands a pushover toward recovery_path. Zero speed disables it.
     double recovery_kias{260},recovery_pitch_rad{.7853981633974483},recovery_path_rad{-.08726646259971647};
@@ -48,11 +48,11 @@ struct Parameters {
     // without it, so full roll authority stays until a DCS corner shows a need.
     double roll_alpha_start_rad{.3490658503988659},high_alpha_roll_floor{1.};
     double positive_load_limit{},negative_load_limit{-1};
-    // October 15, owner: "bouncy" when centring the stick after manoeuvring. With the stick
+    // Pitch damping increases to reduce oscillation after manoeuvring. With the stick
     // centred, pitch damping rises so the short-period damping ratio is at least this value.
     // Zero keeps the fixed damping.
     double released_damping_ratio{};
-    // October 15, owner: "doesn't accelerate as fast as it used to". Zero-lift drag scale by Mach
+    // Zero-lift drag scale by Mach
     // at two air densities, fitted to the old build's recorded level accelerations at 15,000 ft
     // and 35,000 ft; linear in density between them and held outside. Zero densities switch it off.
     Table<21> cd0_scale_dense{},cd0_scale_thin{};

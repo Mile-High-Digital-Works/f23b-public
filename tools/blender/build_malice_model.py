@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-"""Build an original MALICE visual; optional uniform scale for owner-approved bay fit."""
+"""Build an original MALICE visual; optional uniform scale for the configured bay fit."""
 import argparse
 import hashlib
 import json
@@ -189,8 +189,8 @@ report=dict(status='OFFLINE_PASS',approximation=True,dcs_bounds_m=bounds,
     visual_scale=args.scale,body_length_m=4.11*args.scale,body_diameter_m=.34*args.scale,span_m=.67*args.scale,
     finish='Project charcoal grey; subdued identification bands and grey stencils; visual only',
     sha256=hashlib.sha256(output.read_bytes()).hexdigest(),bytes=output.stat().st_size,
-    provenance='Project-original procedural mesh; owner-approved uniform visual reduction, illustrative fin/nose geometry; simulation physics unchanged',
-    bay_clearance='See capacity audit; DCS flight release not observed')
+    provenance='Project-original procedural mesh; uniform visual reduction, illustrative fin/nose geometry; simulation physics unchanged',
+    bay_clearance='Bay clearance and flight release require runtime checks')
 output.with_suffix('.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print(json.dumps(report))
 if args.preview or args.mesh_output:

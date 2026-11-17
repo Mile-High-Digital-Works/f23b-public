@@ -1,12 +1,15 @@
 # Known limitations
 
+The v1.5.2 source is awaiting DCS validation. The latest published download remains v1.5.1.
+
 ## Compatibility
 
 - **Multiplayer is untested. VR is untested.**
 - Windows and an installed, activated F/A-18C Hornet are required.
 - The weapon and radar connection supports **DCS 2.9.31.29434**.
 - On incompatible DCS builds, the connection switches off and displays an in-game message.
-- MALICE, Block II, radar upgrades and SA 640 are unavailable while the connection is off.
+- Radar missile launches, including stock AIM-120C, are blocked while the connection is off.
+- MALICE, Block II, project HARM operation, radar upgrades and SA 640 are also unavailable.
 - Flight, the native cockpit and radar, bays, lights and liveries remain available.
 - The installer is unsigned. Use the ZIP if Windows warns about it.
 
@@ -17,6 +20,7 @@
 - Full missile engagement ranges are not established. Published design values do not guarantee a hit.
 - MALICE loft control does not impose a hard altitude ceiling.
 - Block II helmet-cued shots remain unverified. Post-launch datalink and lock-on after launch are not implemented.
+- The revised HARM definition and cockpit data routing await comparative flight checks. AI launch decisions remain unverified.
 - HARM PB and SP modes, an 85-mile TOO hit and automatic TOO loft remain unverified.
 - AI MALICE can launch with closed main bay doors. AI Block II bay sequencing and AI HARM attacks remain unverified.
 - AI missile enhancements require the weapon helper on the simulation controlling the missile.

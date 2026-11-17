@@ -50,12 +50,16 @@ def verify():
                 or path.name.lower() in instructions):
             failures.append(f'Unexpected source-tree member: {name}')
         if any(p in {'vendor-private', '.devstate', '.runtime', '.cursor', '.codex'} for p in path.parts):
-            failures.append(f'Private directory in source tree: {name}')
+            failures.append(f'Unexpected directory in source tree: {name}')
         data = (ROOT / name).read_bytes()
         if data.startswith(b'version https://git-lfs.github.com/spec/v1'):
             failures.append(f'LFS pointer in source tree: {name}')
-        if re.search(rb'[A-Za-z]:[/\\]Users[/\\][^/\\\s]+', data):
-            failures.append(f'Personal home path in source tree: {name}')
+        # Escaped strings write each separator as two backslashes.
+        if re.search(rb'[A-Za-z]:[/\\]+Users[/\\]+[^/\\\s"\']+', data):
+            failures.append(f'Absolute user path in source tree: {name}')
+        # Serialized runtime tables carry these keys.
+        if re.search(rb'\["_(?:unique_resource_name|file)"\]\s*=', data):
+            failures.append(f'Serialized runtime table in source tree: {name}')
     if failures:
         raise SystemExit('\n'.join(failures))
     print(f'PASS: {len(origin["unchanged_files"])} inherited source hashes, '

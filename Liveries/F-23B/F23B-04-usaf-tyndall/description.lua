@@ -7,4 +7,4 @@ livery = {
 }
 custom_args = { [1013] = 1 }
 name = "F-23B | USAF Tyndall - 325th FW"
-countries = { "USA", "USAFAggressors" }
+countries = { "USA", "AUSAF" }

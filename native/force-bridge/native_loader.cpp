@@ -15,15 +15,21 @@
 namespace {
 constexpr auto count = std::size(names);
 std::array<FARPROC, count> callbacks{};
+#ifdef F23B_DEVELOPMENT_HOOKS
 std::array<std::atomic<unsigned long long>, count> calls{};
+#endif
 std::once_flag initialized;
+#ifdef F23B_DEVELOPMENT_HOOKS
 std::mutex log_mutex;
+#endif
 
-void note(const std::string& text) {
+void note([[maybe_unused]] const std::string& text) {
+#ifdef F23B_DEVELOPMENT_HOOKS
     wchar_t path[2048]{};
     if (GetEnvironmentVariableW(L"F23B_NATIVE_FORWARD_TRACE", path, 2048) == 0) return;
     std::lock_guard<std::mutex> lock(log_mutex);
     std::ofstream(std::filesystem::path(path), std::ios::app) << text << '\n';
+#endif
 }
 
 // The FM resolver runs outside DllMain, before native aircraft initialization.
@@ -83,9 +89,11 @@ extern "C" FARPROC* f23b_resolve(unsigned index) noexcept {
   try {
     std::call_once(initialized, initialize);
     if (index >= count) throw std::runtime_error("Invalid callback index");
+#ifdef F23B_DEVELOPMENT_HOOKS
     const auto n = ++calls[index];
     if (n <= 2 || (std::string(names[index]) == "ed_fm_simulate" && n % 1024 == 0))
         note(std::string(names[index]) + " " + std::to_string(n));
+#endif
     return &callbacks[index];
   } catch (const std::exception& error) {
     note(std::string("forwarding initialization failed: ") + error.what());

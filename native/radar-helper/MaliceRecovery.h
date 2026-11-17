@@ -7,7 +7,7 @@ namespace f23radar {
 constexpr uintptr_t chaffCallbackSlot = 0x3e70a8, chaffCallbackThunk = 0x314210;
 constexpr uintptr_t terminalGuidance = 0x2ecf30, inertialGuidance = 0x2ecbc0, seekerControl = 0x2eeb40;
 constexpr uintptr_t radarSensorVtable = 0x3e6ef0, strapdownVtable = 0x3e4378;
-// Owner's Stage 27 policy: two 2-second reports plus margin. No native descriptor changes.
+// Recovery window: two 2-second reports plus margin. No native descriptor changes.
 constexpr double recoveryFreshSeconds = 4.5;
 
 // One live simulation-system record. A runtime contract failure is local to this missile.
