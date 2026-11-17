@@ -23,7 +23,7 @@
     "native/radar-helper/SaRangeHook_test.cpp": "7875cf697b25bad5c86f3162c183a6ebd81f4aec48e5c13548e4b101c78123ad"
   },
   "v1_5": {
-    "bridge_sha256": "3cf2bfb7b4377e441ed3b138a9d38d12eeeef035f996a218ae355c3111905b32",
+    "bridge_sha256": "a47f32fe9a4da282aa07cf5222a2cf5128d392674ee895150f15a3b63a75686f",
     "files": {
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/BridgeCommands.lua": "1f95549e0a26be7e8456abfcc9105a888ff5f10ab8a4319489aef16e98ae2318",
       "Mods/aircraft/F-23B-Player/Cockpit/ExteriorVisuals/ExteriorVisualAdapter.lua": "ca454a48c252d1f2eead05ca738b9e09df5fdead405c51b5554907ec67b50e0c",
@@ -36,9 +36,9 @@
       "Mods/aircraft/F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
       "native/flight-core/CMakeLists.txt": "a9ac372c1fcb8cccba0025a17c53806ce73493edb451e21735683a3d899e7a5a",
       "native/flight-core/bridge_context.hpp": "cfdce5b62de1918d39799956dd3d3ef993163550eb2451a7676927a7423033d5",
-      "native/flight-core/bridge_model.cpp": "a825139cb255a015b9ec020352247b49dac5855a1b8e8c9db0c0369ac44915c0",
-      "native/flight-core/bridge_model.hpp": "6d080e6fee1855087b9e0e857777246bbd97770e9829118db923b11f99c77e0f",
-      "native/flight-core/bridge_model_test.cpp": "f2b04aa71937d02bb523f39ea265cd302e5b98410f634fd730f600e1aa490c2a",
+      "native/flight-core/bridge_model.cpp": "203665893e75043ecde3b1a25439be2977ed5e836f9fd175c8444bc7fe279fce",
+      "native/flight-core/bridge_model.hpp": "d7a73b241461cf0281a2ef9d2bf999f954b76ca83d6ea3ac742af7396fba0d91",
+      "native/flight-core/bridge_model_test.cpp": "7627441e5c477b7913052e7eeaa8f359e86f12dd31617fabaccf4080a3ef299c",
       "native/flight-core/calibration_replay.py": "f252e1d3d7d608400c94ce76cd56c595f2ff37f56d08857f7acf5c2f9ea13c42",
       "native/flight-core/calibration_replay_test.py": "5520d4b617434bd1efb8187b71865228659e580ad3c74c10a60b1ac7f5948000",
       "native/flight-core/core.hpp": "bfca45b4364169fdc4a54b7474c8693c8e24a74f3ec26074b69e1f4b16ab4458",
@@ -52,7 +52,7 @@
       "native/flight-core/tuning_runtime.hpp": "1b11accfb9297d65157cbde9fea709227aaf0dacb9fc09602cd2c1259848e2fa",
       "native/flight-core/tuning_test.cpp": "7324a66d96de3fac669723aa371ef83129beec196e12fb67bcb7bf5d60e810f6",
       "native/force-bridge/CMakeLists.txt": "173a2e8dab8660e3de67773fceb65553d840dbdd936e2f43f60dc0b65c60a08b",
-      "native/force-bridge/bridge.cpp": "6c2c6f0f5dafa4e23af587e2bcd7beeca193306c45d5a72765c0e5faea177fb6",
+      "native/force-bridge/bridge.cpp": "4af26e981cb017bf916e94f262674e35256dc8c4473b3f0594a232a9e27a42ad",
       "native/force-bridge/control_output_tests.cpp": "0d74b19e90ec7c7ef5bc849655383fb0e64a531275537d683aa342ab978d177d",
       "native/force-bridge/damage_logger.hpp": "89853046847adfab93e02ad47674700c3a75638054f6f8be71d41229c9ca1ed2",
       "native/force-bridge/damage_logger_test.cpp": "5e3d731539ba657c6410710de7b97d2eb0cf4341ada84492f4997ea573aad611",
@@ -63,7 +63,7 @@
       "native/force-bridge/native_loader.cpp": "4de6b4f8798eedaa908b378b1e398adf8ae966b2adb07fade6517bead66b7be3",
       "native/force-bridge/propulsion.hpp": "7786b46665f04c752a1060e4e3fb2569f76b17b21868b3972ea7b6ea4383237d",
       "native/force-bridge/propulsion_tests.cpp": "ce2619677a878f1c8de9b16f8f0618217927b3d4f2ef177508d9dda78ae77fd6",
-      "native/force-bridge/sdk_adapter.hpp": "b97523481804c56568c2868cc8f56e19f632c6c2b54d20951707e9ceae1ad97e",
+      "native/force-bridge/sdk_adapter.hpp": "5d2ca912fa33915f7dd162697cffdb8ce43ac0b1b4475ccd6f1116b236a2f8a6",
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
       "native/force-bridge/telemetry.hpp": "7b54f7bf82f17be64c49ceee83a57e37b093704b89b480ef607420699d259e19",
@@ -99,7 +99,7 @@
       "native/radar-helper/build.ps1": "f51d1fd066dcea51c379c4e4c10b04706351c0c0d81f5533c70ea1cbb9ddc1c7",
       "README.md": "eabb3fe6a92226ab4944761969ce8b2efdf9fe6bf1525485676dce67cbdb2316",
       "docs/PILOT_GUIDE.md": "b152299e4d2796b0cb57506f0a719c80fd5155de38ae151749654742b50c435c",
-      "docs/RELEASE_NOTES.md": "2d2115b6bfa7d7b2bd2eceb0c5887a655777f84e8c5acd0ae4b56a28c7e2c5b2",
+      "docs/RELEASE_NOTES.md": "c6c64d242866754b271bc6403d9d51f89852f78f351d68b80912b3278d0c68dd",
       "Mods/aircraft/F-23B/Shapes/F-23B.lods": "9ff3bb282370824787bc05e76f7d9b0e65220b7f88e6ce88522f06dba8c7abe5"
     },
     "helper_sha256": "49676d62f10f5a8f0ea830028491564decd28c0401600731779457461b1237cd"

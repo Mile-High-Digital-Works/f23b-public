@@ -94,7 +94,7 @@ void own_ed_fm_set_command(int command,float value) {
         runtime.keyboard_throttle_rate=command==1032?1.:(command==1033?-1.:0.);return;
     }
     struct Switch {int toggle,on,off;bool* destination;};
-    const Switch switches[]={{68,431,430,&i.gear_down},{73,147,148,&i.speedbrake},{72,146,145,&i.landing_flaps},{-1,74,75,&i.wheel_brake}};
+    const Switch switches[]={{68,431,430,&i.gear_down},{72,146,145,&i.landing_flaps},{-1,74,75,&i.wheel_brake}};
     for(const auto& s:switches) {
         if(command==s.toggle)*s.destination=!*s.destination;
         else if(command==s.on)*s.destination=true;

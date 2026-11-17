@@ -117,6 +117,11 @@ void draw_native(float* arguments, std::size_t count) {
     // Read native flap input before presenting the controls that actually
     // generate the independent model's forces. Engines/gear/bays stay native.
     if (arguments && count > 10) runtime.input.landing_flaps = arguments[9] > 0.5f;
+    // Hornet exterior argument 21 is the deployed speedbrake fraction.
+    // Read it after the native draw callback so automatic retraction also removes drag.
+    constexpr std::size_t speedbrake_argument = 21;
+    runtime.input.speedbrake = arguments && count > speedbrake_argument
+        ? std::clamp(finite_or(arguments[speedbrake_argument]), 0.0, 1.0) : 0.0;
     if (arguments) write_control_arguments(count, [&](std::size_t index, float value) {
         arguments[index] = value;
     });

@@ -7,6 +7,7 @@ The [latest published release](https://github.com/Mile-High-Digital-Works/f23b-p
 
 - Keep radar launches blocked when the weapon connection is unavailable, with a specific message.
 - Pair weapon-release inputs across master-mode changes.
+- Use the Hornet's deployed speedbrake position for flight drag, including during automatic retraction.
 - Disable tuning-file and recorder hooks in release builds; retain an explicit development build option.
 - Reserve Lua stack space for the radar helper's status results.
 - Align module versions, update the bay description, and correct livery country restrictions.

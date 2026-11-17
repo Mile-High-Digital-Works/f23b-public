@@ -3,16 +3,28 @@
 #include "../force-bridge/bridge.cpp"
 #include "core.hpp"
 #include "fitted_parameters.hpp"
+#include <cstdlib>
 #include <iostream>
-#include <stdexcept>
+#include <limits>
 namespace core=f23b::flight_core;
-void check(bool ok,const char* name) { if(!ok)throw std::runtime_error(name); }
+void check(bool ok,const char* name) {
+    if(!ok) {
+        std::cerr<<name<<'\n';
+        std::exit(EXIT_FAILURE);
+    }
+}
 void native_body(double,double,double,double,double,double,double,double,double,
                  double,double,double,double,double,double,double,double,double,double,double) {}
 void native_start() {}
 void native_simulation(double) {}
 double native_value(unsigned) { return 0.; }
 double native_fuel_value() { return 1000.; }
+float brake_position{};
+int last_command{};
+void native_command(int command,float) { last_command=command; }
+void native_draw_state(float* args,std::size_t count) {
+    if(args&&count>21)args[21]=brake_position;
+}
 int main() {
     static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_state),PFN_CURRENT_STATE>);
     static_assert(std::is_same_v<decltype(&own_ed_fm_set_current_state_body_axis),PFN_CURRENT_STATE_BODY_AXIS>);
@@ -99,7 +111,45 @@ int main() {
 #endif
         SetEnvironmentVariableW(recorder,nullptr);
     }
+    // Exercise the resolved native draw, command and simulate callbacks together.
+    start();
+    runtime.atmosphere={.9,322,4572};
+    runtime.body.velocity_body_m_s={180,0,0};
+    auto draw=reinterpret_cast<PFN_SET_DRAW_ARGS_V2>(f23b_select_callback("ed_fm_set_draw_args_v2",
+        reinterpret_cast<FARPROC>(&native_draw_state)));
+    auto command=reinterpret_cast<decltype(&own_ed_fm_set_command)>(f23b_select_callback(
+        "ed_fm_set_command",reinterpret_cast<FARPROC>(&native_command)));
+    std::array<float,1100> args{};
+    const auto force_for_brake=[&](float position) {
+        brake_position=position;
+        draw(args.data(),args.size());
+        simulate(.01);
+        return runtime.output.force_n.x;
+    };
+    const auto clean=force_for_brake(0);
+    command(147,1);
+    check(last_command==147,"legacy brake input still reaches the Hornet");
+    const auto extended=force_for_brake(1);
+    check(extended<clean&&args[21]==1,"native deployed brake adds drag and preserves its draw argument");
+    check(force_for_brake(0)==clean,"native automatic retraction clears drag without a retract command");
+    command(3035,-1);
+    check(last_command==3035,"Hornet HOTAS input still reaches the native callback");
+    const auto quarter=force_for_brake(.25f);
+    check(std::abs(quarter-(clean+.25*(extended-clean)))<1e-8,"drag follows partial native deployment");
+    command(148,1);
+    simulate(.01);
+    check(runtime.output.force_n.x==quarter,"a retract input does not clear drag before native movement");
+    check(force_for_brake(std::numeric_limits<float>::quiet_NaN())==clean,"invalid native brake sample clears drag");
+    force_for_brake(1);
+    draw(args.data(),21);
+    simulate(.01);
+    check(runtime.output.force_n.x==clean,"short native draw buffer cannot retain stale brake drag");
+    force_for_brake(1);
+    start();
+    simulate(.01);
+    check(runtime.input.speedbrake==0,"aircraft restart clears the previous brake sample");
     SetEnvironmentVariableW(L"F23B_SAVED_GAMES",nullptr);
     std::filesystem::remove_all(profile);
+    std::cout<<"NATIVE SPEEDBRAKE PASS: deployment, automatic retraction, input forwarding, invalid samples and reset\n";
     std::cout<<"INDEPENDENT BRIDGE PASS: SDK state/control mapping, exact force/moment, native propulsion, rest output\n";
 }
