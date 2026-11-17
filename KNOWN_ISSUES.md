@@ -20,6 +20,7 @@ The v1.5.2 source is awaiting DCS validation. The latest published download rema
 - Full missile engagement ranges are not established. Published design values do not guarantee a hit.
 - MALICE loft control does not impose a hard altitude ceiling.
 - Block II helmet-cued shots remain unverified. Post-launch datalink and lock-on after launch are not implemented.
+- The revised HARM definition and cockpit data routing await comparative flight checks. AI launch decisions remain unverified.
 - HARM PB and SP modes, an 85-mile TOO hit and automatic TOO loft remain unverified.
 - AI MALICE can launch with closed main bay doors. AI Block II bay sequencing and AI HARM attacks remain unverified.
 - AI missile enhancements require the weapon helper on the simulation controlling the missile.

@@ -32,7 +32,7 @@
       "Mods/aircraft/F-23B-Player/Input/F-23B/keyboard/default.lua": "17c765aa0b4bc894e06023954763450c2a0c30ae2de4ad508a51d8b6316cbec9",
       "Mods/aircraft/F-23B/F-23B.lua": "7a619988422d2655463a4c3f0d64d8ca0939880f008d8f664ad0d95486c1f9a8",
       "Mods/aircraft/F-23B/UnitPayloads/F-23B.lua": "dfe62cc47b562865bdc6de224042cb6d4cf46eb78e138246e1d97246b0cff266",
-      "Mods/aircraft/F-23B/Weapons/F23B_AGM88G.lua": "fad0e9273e6a7d8b64797abb0c8d4b109cd2c4c12ee9c251cab6792b8889c04c",
+      "Mods/aircraft/F-23B/Weapons/F23B_AGM88G.lua": "412c1fbe842e5af906f46936ab10db5ffd8a14555d5d26b6c5da421c4ac42ab9",
       "Mods/aircraft/F-23B/entry.lua": "81633fa1a956a79f16e8e39d30ac40b1fb07d52f2ec57cd7f796c9171a38caf8",
       "native/flight-core/CMakeLists.txt": "a9ac372c1fcb8cccba0025a17c53806ce73493edb451e21735683a3d899e7a5a",
       "native/flight-core/bridge_context.hpp": "cfdce5b62de1918d39799956dd3d3ef993163550eb2451a7676927a7423033d5",
@@ -67,9 +67,9 @@
       "native/force-bridge/steering.hpp": "19dac44d26a3f33ca634762ae846d4c4b7478cfcfd9b3794bc6150e0bbbb4431",
       "native/force-bridge/steering_tests.cpp": "793eaecf974a8bfa406dd8e5bd5ab9deedbaca69e8feb3a506e8f3998ae30e2a",
       "native/force-bridge/telemetry.hpp": "7b54f7bf82f17be64c49ceee83a57e37b093704b89b480ef607420699d259e19",
-      "native/radar-helper/PayloadAlias.h": "77a7cd4d247344f9a0c3682640c814f070e2146351542a868f2ab7c02ffb430d",
-      "native/radar-helper/PayloadAlias_test.cpp": "2aa0197bee2eb8bd68da1dfab62883f74b88111d6cebabc94eaf38b59aaa24dd",
-      "native/radar-helper/Radar.cpp": "225285cdb25819418549f34ed6f29ef6b9c93063a88174f7dcb904205b11c473",
+      "native/radar-helper/PayloadAlias.h": "f5bd114c25ed6bd6a5b74940ba613ddb37c3db3fd847b8f04afad44dbac65580",
+      "native/radar-helper/PayloadAlias_test.cpp": "94250ffb06dd18bdbc7cdc239539e1b8a0238313fe16028db034a52dafd73298",
+      "native/radar-helper/Radar.cpp": "db7f918d36bd75832b0efd616d4daf72d2b580447679e8514593c5a7bcd77063",
       "tests/lua/exterior_visual_adapter_spec.lua": "81e48a8619ce89debd9def1550cc866932bbe96df2695d6730c054067e6b9154",
       "tests/lua/input_bridge_profile_spec.lua": "6688afa1ce25a0fc1d4bfb0a935ad857b211c972a4a89bf513ea224e9ecbcabe",
       "tools/blender/build_agm88g_model.py": "f63d717e99be48cceb4fd22e552f98caa2af37a0221c5e6eafe4f5c48066e7ea",
@@ -99,9 +99,9 @@
       "native/radar-helper/build.ps1": "f51d1fd066dcea51c379c4e4c10b04706351c0c0d81f5533c70ea1cbb9ddc1c7",
       "README.md": "eabb3fe6a92226ab4944761969ce8b2efdf9fe6bf1525485676dce67cbdb2316",
       "docs/PILOT_GUIDE.md": "b152299e4d2796b0cb57506f0a719c80fd5155de38ae151749654742b50c435c",
-      "docs/RELEASE_NOTES.md": "da4a6dabfd9f5966636ba28e4a661d2e00db566837c1afad6f2c8312cc61b956",
+      "docs/RELEASE_NOTES.md": "2d2115b6bfa7d7b2bd2eceb0c5887a655777f84e8c5acd0ae4b56a28c7e2c5b2",
       "Mods/aircraft/F-23B/Shapes/F-23B.lods": "9ff3bb282370824787bc05e76f7d9b0e65220b7f88e6ce88522f06dba8c7abe5"
     },
-    "helper_sha256": "c0c26e7e65950324c8b9f4de07309b89e896661688d82433ea4f9b6bf4c8097f"
+    "helper_sha256": "49676d62f10f5a8f0ea830028491564decd28c0401600731779457461b1237cd"
   }
 }

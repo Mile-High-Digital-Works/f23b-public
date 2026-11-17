@@ -2,6 +2,7 @@
 -- Exercise real payload definitions, pylon choices, presets and quick missions.
 _ = function(s) return s end
 CAT_AIR_TO_AIR, AIM_120, AIM_9X, AIM_9_CX_PIL = 1, 24, 136, 1.03
+CAT_MISSILES = 2
 WSTYPE_PLACEHOLDER = 'placeholder'
 enhanced_a2a_warhead = function(m,c) return {mass=m,caliber=c} end
 predefined_warhead = function(n) return {name=n} end
@@ -14,6 +15,9 @@ local root=(os.getenv('F23B_RUNTIME_ROOT') or 'Mods/aircraft')..'/F-23B'
 current_mod_path=root
 local m=dofile(root..'/Weapons/F23B_AIM424_MALICE.lua')
 local s=dofile(root..'/Weapons/F23B_AIM9X_BLOCKII.lua')
+-- This declaration must load without runtime database tables.
+weapons_table, rockets, db = nil, nil, nil
+local h=dofile(root..'/Weapons/F23B_AGM88G.lua')
 assert(m.name=='F23B_AIM424_MALICE' and m.wsTypeOfWeapon[4]==WSTYPE_PLACEHOLDER and declared[m.name]==m)
 assert(s.name=='F23B_AIM9X_BLOCKII' and s.wsTypeOfWeapon[4]==WSTYPE_PLACEHOLDER and declared[s.name]==s)
 assert(m.shape_table_data[1].name==m.name and s.shape_table_data[1].name==s.name, 'no stock shape identity')
@@ -45,6 +49,33 @@ assert(s.Fi_search==.09 and s.Fi_start==1.57 and s.Fi_excort==1.57,
 assert(m.go_active_by_default==nil and m.send_off_data==nil)
 assert(m.sensor.active_radar_lock_dist==m.active_radar_lock_dist)
 assert(m.sensor.active_dist_trig_by_default==1)
+-- The independent anti-radiation store retains its declared TOO envelope and project handling.
+assert(h.name=='F23B_AGM88G' and declared[h.name]==h and declared.AGM_88==nil)
+assert(h.category==CAT_MISSILES and h.Head_Type==3
+    and h.scheme=='anti_rad_missile' and h.class_name=='wAmmunitionAntiRad')
+assert(h.wsTypeOfWeapon[1]==4 and h.wsTypeOfWeapon[2]==4
+    and h.wsTypeOfWeapon[3]==8 and h.wsTypeOfWeapon[4]==WSTYPE_PLACEHOLDER)
+assert(h.model=='F23B_AGM88G' and h.shape_table_data[1].name==h.name
+    and h.shape_table_data[1].file==h.model, 'HARM uses its independent project shape')
+assert(h.M==270.75 and h.mass==h.M and h.fm.mass==h.M and h.Diam==190.5)
+assert(math.abs(h.fm.caliber-.1905)<1e-12 and math.abs(h.fm.S-.0286875)<1e-12)
+assert(h.boost.impulse==293.75 and h.march.impulse==257.5
+    and h.march.work_time==15 and h.t_marsh==12, 'HARM motor contract changed')
+assert(h.Nr_max==18 and h.autopilot.Areq_limit==21
+    and h.seeker.op_time==280 and h.autopilot.op_time==280 and h.seeker.pos_memory_time==210)
+assert(h.D_max==151000 and h.Range_max==134000 and h.seeker.sens_far_dist==100000,
+    'HARM declared range and TOO detection must retain the existing envelope')
+-- Cockpit launch calculations stay native. Check the independently registered projectile here.
+assert(type(h.warhead)=='table' and type(h.warhead_air)=='table', 'HARM warhead definitions missing')
+for _,warhead in ipairs({h.warhead,h.warhead_air}) do
+    assert(warhead.mass==62.48 and warhead.expl_mass==18.42 and warhead.piercing_mass==12.496,
+        'HARM warhead settings changed')
+end
+local harm_loadout=loads['{F23B-AGM88G}']
+assert(harm_loadout and harm_loadout.Count==1 and harm_loadout.Weight==h.mass)
+assert(harm_loadout.attribute==h.wsTypeOfWeapon and harm_loadout.wsTypeOfWeapon==h.wsTypeOfWeapon)
+assert(math.abs(harm_loadout.Cx_pil-.00061875)<1e-12 and #harm_loadout.Elements==1
+    and harm_loadout.Elements[1].ShapeName==h.model, 'HARM must remain a direct bay store')
 local malice='{F23B-AIM424-MALICE}'
 local ir='{F23B-AIM9X-BLOCKII}'
 local amraam='{40EF17B7-F508-45de-8566-6FFECC0C1AB8}'
@@ -118,4 +149,4 @@ if arg[1] then
     end
     assert(players==1)
 end
-print('OFFLINE PASS: three MALICE stations/preset, Block II rails, regular AMRAAM preset')
+print('OFFLINE PASS: MALICE and Block II integration, HARM definition and SEAD stations, regular AMRAAM preset')

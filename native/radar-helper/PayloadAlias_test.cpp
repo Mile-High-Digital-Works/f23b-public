@@ -27,7 +27,7 @@ int main() {
     const AliasPair all[3] = {{474, stockAim120B}, {475, stockAim9X}, {476, stockAgm88C, 8}};
     WsType harm{4, 4, 8, 0xcd, 476, 0xabcd}, stockHarm{4, 4, 8, 0, stockAgm88C, 0};
     check(stockFor(harm, all, 3) == stockAgm88C, "project HARM reports stock AGM-88C");
-    check(projectFor(stockHarm, all, 3) == 476, "stock HARM reads project data when carried");
+    check(projectFor(stockHarm, all, 3) == 0, "HARM cockpit queries retain stock AGM-88C data when project HARM is carried");
     WsType wrongFamily{4, 4, 7, 0, 476, 0}, wrongStock{4, 4, 7, 0, stockAgm88C, 0};
     check(stockFor(wrongFamily, all, 3) == 0 && projectFor(wrongStock, all, 3) == 0,
         "cross-family numeric identity collisions cannot alias");
@@ -46,6 +46,8 @@ int main() {
     WsType b{4, 4, 7, 0, stockAim120B, 0}, x{4, 4, 7, 0, stockAim9X, 0};
     check(projectFor(b, pairs, 2) == 474, "AIM-120B reads MALICE data");
     check(projectFor(x, pairs, 2) == 475, "AIM-9X reads Block II data");
+    check(projectFor(b, all, 3) == 474 && projectFor(x, all, 3) == 475,
+        "HARM stock cockpit data does not change MALICE or Block II data routing");
     check(projectFor(aim120c, pairs, 2) == 0, "AIM-120C keeps its own data");
 
     const AliasPair missing[2] = {{0, stockAim120B}, {475, stockAim9X}};

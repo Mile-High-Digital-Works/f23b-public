@@ -386,8 +386,8 @@ static void scan_payload(bool (&found)[3], unsigned* harmBayMask = nullptr) {
         }
     }
 }
-// Hornet data lookups: an aliased stock type reads the project's own weapon data, but only while the
-// current payload carries that project missile. A stock Hornet flown later keeps its own data.
+// Hornet A/A data lookups use project data only while that missile is carried.
+// HARM uses stock AGM-88C cockpit data; the projectile retains its own registered definition.
 static const void* project_type(const void* type, f23radar::WsType& buffer) {
     if (!type || !accessible(type, sizeof(f23radar::WsType))) return type;
     f23radar::WsType value; std::memcpy(&value, type, sizeof(value));
@@ -398,7 +398,9 @@ static const void* project_type(const void* type, f23radar::WsType& buffer) {
     bool found[3];
     scan_payload(found);
     if (!found[index]) return type;
-    buffer = f23radar::withLevel4(type, aliasPairs[index].project);
+    const auto project = f23radar::projectFor(value, aliasPairs, 3);
+    if (!project) return type;
+    buffer = f23radar::withLevel4(type, project);
     return &buffer;
 }
 static bool selected_weapon(void* mc, f23radar::WsType& result, int& station) {
@@ -658,7 +660,7 @@ static int install_hornet_imports(uintptr_t base) {
             reinterpret_cast<void*>(&alias_descriptor_by_type))
         || !sidewinderHook.prepare(slot(f23radar::importSidewinderNew), address(stockSidewinderNew),
             reinterpret_cast<void*>(&alias_sidewinder_new))) return -23;
-    // Project data first, then the payload accessor, so no aliased type reaches a stock lookup.
+    // Install data routing before the payload accessor; HARM retains stock cockpit data.
     if (!(missileDataHook.install() && descriptorHook.install() && sidewinderHook.install()
         && (viaExport || payloadHook.install()))) {
         payloadHook.restore(); missileDataHook.restore(); descriptorHook.restore(); sidewinderHook.restore();

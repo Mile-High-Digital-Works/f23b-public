@@ -13,8 +13,10 @@ The [latest published release](https://github.com/Mile-High-Digital-Works/f23b-p
 - Improve installer recovery, dedicated-server detection, source checks and automated test coverage.
 
 The HARM visual uses long body strakes, compact tail controls and a gray finish.
-Its stock TOO acquisition envelope and existing performance values are retained.
-The runtime definition update and comparative flight validation remain incomplete.
+The HARM definition is self-contained and retains its physical, motor, seeker, control and warhead settings.
+Native Hornet data supplies cockpit HARM calculations. The projectile omits its previous launch-data tables.
+Comparative flight behavior and AI launch decisions remain unverified.
+The [definition record](evidence/F23B_AGM88G_DEFINITION_2026-11-16.md) gives the source identity and limits.
 No changed runtime behavior is claimed as flight-validated here.
 
 ## Known limits
@@ -26,6 +28,7 @@ No changed runtime behavior is claimed as flight-validated here.
 - Full missile engagement ranges are not established.
 - MALICE recovery after sustained tracking loss remains unconfirmed in DCS.
 - Block II helmet-cued shots remain unverified; post-launch datalink is not implemented.
+- The revised HARM definition and cockpit data routing await comparative flight checks. AI launch decisions remain unverified.
 - HARM PB/SP modes, an 85-mile TOO hit and automatic TOO loft remain unverified.
 - AI MALICE can launch with closed main bay doors; AI Block II bay sequencing and AI HARM attacks remain unverified.
 - AI and dedicated-server missiles without the helper do not receive its missile enhancements.

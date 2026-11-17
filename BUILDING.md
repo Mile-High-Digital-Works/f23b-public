@@ -136,6 +136,7 @@ Packaging preserves the released aircraft bytes. A documentation-only package ne
 
 DCS validation of this build is pending. Multiplayer and VR remain untested.
 The flight defaults retain the existing handling and dry-power curve.
+The [HARM definition record](docs/evidence/F23B_AGM88G_DEFINITION_2026-11-16.md) separates retained settings from pending flight validation.
 `F23B_DEVELOPMENT_HOOKS` defaults to OFF. Release builds do not read tuning files
 or use the FIT, STATE, MECHANICS, GROUND or TRACE recorder variables.
 The damage logger remains disabled by default.

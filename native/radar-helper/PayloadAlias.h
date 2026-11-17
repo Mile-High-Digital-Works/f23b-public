@@ -15,8 +15,8 @@ namespace f23radar {
 // the first Hornet payload call installs the payload slots before station enumeration.
 // Only calls that come from FA18C code see the alias. It reports MALICE as AIM-120B (24) and
 // Block II as AIM-9X (136). FA18C imports that read weapon data by type get the project type back
-// while the payload carries that project missile, so launch-zone, seeker and descriptor data stay the
-// project's own. AI, other aircraft, other modules and the world simulation see only the real types.
+// while the payload carries that A/A missile, so its launch-zone, seeker and descriptor data remain project-specific.
+// HARM cockpit queries retain stock AGM-88C data. AI, other aircraft and the world simulation see the real project types.
 // wsType layout (Weapons.dll map key): level1-3 bytes at +0..+2, level4 uint16 at +4.
 struct WsType {
     unsigned char level1, level2, level3, pad;
@@ -137,8 +137,9 @@ inline uint16_t stockFor(const WsType& type, const AliasPair* pairs, int count) 
     return 0;
 }
 
-// Stock level4 -> project level4, or 0 when the type is not an aliased stock missile.
+// Stock A/A type -> project cockpit data, or 0 to retain native data.
 inline uint16_t projectFor(const WsType& type, const AliasPair* pairs, int count) {
+    if (!airToAirMissile(type)) return 0;
     for (int i = 0; i < count; ++i)
         if (sameMissileFamily(type, pairs[i]) && pairs[i].project
             && type.level4 == pairs[i].stock) return pairs[i].project;
